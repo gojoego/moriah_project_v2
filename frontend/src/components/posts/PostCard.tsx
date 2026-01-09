@@ -1,7 +1,6 @@
 "use client";
 
-import { Post } from "@/src/types/post";
-import Link from "next/link";
+import { Post } from "@/types/post";
 import { 
     Card,
     CardHeader,

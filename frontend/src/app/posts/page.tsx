@@ -1,5 +1,5 @@
-import { PostList } from "@/src/components/posts/PostList";
-import { Post } from "@/src/types/post";
+import { PostList } from "@/components/posts/PostList";
+import { Post } from "@/types/post";
 
 const mockData: Post[] = [
     {
@@ -19,12 +19,22 @@ const mockData: Post[] = [
 ];
 
 export default function PostsPage() {
+    const posts = [...mockData].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
     return (
         <main className="max-w-4xl mx-auto py-12 px-4">
-            <h1 className="text-3xl font-bold mb-6">
-                stories
-            </h1>
-            <PostList posts={mockData}/>
+            <header className="mb-6">
+                <h1 className="text-3xl font-bold">
+                    stories
+                </h1> 
+                <p className="mt-2 text-sm text-slate-400">
+                    recent posts 
+                </p>               
+            </header>
+
+            <PostList posts={posts}/>
         </main>
     )
 }
