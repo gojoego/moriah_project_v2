@@ -1,5 +1,5 @@
 import { PostList } from "@/components/posts/PostList";
-import { Post } from "@/types/post";
+import type { Post } from "@/types/post";
 
 const mockData: Post[] = [
     {
@@ -14,7 +14,7 @@ const mockData: Post[] = [
         deceasedName: "Thomas",
         background: "how I met Thomas",
         content: "how Thomas was taken from us", 
-        createdAt: "2026-01-04"
+        createdAt: "2026-01-01"
     },
 ];
 
@@ -34,7 +34,7 @@ export default function PostsPage() {
                 </p>               
             </header>
 
-            <PostList posts={posts}/>
+            <PostList posts={posts} />
         </main>
     )
 }
