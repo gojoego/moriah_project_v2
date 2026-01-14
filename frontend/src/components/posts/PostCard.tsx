@@ -1,39 +1,47 @@
 "use client";
 
 import type { Post } from "@/types/post";
-import { 
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardContent
- } from "@/components/ui/card";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 interface PostCardProps {
-    post: Post;
+  post: Post;
 }
 
-export function PostCard({ post }: PostCardProps){
-    return (
-        <Card className="hover:shadow-md transition">
-            <CardHeader>
-                <CardTitle>
-                    {post.deceasedName}
-                </CardTitle>
-                <CardDescription className="text-sm text-muted-foreground">
-                    { new Date(post.createdAt).toLocaleDateString()}
-                </CardDescription>
-            </CardHeader>
+export function PostCard({ post }: PostCardProps) {
+  const dateLabel = new Date(post.createdAt).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
-            <CardContent>
-                <p className="line-clamp-3 text-sm text-slate-800 dark:text-slate-300">
-                    {post.background}
-                </p>
+  return (
+    <Card className={cn("moriah-card", "transition hover:shadow-md")}>
+      <CardHeader>
+        <CardTitle className="text-xl">{post.deceasedName}</CardTitle>
 
-                <p>
-                    {post.content}
-                </p>
-            </CardContent>
-        </Card>
-    )
+ 
+        <CardDescription className="text-xs moriah-muted">
+          {dateLabel}
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-3">
+        <p className="text-sm leading-relaxed text-foreground/90 line-clamp-3">
+          {post.background}
+        </p>
+
+        <Link href={`/posts/${post.id}`} className="moriah-link text-sm">
+          Read story →
+        </Link>
+      </CardContent>
+    </Card>
+  );
 }

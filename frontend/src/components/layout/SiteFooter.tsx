@@ -1,9 +1,13 @@
-export function SiteFooter(){
-    return (
-        <footer className="border-t border-slate-800">
-            <div className="mx-auto max-w-4xl px-4 py-4 text-center text-xs text-slate-500">
-                to those we have lost to suicide 
-            </div>
-        </footer>
-    );
+export function SiteFooter() {
+  return (
+    <footer className="border-t">
+      <div className="moriah-container py-10 text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} The Moriah Project</p>
+        <p className="mt-2">
+          Built with care. If you’re in crisis, consider contacting local emergency services
+          or a crisis hotline in your country.
+        </p>
+      </div>
+    </footer>
+  );
 }
