@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import type { Post } from "@/types/post";
 import { 
     Card, 
     CardContent, 
@@ -9,23 +8,10 @@ import {
     CardTitle 
 } from "@/components/ui/card";
 
+import { mockPosts } from "@/lib/mockPosts";
+
 /** const post = await fetch(`${API_URL}/posts/${params.id}`) */
-const mockData: Post[] = [
-  {
-    id: "1",
-    deceasedName: "Moriah",
-    background: "how I knew Moriah",
-    content: "how we lost Moriah to suicide",
-    createdAt: "2026-01-04",
-  },
-  {
-    id: "2",
-    deceasedName: "Thomas",
-    background: "how I met Thomas",
-    content: "how Thomas was taken from us",
-    createdAt: "2026-01-03",
-  },
-];
+
 
 /**
  dynamic route page Folder name: [id]
@@ -41,7 +27,7 @@ export default async function PostDetailPage(promise: {
 
     const {id} = await promise.params;
 
-    const post = mockData.find((p) => p.id === id);
+    const post = mockPosts.find((p) => p.id === id);
 
     if (!post){
         notFound();
