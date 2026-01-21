@@ -1,25 +1,8 @@
 import { PostList } from "@/components/posts/PostList";
-import type { Post } from "@/types/post";
-
-const mockData: Post[] = [
-    {
-        id: "1",
-        deceasedName: "Moriah",
-        background: "how I knew Moriah", 
-        content: "how we lost Moriah to suicide", 
-        createdAt: "2026-01-04"
-    },
-    {
-        id: "2", 
-        deceasedName: "Thomas",
-        background: "how I met Thomas",
-        content: "how Thomas was taken from us", 
-        createdAt: "2026-01-01"
-    },
-];
+import { mockPosts } from "@/lib/mockPosts";
 
 export default function PostsPage() {
-    const posts = [...mockData].sort(
+    const posts = [...mockPosts].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
