@@ -1,15 +1,8 @@
-// ✅ src/types/auth.ts
-
-export interface AuthFormProps {
-  type: "login" | "signup";
-  onSubmit?: (email: string, password: string) => void;
+export interface LoginPayload {
+  email: string;
+  password: string;
 }
 
-export interface AuthResponse {
-  token: string;
-  userId: string;
-}
-
-export interface AuthError {
-  message: string;
+export interface SignUpPayload extends LoginPayload {
+  displayName: string; 
 }
