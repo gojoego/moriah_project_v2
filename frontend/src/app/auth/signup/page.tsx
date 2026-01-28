@@ -16,16 +16,17 @@ export default function SignupPage(){
   }
 
   return (
-    <main>
-      <h1>
-        create an account
+    <main className="max-w-md mx-auto py-16 space-y-6">
+
+      <h1 className="text-3xl font-semibold">
+          create an account
       </h1>
 
-      <form onSubmit={handleSubmit}>
-
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input 
           type="email"
           placeholder="email"
+          className="moriah-input"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })} 
         />
@@ -33,6 +34,7 @@ export default function SignupPage(){
         <input 
           type="password"
           placeholder="password"
+          className="moriah-input"
           value={form.password} 
           onChange={(e) => setForm({ ...form, password: e.target.value })} 
         />
@@ -40,11 +42,12 @@ export default function SignupPage(){
         <input 
           type="display name"
           placeholder="display name"
+          className="moriah-input"
           value={form.password} 
           onChange={(e) => setForm({ ...form, displayName: e.target.value })} 
         />
 
-        <button type="submit">
+        <button type="submit" className="moriah-button w-full">
           sign up 
         </button>
       </form>
