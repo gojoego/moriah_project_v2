@@ -4,12 +4,13 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/posts", label: "Stories" },
   { href: "/about", label: "About" },
+  { href: "/auth/signup", label: "Sign Up" },
 ];
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
-      <div className="moriah-container">
+      <div className="mx-auto max-w-5xl px-4">
         <div className="flex h-14 items-center justify-between">
           <Link href="/" className="font-semibold tracking-tight">
             The Moriah Project
