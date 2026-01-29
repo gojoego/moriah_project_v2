@@ -16,15 +16,16 @@ export default function LoginPage(){
   }
 
   return (
-    <main>
-      <h1>
+    <main className="max-w-md mx-auto py-16 space-y-6">
+      <h1 className="text-3xl font-semibold">
         welcome back 
       </h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input 
           type="email"
           placeholder="email"
+          className="moriah-input"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })} 
         />
@@ -32,16 +33,18 @@ export default function LoginPage(){
         <input 
           type="password"
           placeholder="password"
+          className="moriah-input"
           value={form.password} 
           onChange={(e) => setForm({ ...form, password: e.target.value })} 
         />
 
-        <div>
-          <Link href="/forgot-password">
+        <div className="flex justify-end">
+          <Link href="/forgot-password" className="moriah-link text-sm">
+            forgot password?
           </Link>
         </div>
 
-        <button type="submit">
+        <button type="submit" className="moriah-button w-full">
           log in 
         </button>
       </form>
