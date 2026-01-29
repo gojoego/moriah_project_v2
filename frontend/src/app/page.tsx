@@ -8,8 +8,8 @@ export default function HomePage() {
         .slice(0, 5);
 
     return (
-        <main className="space-y-8">
-            <header className="space-y-2">
+        <main className="mx-auto max-w-3xl space-y-8 px-4">
+            <header className="space-y-2 text-center">
                 <h1 className="text-3xl font-semibold">
                     welcome to the Moriah Project
                 </h1>
