@@ -30,6 +30,9 @@ export default function HomePage() {
                         here is the example: the first post
                     </Link>
                 </ol>
+                <Link href="/community_guidelines" className="mt-3 inline-block text-lg font-medium underline-offset-4 hover:underline">
+                        here are some guidelines for posting 
+                </Link>
             </section>
             <section>
                 <div className="flex items-center justify-between mb-4">
