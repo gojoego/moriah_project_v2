@@ -16,8 +16,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           title: "Disclaimer",
           children: (
             <p className="text-sm leading-relaxed text-muted-foreground">
-              This site is not a substitute for professional mental health care.
-              If you are in immediate danger, contact local emergency services.
+                This is a safe space to grieve those you have lost to suicide
+                It is in no way meant to replace therapy or services from any psychiatric provider
+                Please call 911 or your local emergency service immediately if you are at risk for self-harm or are having a psychiatric/medical emergency.
             </p>
           ),
         }}
