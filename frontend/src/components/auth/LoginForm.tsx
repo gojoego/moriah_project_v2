@@ -21,7 +21,6 @@ export function LoginForm(){
             return;
         }
         
-        console.log("login attempt: ", {email, password});
     };
 
     return (
