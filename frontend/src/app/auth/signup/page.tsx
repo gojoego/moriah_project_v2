@@ -1,56 +1,115 @@
 "use client";
 
 import { useState } from "react";
-import type { SignUpPayload } from "@/types/auth";
 
-export default function SignupPage(){
-  const [form, setForm] = useState<SignUpPayload>({
-    displayName: "",
-    email: "",
-    password: "", 
-  });
+export default function SignupForm() {
 
-  function handleSubmit(e: React.FormEvent) {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("signup payload: ", form);
-  }
+
+    // Reset UI feedback
+    setError(null);
+    setSuccess(false);
+
+    // Validation
+    if (username.trim().length < 3) {
+      setError("Username must be at least 3 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    // Simulate network request
+    setIsSubmitting(true);
+    await new Promise((res) => setTimeout(res, 800));
+    setIsSubmitting(false);
+
+    // Fake success
+    setSuccess(true);
+
+    console.log("Signup attempt:", {
+      username,
+      email,
+      password,
+    });
+  };
 
   return (
-    <main className="max-w-md mx-auto py-16 space-y-6">
-
-      <h1 className="text-3xl font-semibold">
-          create an account
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 max-w-sm mx-auto mt-12"
+    >
+      <h1 className="text-2xl font-semibold text-center">
+        Create an Account
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input 
-          type="email"
-          placeholder="email"
-          className="moriah-input"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })} 
-        />
+      <input
+        type="text"
+        placeholder="Username"
+        className="w-full border p-2 rounded"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        required
+      />
 
-        <input 
-          type="password"
-          placeholder="password"
-          className="moriah-input"
-          value={form.password} 
-          onChange={(e) => setForm({ ...form, password: e.target.value })} 
-        />
+      <input
+        type="email"
+        placeholder="Email"
+        className="w-full border p-2 rounded"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
 
-        <input 
-          type="display name"
-          placeholder="display name"
-          className="moriah-input"
-          value={form.password} 
-          onChange={(e) => setForm({ ...form, displayName: e.target.value })} 
-        />
+      <input
+        type="password"
+        placeholder="Password"
+        className="w-full border p-2 rounded"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
 
-        <button type="submit" className="moriah-button w-full">
-          sign up 
-        </button>
-      </form>
-    </main>
-  )
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        className="w-full border p-2 rounded"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        required
+      />
+
+      {error && (
+        <p className="text-sm text-red-600 text-center">
+          {error}
+        </p>
+      )}
+
+      {success && (
+        <p className="text-sm text-green-600 text-center">
+          Account created successfully.
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
+      >
+        {isSubmitting ? "Creating account…" : "Create Account"}
+      </button>
+    </form>
+  );
 }
