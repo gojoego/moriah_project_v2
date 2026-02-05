@@ -16,11 +16,9 @@ export default function SignupForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Reset UI feedback
     setError(null);
     setSuccess(false);
 
-    // Validation
     if (username.trim().length < 3) {
       setError("Username must be at least 3 characters.");
       return;
@@ -31,19 +29,12 @@ export default function SignupForm() {
       return;
     }
 
-    // Simulate network request
     setIsSubmitting(true);
     await new Promise((res) => setTimeout(res, 800));
     setIsSubmitting(false);
 
-    // Fake success
     setSuccess(true);
 
-    console.log("Signup attempt:", {
-      username,
-      email,
-      password,
-    });
   };
 
   return (
