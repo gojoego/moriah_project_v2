@@ -30,3 +30,23 @@ app/
 ├─ login/page.tsx        → Login
 ├─ signup/page.tsx       → Signup
 ├─ profile/page.tsx      → User profile
+
+Database Schema 
+
+table: users
+- id 
+- display name  
+- email 
+- role
+- created at 
+- updated at 
+
+table: posts 
+- id 
+- author_id 
+- deceased_name
+- background 
+- content 
+- status 
+- created at
+- updated at 
