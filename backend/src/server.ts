@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 import login from "./routes/auth/login";
 import signup from "./routes/auth/signup";
@@ -7,6 +8,13 @@ import posts from "./routes/posts";
 import postById from "./routes/posts/getById";
 
 const app = express();
+
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+    })
+);
 
 app.use(express.json());
 

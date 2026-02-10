@@ -18,19 +18,7 @@ Key Features
 2. Post Browsing
     - list of recent posts
     - individual post pages
-
-Page Structure
-
-app/
-├─ page.tsx              → Landing page
-├─ posts/
-│  ├─ page.tsx           → Post list
-│  ├─ [id]/page.tsx      → Individual post
-│  └─ new/page.tsx       → Create post
-├─ login/page.tsx        → Login
-├─ signup/page.tsx       → Signup
-├─ profile/page.tsx      → User profile
-
+    
 Database Schema 
 
 table: users
