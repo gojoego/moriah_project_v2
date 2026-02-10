@@ -1,28 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+interface User {
+  displayName: string;
+  email: string;
+  birthday?: string;
+}
 
 export default function ProfilePage() {
-  const [user, setUser] = useState({
-    name: "Joe",
-    email: "joe@moriahproject.com",
-    birthday: "1996-08-22",
-    photoUrl: null as string | null,
-  });
+	const router = useRouter();
 
-  const [isEditing, setIsEditing] = useState(false);
+  	const [user, setUser] = useState<User | null>(null);
+	const [isEditing, setIsEditing] = useState(false);
+
+  	useEffect(() => {
+    	const token = localStorage.getItem("token");
+
+		if (!token) {
+			router.push("/login");
+			return;
+		}
+
+		fetch("http://localhost:4000/api/users/me", {
+			headers: {
+				Authorization: `Bearer ${token}`, 
+			},
+		})
+			.then((res) => res.json())
+			.then(setUser)
+			.catch(() => {
+				router.push("/login")
+			});
+  	}, [router]);
+
+	if (!user) return <p>loading...</p>;
 
   return (
     <main className="mx-auto max-w-xl px-4 py-20">
       <div className="space-y-10">
         <header className="flex items-center gap-5">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted text-xl font-medium">
-            {user.name.charAt(0)}
+            {user.displayName.charAt(0)}
           </div>
 
           <div className="space-y-1">
             <h1 className="text-2xl font-semibold">
-              {user.name}
+              {user.displayName}
             </h1>
             <p className="text-sm text-muted-foreground">
               {user.email}

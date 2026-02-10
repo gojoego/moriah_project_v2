@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm(){
+    const router = useRouter();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -21,6 +24,32 @@ export function LoginForm(){
             return;
         }
         
+        setIsSubmitting(true);
+        
+        try {
+            const res = await fetch("http://localhost:4000/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({email, password}),
+            });
+
+            if (!res.ok) throw new Error("invalid creds");
+
+            const data = await res.json();
+
+            localStorage.setItem("token", data.token);
+
+            setSuccess(true);
+
+            router.push("/user_profile")
+        } catch (err) {
+            console.log(err)
+            setError("login failed")
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
