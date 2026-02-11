@@ -9,10 +9,10 @@ const navLinks = [
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
+    <header className="border-b border-border bg-background">
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex h-14 items-center justify-between">
-          <Link href="/" className="font-semibold tracking-tight">
+          <Link href="/" className="text-primary hover:underline">
             The Moriah Project
           </Link>
 
