@@ -23,22 +23,26 @@ export function PostCard({ post }: PostCardProps) {
   });
 
   return (
-    <Card className={cn("moriah-card", "transition hover:shadow-md")}>
+    <Card 
+      className={cn(
+        "shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/40"
+      )}
+    >
       <CardHeader>
-        <CardTitle className="text-xl">{post.deceasedName}</CardTitle>
+        <CardTitle className="text-xl tracking-tight">{post.deceasedName}</CardTitle>
 
  
-        <CardDescription className="text-xs moriah-muted">
+        <CardDescription className="text-xs text-muted-foreground">
           {dateLabel}
         </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-3">
-        <p className="text-sm leading-relaxed text-foreground/90 line-clamp-3">
+        <p className="text-sm leading-relaxed text-foreground/80 line-clamp-3">
           {post.background}
         </p>
 
-        <Link href={`/posts/${post.id}`} className="moriah-link text-sm">
+        <Link href={`/posts/${post.id}`} className="text-sm text-primary hover:underline">
           Read story →
         </Link>
       </CardContent>

@@ -15,17 +15,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body>
-       <div className="min-h-screen bg-background text-foreground">
+      <body className="bg-background text-foreground antialiased">
+       <div className="min-h-screen">
           <SiteHeader />
-
           <div className="relative">
-            <div className="pointer-events-none absolute inset-0 opacity-60">
-              <div className="absolute -top-24 left-1/2 h-64 w-[48rem] -translate-x-1/2 rounded-full bg-secondary blur-3xl" />
-              <div className="absolute top-24 left-12 h-48 w-48 rounded-full bg-accent blur-3xl" />
-              <div className="absolute top-40 right-12 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
-            </div>
-
             <main className="relative moriah-container py-12">
               <AppShell>{children}</AppShell>
             </main>

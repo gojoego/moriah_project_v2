@@ -1,8 +1,39 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 36 33% 97%;
+  --foreground: 30 12% 15%;
+
+  --card: 36 25% 99%;
+  --card-foreground: 30 10% 15%;
+
+  --primary: 163 31% 28%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 140 18% 45%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 30 20% 92%;
+  --muted-foreground: 163 10% 35%;
+
+  --accent: 18 45% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  --border: 30 20% 85%;
+  --ring: 163 31% 35%;
+}
 
 body {
-  background-color: #faf9f7;
-  color: #1f2937;
-  -webkit-font-smoothing: antialiased;
+  background: radial-gradient(
+    circle at 60% 40%,
+    hsl(158 35% 70%) 0%,
+    hsl(158 30% 82%) 35%,
+    hsl(158 25% 88%) 60%,
+    hsl(70 35% 94%) 100%
+  );
+  color: hsl(var(--foreground));
 }
+
+
