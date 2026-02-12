@@ -37,7 +37,7 @@
     "**/*.mts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "../backend/src/db.ts"  ],
   "exclude": [
     "node_modules"
   ]
