@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import "dotenv/config";
 
 import login from "./routes/auth/login";
 import signup from "./routes/auth/signup";
@@ -34,5 +35,12 @@ if (process.env.NODE_ENV !== "test"){
         console.log(`Backend running at http://localhost:${PORT}`);
     });
 }
+
+import { pool } from "./db";
+
+pool.query("SELECT NOW()")
+  .then(res => console.log("DB connected:", res.rows[0]))
+  .catch(err => console.error("DB connection failed:", err));
+
 
 export default app;

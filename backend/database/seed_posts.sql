@@ -7,6 +7,11 @@ SELECT
     'published'
 FROM users u 
 WHERE u.email = 'joe@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Moriah'
+);
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
@@ -16,7 +21,12 @@ SELECT
     'I wish I had told you how much your steadiness meant to me. I carry your lessons with me every day.',
     'published'
 FROM users u
-WHERE u.email = 'admin@moriahproject.org';
+WHERE u.email = 'admin@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Daniel'
+);
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
@@ -26,7 +36,12 @@ SELECT
     'I am sorry I didn’t recognize how much you were carrying. I hope you know you were deeply loved.',
     'published'
 FROM users u
-WHERE u.email = 'test@test.org';
+WHERE u.email = 'test@test.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Lena'
+);
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
@@ -36,7 +51,12 @@ SELECT
     'There are so many things I still want to tell you. I miss our long talks more than I can explain.',
     'draft'
 FROM users u
-WHERE u.email = 'testuser@moriahproject.org';
+WHERE u.email = 'testuser@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Chris'
+);
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
@@ -46,7 +66,12 @@ SELECT
     'I wish I had been able to protect you too. I think about you every single day.',
     'published'
 FROM users u
-WHERE u.email = 'maria@moriahproject.org';
+WHERE u.email = 'maria@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Isabella'
+);
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
@@ -56,17 +81,12 @@ SELECT
     'I replay our last conversation often. I hope you found the peace you were searching for.',
     'published'
 FROM users u
-WHERE u.email = 'david@moriahproject.org';
-
-INSERT INTO posts (author_id, deceased_name, background, content, status)
-SELECT 
-    u.id,
-    'Marcus',
-    'We trained together for our first marathon and pushed each other past our limits.',
-    'I replay our last conversation often. I hope you found the peace you were searching for.',
-    'published'
-FROM users u
-WHERE u.email = 'david@moriahproject.org';
+WHERE u.email = 'david@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Marcus'
+);
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
@@ -76,7 +96,13 @@ SELECT
     'Your songs still play in my car. I hope you knew how much light you brought into our lives.',
     'hidden'
 FROM users u
-WHERE u.emai
+WHERE u.email = 'micah@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Noah'
+);
+
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
     u.id,
@@ -85,7 +111,12 @@ SELECT
     'I wish I had called you that night. I carry both regret and gratitude in equal measure.',
     'published'
 FROM users u
-WHERE u.email = 'elena@moriahproject.org';
+WHERE u.email = 'elena@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Sofia'
+);
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
@@ -95,4 +126,9 @@ SELECT
     'I hope you know that you mattered deeply to so many people, even when you couldn’t see it.',
     'published'
 FROM users u
-WHERE u.email = 'james@moriahproject.org';
+WHERE u.email = 'james@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.author_id = u.id 
+    AND p.deceased_name = 'Thomas'
+);
