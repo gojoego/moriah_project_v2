@@ -9,4 +9,5 @@ VALUES
     (gen_random_uuid(), 'sarah@moriahproject.org', 'Sarah', 'user'),
     (gen_random_uuid(), 'micah@moriahproject.org', 'Micah', 'user'),
     (gen_random_uuid(), 'elena@moriahproject.org', 'Elena', 'user'),
-    (gen_random_uuid(), 'james@moriahproject.org', 'James', 'moderator');
+    (gen_random_uuid(), 'james@moriahproject.org', 'James', 'moderator')
+ON CONFLICT (email) DO NOTHING;
