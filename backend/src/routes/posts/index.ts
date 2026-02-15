@@ -1,46 +1,27 @@
 import { Router } from "express";
+import { getAllPosts } from "../../db/queries/posts";
 
-const router = Router(); 
+const router = Router();
 
-router.post("/", (req, res) => {
-    const {
-        deceasedName,
-        background, 
-        content
-    } = req.body;
-
-    if (!deceasedName || !content) {
-        return res.status(400).json({ error: "missing required fields"});
-    }
-
-    return res.json({
-        id: crypto.randomUUID(),
-        authorId: "demo-user-id",
-        deceasedName, 
-        background,
-        content, 
-        status: "published",
-        createdAt: new Date().toISOString(),
-    });
+router.get("/", async (_req, res) => {
+  try {
+    const posts = await getAllPosts();
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: "getAllPosts() failed" });
+  }
 });
 
-router.get("/", (_req, res) => {
-  return res.json([
-    {
-      id: "post-1",
-      deceasedName: "John",
-      content: "I wish I could have told you...",
-      status: "published",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "post-2",
-      deceasedName: "Maria",
-      content: "You mattered more than you knew...",
-      status: "published",
-      createdAt: new Date().toISOString(),
-    },
-  ]);
+router.get("/:id", (req, res) => {
+  return res.json({
+    id: req.params.id,
+    deceasedName: "John",
+    background: "My brother",
+    content: "I wish I could have told you...",
+    status: "published",
+    createdAt: new Date().toISOString(),
+  });
 });
 
 export default router;
+
