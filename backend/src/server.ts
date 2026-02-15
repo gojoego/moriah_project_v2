@@ -6,7 +6,7 @@ import login from "./routes/auth/login";
 import signup from "./routes/auth/signup";
 import me from "./routes/users/me";
 import posts from "./routes/posts";
-import postById from "./routes/posts/getById";
+import { getAllPosts } from "./db/queries/posts";
 
 const app = express();
 
@@ -27,7 +27,7 @@ app.use("/api/auth", login);
 app.use("/api/auth", signup);
 app.use("/api/users", me);
 app.use("/api/posts", posts)
-app.use("/api/posts", postById);
+app.use("/api/posts", getAllPosts);
 
 if (process.env.NODE_ENV !== "test"){
     const PORT = 4000;
