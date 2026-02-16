@@ -1,10 +1,48 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { PostList } from "@/components/posts/PostList";
-import { mockPosts } from "@/lib/mockPosts";
+import { Post } from "@/types/post";
+import { fetchPosts } from "@/lib/api";
 
 export default function PostsPage() {
-    const posts = [...mockPosts].sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function loadPosts() {
+            try {
+
+                const data = await fetchPosts();
+
+                const sorted = [...data].sort(
+                    (a, b) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                );
+
+                setPosts(sorted);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError("Something went wrong");
+                }
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadPosts();
+    }, []);
+
+    if (loading) {
+        return <div className="text-center py-12">Loading posts...</div>;
+    }
+
+    if (error) {
+        return <div className="text-center py-12 text-red-500">Error: {error}</div>;
+    }
 
     return (
         <main className="max-w-4xl mx-auto py-12 px-4">

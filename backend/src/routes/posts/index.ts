@@ -8,8 +8,8 @@ router.get("/", async (_req, res) => {
     const posts = await getAllPosts();
     res.json(posts);
   } catch (error) {
-    res.status(500).json({ error: "getAllPosts() failed" });
-  }
+  console.error("getAllPosts error:", error);
+  res.status(500).json({ error: "getAllPosts() failed" });  }
 });
 
 router.get("/:id", (req, res) => {

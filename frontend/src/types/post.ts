@@ -3,5 +3,7 @@ export interface Post {
     deceasedName: string;
     background: string;
     content: string;
+    status: string;
     createdAt: string;   
+    author_name: string;
 }
