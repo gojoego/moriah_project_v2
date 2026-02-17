@@ -1,51 +1,27 @@
-"use client";
-
-import type { Post } from "@/types/post";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { Post } from "@/types/post";
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-interface PostCardProps {
+interface Props {
   post: Post;
 }
 
-export function PostCard({ post }: PostCardProps) {
-  const dateLabel = new Date(post.createdAt).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
+export function PostCard({ post }: Props) {
   return (
-    <Card 
-      className={cn(
-        "shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/40"
-      )}
+    <Link
+      href={`/posts/${post.id}`}
+      className="block p-6 border rounded-lg hover:bg-slate-50 transition"
     >
-      <CardHeader>
-        <CardTitle className="text-xl tracking-tight">{post.deceasedName}</CardTitle>
+      <h2 className="text-xl font-semibold">
+        {post.deceasedName}
+      </h2>
 
- 
-        <CardDescription className="text-xs text-muted-foreground">
-          {dateLabel}
-        </CardDescription>
-      </CardHeader>
+      <p className="mt-2 text-sm text-slate-600">
+        {post.content.slice(0, 120)}...
+      </p>
 
-      <CardContent className="space-y-3">
-        <p className="text-sm leading-relaxed text-foreground/80 line-clamp-3">
-          {post.background}
-        </p>
-
-        <Link href={`/posts/${post.id}`} className="text-sm text-primary hover:underline">
-          Read story →
-        </Link>
-      </CardContent>
-    </Card>
+      <p className="mt-2 text-xs text-slate-400">
+        By {post.author_name}
+      </p>
+    </Link>
   );
 }
