@@ -1,7 +1,10 @@
 import { pool } from "..";
 
-export async function getAllPosts() {
-    const result = await pool.query(`
+export async function getAllPosts(options?: {
+    limit?: number;
+    offset?: number;
+}) {
+    let query = `
         SELECT
             p.id,
             p.deceased_name,
@@ -13,9 +16,22 @@ export async function getAllPosts() {
         FROM posts p 
         JOIN users u ON p.author_id = u.id 
         WHERE p.status = 'published'
-        ORDER BY p.created_at DESC;
-    `); 
+        ORDER BY p.created_at DESC
+    `; 
 
+    const values: any[] = [];
+
+    if (options?.limit) {
+        values.push(options.limit);
+        query += ` LIMIT $${values.length}`;
+    }
+
+    if (options?.offset) {
+        values.push(options.offset);
+        query += ` OFFSET $${values.length}`;
+    }
+
+    const result = await pool.query(query, values); 
     return result.rows;
 }
 
