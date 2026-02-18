@@ -13,10 +13,18 @@ export function LoginForm(){
     const [success, setSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const LOGIN_DISABLED = true;
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setError(null);
+        if (LOGIN_DISABLED) {
+            setError(
+                "logging in is currently disabled while The Moriah Project is operating in read-only mode."
+            );
+            return;
+        }
+
         setSuccess(false);
 
         if (!email || !password) {
@@ -46,7 +54,6 @@ export function LoginForm(){
             router.push("/user_profile")
         } catch (err) {
             console.log(err)
-            setError("login failed")
         } finally {
             setIsSubmitting(false);
         }
@@ -60,18 +67,28 @@ export function LoginForm(){
             <h1 className="text-2xl font-semibold text-center">
                 Log In
             </h1>
-            <input type="email" 
+            <input
+                disabled={LOGIN_DISABLED}
+                type="email" 
                 placeholder="email"
                 className="w-full border p-2"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError(null);   
+                }}
                 required
             />
-            <input type="password" 
+            <input
+                disabled={LOGIN_DISABLED} 
+                type="password" 
                 placeholder="password"
                 className="w-full border p-2 rounded"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError(null);   
+                }}
                 required
             />
 
@@ -81,18 +98,22 @@ export function LoginForm(){
                 </p>
             )}
 
-            {success && (
-                <p className="text-sm text-green-600 text-center">
-                    logged in successfully
-                </p>
+            {!LOGIN_DISABLED && success && (
+            <p className="text-sm text-green-600 text-center">
+                Account created successfully.
+            </p>
             )}
 
             <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
+                disabled={LOGIN_DISABLED || isSubmitting}
+                className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                {isSubmitting ? "logging in" : "log in"}
+                {LOGIN_DISABLED
+                    ? "Login Disabled"
+                    : isSubmitting
+                    ? "Logging in…"
+                    : "Log in"}
             </button>
         </form>
     )
