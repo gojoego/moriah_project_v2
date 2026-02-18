@@ -1,11 +1,36 @@
+"use client";
+
 import Link from "next/link";
 import { PostList } from "@/components/posts/PostList";
-import { mockPosts } from "@/lib/mockPosts";
+import { useEffect, useState } from "react";
+import { Post } from "@/types/post";
+import { fetchPosts } from "@/lib/api";
 
 export default function HomePage() {
-  const topPosts = [...mockPosts]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 5);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadTopPosts() {
+      try {
+        const posts = await fetchPosts(5);
+        setPosts(posts);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("something went wrong");
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadTopPosts();
+  }, []);
+
+  if (loading) return <div className="text-center py-12">Loading recent posts...</div>;
+  if (error) return <div className="text-center py-12 text-red-500"> Error: {error}</div>
 
   return (
     <main className="mx-auto max-w-3xl space-y-8 px-4">
@@ -51,7 +76,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <PostList posts={topPosts} />
+        <PostList posts={posts} />
       </section>
     </main>
   );

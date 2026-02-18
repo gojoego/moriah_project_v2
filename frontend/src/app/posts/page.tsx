@@ -14,15 +14,9 @@ export default function PostsPage() {
         async function loadPosts() {
             try {
 
-                const data = await fetchPosts();
+                const posts = await fetchPosts();
 
-                const sorted = [...data].sort(
-                    (a, b) =>
-                        new Date(b.createdAt).getTime() -
-                        new Date(a.createdAt).getTime()
-                );
-
-                setPosts(sorted);
+                setPosts(posts);
             } catch (err: unknown) {
                 if (err instanceof Error) {
                     setError(err.message);
