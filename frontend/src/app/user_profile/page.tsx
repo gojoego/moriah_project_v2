@@ -36,7 +36,9 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:4000/api/users/me", {
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+    fetch(`${apiBase}/api/users/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

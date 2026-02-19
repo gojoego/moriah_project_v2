@@ -1,17 +1,11 @@
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
-    u.id, 
+    '1ceb0a50-2380-4a83-a87f-d24d2d16b78b', 
     'Moriah',
     'She was always into health and fitness and really inspired me to take better care of myself', 
     'I am sorry that you were in pain and I am sorry that I did not reach out to you after I left the city',
     'published'
-FROM users u 
-WHERE u.email = 'joe@moriahproject.org'
-AND NOT EXISTS (
-    SELECT 1 FROM posts p 
-    WHERE p.author_id = u.id 
-    AND p.deceased_name = 'Moriah'
-);
+;
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 
