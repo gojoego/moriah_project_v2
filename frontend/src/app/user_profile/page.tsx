@@ -51,7 +51,7 @@ export default function ProfilePage() {
         setUser(data);
       })
       .catch(() => {
-        router.push("/login");
+        router.push("/auth/login");
       })
       .finally(() => {
         setLoading(false);
