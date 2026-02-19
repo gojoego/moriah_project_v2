@@ -62,7 +62,7 @@ export function LoginForm(){
     return (
         <form 
             onSubmit={handleSubmit}
-            className="space-y-4 max-w-sm mx-auto mt-12"
+            className="space-y-4 max-w-sm mx-auto"
         >
             <h1 className="text-2xl font-semibold text-center">
                 Log In

@@ -56,7 +56,7 @@ export default function HomePage() {
         </ol>
 
         <div className="mt-4 flex flex-col gap-2 text-center">
-          <Link href="/posts/1" className="text-lg font-medium underline-offset-4 hover:underline">
+          <Link href="/posts/1ceb0a50-2380-4a83-a87f-d24d2d16b78b" className="text-lg font-medium underline-offset-4 hover:underline">
             here is the example: the first post
           </Link>
 
