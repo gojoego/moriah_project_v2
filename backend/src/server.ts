@@ -26,7 +26,10 @@ app.use(
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
-    res.json({ status: "ok"});
+    res.status(200).json({
+        status: "ok", 
+        timeStamp: new Date().toISOString(),
+    });
 });
 
 app.use("/api/auth", (_req, res) => {

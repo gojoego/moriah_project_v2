@@ -15,10 +15,7 @@ export default async function PostDetailPage({
 }) {
   const { id } = await params;
 
-  const response = await fetch(
-    `http://localhost:4000/api/posts/${id}`,
-    { cache: "no-store" }
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts/${id}`, {cache: "no-store"})
 
   if (!response.ok) notFound();
 
