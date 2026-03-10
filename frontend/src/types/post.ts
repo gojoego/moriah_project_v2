@@ -1,9 +1,9 @@
 export interface Post { 
     id: string;
-    deceasedName: string;
+    deceased_name: string;
     background: string;
     content: string;
     status: string;
-    createdAt: string;   
+    created_at: string;   
     author_name: string;
 }
