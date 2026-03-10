@@ -1,7 +1,11 @@
 import { Post } from "@/types/post";
 
+const ApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+if (!ApiBaseUrl) throw new Error("NEXT_PUBLIC_API_BASE_URL not set")
+
 export async function fetchPosts(limit?: number) {
-    const baseUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`
+    const baseUrl = `${ApiBaseUrl}/api/posts`
 
     const url = limit ? `${baseUrl}?limit=${limit}` : baseUrl;
 
