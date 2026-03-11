@@ -8,6 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { fetchPostById } from "@/lib/api";
+
 export default async function PostDetailPage({
   params,
 }: {
@@ -15,16 +17,18 @@ export default async function PostDetailPage({
 }) {
   const { id } = await params;
 
-  const response = await fetch(
-    `http://localhost:4000/api/posts/${id}`,
-    { cache: "no-store" }
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts/${id}`, {cache: "no-store"})
 
+  let post;
+
+  try {
+    post = await fetchPostById(id)
+  } catch {
+    notFound();
+  }
   if (!response.ok) notFound();
 
-  const post = await response.json();
-
-  const dateLabel = new Date(post.created_at).toLocaleDateString(
+  const dateLabel = new Date(post.createdAt).toLocaleDateString(
     undefined,
     {
       year: "numeric",
@@ -41,7 +45,7 @@ export default async function PostDetailPage({
 
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight">
-          {post.deceased_name}
+          {post.deceasedName}
         </h1>
         <p className="moriah-muted text-sm">{dateLabel}</p>
       </header>
@@ -60,7 +64,7 @@ export default async function PostDetailPage({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">
-            What I wish I could say to {post.deceased_name}
+            What I wish I could say to {post.deceasedName}
           </CardTitle>
         </CardHeader>
         <CardContent className="leading-relaxed text-foreground/90 whitespace-pre-line">
