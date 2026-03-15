@@ -1,0 +1,31 @@
+# fly.toml app configuration file generated for backend-thrumming-meadow-3806 on 2026-03-14T20:25:49-05:00
+
+app = 'moriah-project-api'
+primary_region = 'dfw'
+
+[build]
+
+[env]
+  PORT = '4000'
+  NODE_ENV = 'production'
+
+[http_service]
+  internal_port = 4000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [[http_service.checks]]
+    grace_period = '10s'
+    interval = '15s'
+    method = 'GET'
+    timeout = '2s'
+    path = '/health'
+
+[[vm]]
+  memory = '256mb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
