@@ -12,7 +12,7 @@ export function PostCard({ post }: Props) {
       className="block p-6 border rounded-lg hover:bg-slate-50 transition"
     >
       <h2 className="text-xl font-semibold">
-        {post.deceasedName}
+        {post.deceased_name}
       </h2>
 
       <p className="mt-2 text-sm text-slate-600">
