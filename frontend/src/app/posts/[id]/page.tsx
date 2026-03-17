@@ -17,8 +17,6 @@ export default async function PostDetailPage({
 }) {
   const { id } = await params;
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts/${id}`, {cache: "no-store"})
-
   let post;
 
   try {
@@ -26,9 +24,8 @@ export default async function PostDetailPage({
   } catch {
     notFound();
   }
-  if (!response.ok) notFound();
 
-  const dateLabel = new Date(post.createdAt).toLocaleDateString(
+  const dateLabel = new Date(post.created_at).toLocaleDateString(
     undefined,
     {
       year: "numeric",
@@ -45,7 +42,7 @@ export default async function PostDetailPage({
 
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight">
-          {post.deceasedName}
+          {post.deceased_name}
         </h1>
         <p className="moriah-muted text-sm">{dateLabel}</p>
       </header>
@@ -64,7 +61,7 @@ export default async function PostDetailPage({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">
-            What I wish I could say to {post.deceasedName}
+            What I wish I could say to {post.deceased_name}
           </CardTitle>
         </CardHeader>
         <CardContent className="leading-relaxed text-foreground/90 whitespace-pre-line">

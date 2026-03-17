@@ -9,8 +9,6 @@ export async function fetchPosts(limit?: number) {
 
     const url = limit ? `${baseUrl}?limit=${limit}` : baseUrl;
 
-    console.log(url);
-
     const response = await fetch(url);
 
     if (!response.ok) throw new Error("failed to fetch posts");
@@ -19,7 +17,7 @@ export async function fetchPosts(limit?: number) {
 }
 
 export async function fetchPostById(id:string): Promise<Post> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts/${id}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts/${id}`, {cache: "no-store"});
 
     if (!response.ok) throw new Error("failed to fetch post");
 
