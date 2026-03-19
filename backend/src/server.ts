@@ -6,10 +6,13 @@ import { pool } from "./db";
 
 // import login from "./routes/auth/login";
 // import signup from "./routes/auth/signup";
+
 import me from "./routes/users/me";
 import posts from "./routes/posts";
 
 const app = express();
+
+const PORT = Number(process.env.PORT) || 4000;
 
 const postsLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -34,6 +37,7 @@ app.use(
     })
 );
 
+app.use(postsLimiter);
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
@@ -48,15 +52,43 @@ app.use("/api/auth", (_req, res) => {
         error: "authentication is disabled while The Moriah Project is in development"
     })
 });
+
 // app.use("/api/auth", signup);
 app.use("/api/users", me);
 app.use("/api/posts", posts)
-app.use("/api/posts", postsLimiter)
+
+app.use((_req, res) => {
+    res.status(404).json(
+        { error: "route not found"}
+    );
+});
+
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    console.error("unhandled error: ", err);
+    res.status(500).json(
+        { error: "internal server error" }
+    );
+})
 
 if (process.env.NODE_ENV !== "test"){
-    const PORT = 4000;
-    app.listen(PORT, () => {
-        console.log(`Backend running at http://localhost:${PORT}`);
+    const server = app.listen(PORT, "0.0.0.0", async () => {
+        console.log(`Backend running on port ${PORT}`);
+        try {
+            const result = await pool.query("SELECT NOW()");
+            console.log("DB connected:", result.rows[0]);
+        } catch (error) {
+            console.error("DB connection failed:", error);
+        }
+    });
+
+    process.on("SIGINT", () => {
+        console.log("Shutting down...");
+        server.close(() => process.exit(0));
+    });
+
+    process.on("SIGTERM", () => {
+        console.log("Shutting down...");
+        server.close(() => process.exit(0));
     });
 }
 
