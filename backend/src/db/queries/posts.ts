@@ -21,12 +21,12 @@ export async function getAllPosts(options?: {
 
     const values: any[] = [];
 
-    if (options?.limit) {
+    if (options?.limit !== undefined) {
         values.push(options.limit);
         query += ` LIMIT $${values.length}`;
     }
 
-    if (options?.offset) {
+    if (options?.offset !== undefined) {
         values.push(options.offset);
         query += ` OFFSET $${values.length}`;
     }

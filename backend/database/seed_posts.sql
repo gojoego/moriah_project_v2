@@ -1,11 +1,17 @@
-INSERT INTO posts (author_id, deceased_name, background, content, status)
-SELECT 
-    '1ceb0a50-2380-4a83-a87f-d24d2d16b78b', 
+INSERT INTO posts (id, author_id, deceased_name, background, content, status)
+SELECT
+    '1ceb0a50-2380-4a83-a87f-d24d2d16b78b',
+    u.id,
     'Moriah',
-    'She was always into health and fitness and really inspired me to take better care of myself', 
+    'She was always into health and fitness and really inspired me to take better care of myself',
     'I am sorry that you were in pain and I am sorry that I did not reach out to you after I left the city',
     'published'
-;
+FROM users u
+WHERE u.email = 'admin@moriahproject.org'
+AND NOT EXISTS (
+    SELECT 1 FROM posts p
+    WHERE p.id = '1ceb0a50-2380-4a83-a87f-d24d2d16b78b'
+);
 
 INSERT INTO posts (author_id, deceased_name, background, content, status)
 SELECT 

@@ -17,9 +17,10 @@ const postsLimiter = rateLimit({
 });
 
 const allowedOrigins = [
-    "http://localhost:3000",
-    process.env.FRONTEND_URL
-];
+  "http://localhost:3000",
+  "https://moriah-project-web.vercel.app",
+  process.env.FRONTEND_URL,
+].filter((origin): origin is string => Boolean(origin));
 
 app.use(
     cors({
