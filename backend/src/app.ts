@@ -45,9 +45,9 @@ app.use("/api/auth", (_req, res) => {
         error: "authentication is disabled while The Moriah Project is in development"
     })
 });
+
 // app.use("/api/auth", signup);
 app.use("/api/users", me);
-app.use("/api/posts", posts)
-app.use("/api/posts", postsLimiter)
+app.use("/api/posts", postsLimiter, posts);
 
 export default app;
