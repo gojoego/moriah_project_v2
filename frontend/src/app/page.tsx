@@ -5,6 +5,7 @@ import { PostList } from "@/components/posts/PostList";
 import { useEffect, useState } from "react";
 import { Post } from "@/types/post";
 import { fetchPosts } from "@/lib/api";
+import { ErrorState } from "@/components/ui/ErrorState";
 
 export default function HomePage() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -30,25 +31,6 @@ export default function HomePage() {
     }, []);
 
     if (loading) return <div className="text-center py-12">Loading recent posts...</div>;
-    
-    if (error) {
-        return (
-            <div className="text-center py-12 space-y-4">
-                <p className="text-red-500 text-lg font-medium">
-                    We could not load sotries right now... Sorry! 
-                </p>
-                <p className="text-sm text-muted-foreground">
-                    Please try again in a moment. 
-                </p>
-                <button
-                    onClick={() => window.location.reload()}
-                    className="px-4 py-2 border rounded-lg hover:bg-slate-100 transition"
-                >
-                    Retry
-                </button>
-            </div>
-        )
-    }
 
     return (
         <main className="mx-auto max-w-3xl space-y-8 px-4">
@@ -61,7 +43,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col items-center gap-3">
             <Link
-                href={`/posts/${posts[0]?.id}`}
+                href={`/posts/${posts[0].id}`}
                 className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
             >
                 Read an Example
@@ -106,7 +88,11 @@ export default function HomePage() {
             </Link>
             </div>
 
-            <PostList posts={posts} />
+            {error ? (
+                <ErrorState onRetry={() => window.location.reload()} />
+            ) : (
+                <PostList posts={posts} />
+            )}
         </section>
         </main>
     );
