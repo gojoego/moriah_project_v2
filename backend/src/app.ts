@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
 
 // import login from "./routes/auth/login";
 // import signup from "./routes/auth/signup";
@@ -10,6 +11,8 @@ import posts from "./routes/posts";
 const allowedOrigins = [
   "http://localhost:3000",
   "https://moriah-project-web.vercel.app",
+  "https://moriahproject.org",
+  "https://themoriahproject.org",
   process.env.FRONTEND_URL,
 ].filter((origin): origin is string => Boolean(origin));
 
@@ -20,6 +23,7 @@ const postsLimiter = rateLimit({
 
 const app = express();
 
+app.use(helmet());
 app.use(
     cors({
         origin(origin, callback) {
@@ -27,7 +31,7 @@ app.use(
 
             if (allowedOrigins.includes(origin)) return callback(null, true);
 
-            return callback(new Error("not allowed by CORS"));
+            return callback(null, false);
         }
     })
 );

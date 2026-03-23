@@ -10,7 +10,7 @@ async function start() {
     console.log("DB connected:", res.rows[0]);
 
     app.listen(PORT, () => {
-      console.log(`Backend running at http://localhost:${PORT}`);
+      console.log(`Backend running on port ${PORT}`);
     });
   } catch (err) {
     console.error("DB connection failed:", err);
