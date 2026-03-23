@@ -9,19 +9,25 @@ export function PostCard({ post }: Props) {
   return (
     <Link
       href={`/posts/${post.id}`}
-      className="block p-6 border rounded-lg hover:bg-slate-50 transition"
+      className="group block p-6 border border-slate-200 rounded-2xl bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
     >
-      <h2 className="text-xl font-semibold">
+      <h2 className="text-xl font-semibold text-slate-900 group-hover:text-slate-700 transition">
         {post.deceased_name}
       </h2>
 
-      <p className="mt-2 text-sm text-slate-600">
-        {post.content.slice(0, 120)}...
+      <p className="mt-3 text-sm text-slate-600 line-clamp-3">
+        {post.content}
       </p>
 
-      <p className="mt-2 text-xs text-slate-400">
-        By {post.author_name}
-      </p>
+      <div className="mt-4 flex items-center justify-between">
+        <p className="text-xs text-slate-400">
+          By {post.author_name}
+        </p>
+
+        <span className="text-xs text-slate-300 group-hover:text-slate-500 transition">
+          Read →
+        </span>
+      </div>
     </Link>
   );
 }
