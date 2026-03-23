@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { PostList } from "@/components/posts/PostList";
 import { Post } from "@/types/post";
 import { fetchPosts } from "@/lib/api";
+import { ErrorState } from "@/components/ui/ErrorState";
 
 export default function PostsPage() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -35,7 +36,16 @@ export default function PostsPage() {
     }
 
     if (error) {
-        return <div className="text-center py-12 text-red-500">Error: {error}</div>;
+        function loadPosts(): void {
+            throw new Error("Function not implemented.");
+        }
+
+        return (
+            <ErrorState
+                message="cannot load stories right now"
+                onRetry={loadPosts}
+            />
+        )
     }
 
     return (
