@@ -12,8 +12,10 @@ export default function HomePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        async function loadTopPosts() {
+    async function loadTopPosts() {
+        setLoading(true);
+        setError(null);
+
         try {
             const posts = await fetchPosts(5);
             setPosts(posts);
@@ -26,11 +28,30 @@ export default function HomePage() {
         } finally {
             setLoading(false);
         }
-        }
+    }
+
+    useEffect(() => {
         loadTopPosts();
     }, []);
 
-    if (loading) return <div className="text-center py-12">Loading recent posts...</div>;
+    const hasPosts = posts.length > 0;
+
+    function renderContent() {
+        if (loading) {
+            return (
+                <div className="text-center py-8 text-muted-foreground">
+                    Loading stories... 
+                </div>
+            );
+        } 
+        
+        if (error) {
+            return <ErrorState onRetry={loadTopPosts} />
+        }
+
+        return <PostList posts={posts} />;      
+    }
+
 
     return (
         <main className="mx-auto max-w-3xl space-y-8 px-4">
@@ -42,12 +63,24 @@ export default function HomePage() {
             write a message to someone you have lost to suicide 
             </p>
             <div className="flex flex-col items-center gap-3">
-            <Link
-                href={`/posts/${posts[0].id}`}
-                className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
-            >
-                Read an Example
-            </Link>
+
+            {!loading && (
+                hasPosts ? (
+                    <Link
+                        href={`/posts/${posts[0].id}`}
+                        className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
+                    >
+                        Read an example
+                    </Link>
+                ) : (
+                    <Link
+                        href="/posts"
+                        className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
+                    >
+                        Browse examples
+                    </Link>               
+                )                
+            )}
 
             <p className="text-sm text-muted-foreground">
                 Writing your own message coming soon
@@ -68,9 +101,6 @@ export default function HomePage() {
             </ol>
 
             <div className="flex flex-col gap-2 text-center">
-            <Link href="/posts/1ceb0a50-2380-4a83-a87f-d24d2d16b78b" className="text-lg font-medium underline-offset-4 hover:underline">
-                here is the example: the first post
-            </Link>
 
             <Link href="/community_guidelines" className="text-lg font-medium underline-offset-4 hover:underline">
                 here are some guidelines for posting
@@ -80,19 +110,14 @@ export default function HomePage() {
 
         <section className="space-y-4">
             <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold tracking-tight">
-                recent stories
-            </h2>
-            <Link href="/posts" className="moriah-link text-sm">
-                View all →
-            </Link>
+                <h2 className="text-xl font-semibold tracking-tight">
+                    recent stories
+                </h2>
+                <Link href="/posts" className="moriah-link text-sm">
+                    View all →
+                </Link>
             </div>
-
-            {error ? (
-                <ErrorState onRetry={() => window.location.reload()} />
-            ) : (
-                <PostList posts={posts} />
-            )}
+            {renderContent()}
         </section>
         </main>
     );
