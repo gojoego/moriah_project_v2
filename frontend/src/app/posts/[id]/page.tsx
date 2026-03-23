@@ -35,7 +35,7 @@ export default async function PostDetailPage({
   );
 
   return (
-    <main className="space-y-6">
+    <main className="mx-auto max-w-3xl space-y-6 px-4">
       <Link href="/posts" className="moriah-link text-sm">
         ← Back to stories
       </Link>
@@ -51,20 +51,20 @@ export default async function PostDetailPage({
         <CardHeader>
           <CardTitle className="text-lg">Background</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="leading-relaxed text-foreground/90">
+        <CardContent className="space-y-4 leading-relaxed text-foreground/90 whitespace-pre-line">
+          <p>
             {post.background}
           </p>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="moriah-card">
         <CardHeader>
           <CardTitle className="text-lg">
             What I wish I could say to {post.deceased_name}
           </CardTitle>
         </CardHeader>
-        <CardContent className="leading-relaxed text-foreground/90 whitespace-pre-line">
+        <CardContent className="space-y-4 leading-relaxed text-foreground/90 whitespace-pre-line">
           {post.content}
         </CardContent>
       </Card>
