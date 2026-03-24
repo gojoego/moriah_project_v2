@@ -21,3 +21,5 @@ async function start() {
 if (process.env.NODE_ENV !== "test") {
   void start();
 }
+
+export default app;
