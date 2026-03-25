@@ -2,32 +2,27 @@ import Link from "next/link";
 import { Post } from "@/types/post";
 
 interface Props {
-  post: Post;
+	post: Post;
 }
 
 export function PostCard({ post }: Props) {
-  return (
-    <Link
-      href={`/posts/${post.id}`}
-      className="group block p-6 border border-slate-200 rounded-2xl bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
-    >
-      <h2 className="text-xl font-semibold text-slate-900 group-hover:text-slate-700 transition">
-        {post.deceased_name}
-      </h2>
+	return (
+    	<Link
+			href={`/posts/${post.id}`}
+			className="block p-6 rounded-2xl border bg-muted/30 hover:bg-muted/50 transition"
+    	>
+			<h2 className="text-lg font-semibold">
+				{post.deceased_name}
+			</h2>
 
-      <p className="mt-3 text-sm text-slate-600 line-clamp-3">
-        {post.content}
-      </p>
+			<p className="mt-3 text-sm text-foreground/80 leading-relaxed line-clamp-3">
+				{post.content}
+			</p>
 
-      <div className="mt-4 flex items-center justify-between">
-        <p className="text-xs text-slate-400">
-          By {post.author_name}
-        </p>
-
-        <span className="text-xs text-slate-300 group-hover:text-slate-500 transition">
-          Read →
-        </span>
-      </div>
-    </Link>
-  );
+			<p className="mt-4 text-xs text-muted-foreground">
+				By {post.author_name}
+			</p>
+    
+    	</Link>
+	)
 }

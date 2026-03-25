@@ -24,10 +24,10 @@ export function PostList({ posts }: PostListProps) {
 					</Link>
 
 					<Link
-						href={`/posts/${posts[0]?.id}`}
-          				className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition"
+					href="/posts/example"
+					className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition"
 					>
-						read an example
+					read an example
 					</Link>
 				</div>
 			</div>
@@ -35,7 +35,7 @@ export function PostList({ posts }: PostListProps) {
   	}
 
   	return (
-		<div className="grid grid-cols-1 gap-6">
+		<div className="grid gap-6">
 			{posts.map((post) => (
 				<PostCard key={post.id} post={post} />
 			))}

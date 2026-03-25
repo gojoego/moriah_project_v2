@@ -60,7 +60,7 @@ export default function HomePage() {
             Welcome to the Moriah Project 
             </h1>
             <p className="text-muted-foreground text-2xl">
-            write a message to someone you have lost to suicide 
+            a place to share what you wish you could say to someone who has passed from suicide 
             </p>
             <div className="flex flex-col items-center gap-3">
 
@@ -81,14 +81,22 @@ export default function HomePage() {
                     </Link>               
                 )                
             )}
-
-            <p className="text-sm text-muted-foreground">
-                Writing your own message coming soon
-            </p>
             </div>
         </header>
 
         <section className="space-y-4">
+            <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold tracking-tight">
+                    recent stories
+                </h2>
+                <Link href="/posts" className="moriah-link text-sm">
+                    View all →
+                </Link>
+            </div>
+            {renderContent()}
+        </section>
+
+                <section className="space-y-4">
             <h2 className="text-2xl font-medium text-center">How This Works…</h2>
 
             <ol className="space-y-2 text-muted-foreground text-xl list-decimal list-inside">
@@ -106,18 +114,6 @@ export default function HomePage() {
                 here are some guidelines for posting
             </Link>
             </div>
-        </section>
-
-        <section className="space-y-4">
-            <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold tracking-tight">
-                    recent stories
-                </h2>
-                <Link href="/posts" className="moriah-link text-sm">
-                    View all →
-                </Link>
-            </div>
-            {renderContent()}
         </section>
         </main>
     );
