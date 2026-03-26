@@ -30,7 +30,7 @@ export default [
   },
 
   {
-    files: ["*.config.js", "jest.config.js"],
+    files: ["*.config.js", "jest.config.js", "jest.config.cjs"],
     languageOptions: {
       globals: {
         module: "readonly",

@@ -16,7 +16,10 @@
 
     "typecheck": "cd frontend && npm run typecheck && cd ../backend && npm run typecheck",
 
-    "test": "cd backend && npm run test"
+    "test": "cd backend && npm run test",
+
+    "ci:local": "npm run install:all && npm run typecheck && npm run lint && npm run build && npm run test",
+    "check": "npm run typecheck && npm run lint"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
