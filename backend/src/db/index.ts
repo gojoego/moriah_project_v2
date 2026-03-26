@@ -1,6 +1,8 @@
 import { Pool } from "pg";
 
-if (!process.env.DATABASE_URL){
+const isTest = process.env.NODE_ENV === "test";
+
+if (!process.env.DATABASE_URL && !isTest){
     throw new Error("DATABASE URL not defined");
 }
 

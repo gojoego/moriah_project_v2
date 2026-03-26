@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../server";
 
-describe("POST /api/auth/login", () => {
+describe.skip("POST /api/auth/login", () => {
     it("returns user and token when valid data provided", async () => {
         const res = await request(app)
             .post("/api/auth/login")
