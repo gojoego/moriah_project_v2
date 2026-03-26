@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     try {
         const posts = await getAllPosts({limit});
         res.json(posts);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "getAllPosts() failed" });  }
     });
     

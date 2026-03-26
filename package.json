@@ -2,19 +2,21 @@
   "name": "moriah-project",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\"",
+    "dev": "concurrently \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
 
-    "build": "npm run build --prefix frontend && npm run build --prefix backend",
+    "build": "cd frontend && npm run build && cd ../backend && npm run build",
 
-    "start": "concurrently \"npm run start --prefix frontend\" \"npm run start --prefix backend\"",
+    "start": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start\"",
 
-    "install:all": "npm install --prefix frontend && npm install --prefix backend",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
 
-    "lint": "npm run lint --prefix frontend",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "lint": "npm run lint:frontend && npm run lint:backend",
 
-    "typecheck": "npm run typecheck --prefix frontend && npm run typecheck --prefix backend",
+    "typecheck": "cd frontend && npm run typecheck && cd ../backend && npm run typecheck",
 
-    "test": "npm run test --prefix backend"
+    "test": "cd backend && npm run test"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
