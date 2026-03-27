@@ -1,8 +1,27 @@
 {
-  "devDependencies": {
-    "@types/jest": "^30.0.0"
+  "name": "moriah-project",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
+
+    "build": "cd frontend && npm run build && cd ../backend && npm run build",
+
+    "start": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start\"",
+
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+
+    "typecheck": "cd frontend && npm run typecheck && cd ../backend && npm run typecheck",
+
+    "test": "cd backend && npm run test",
+
+    "ci:local": "npm run install:all && npm run typecheck && npm run lint && npm run build && npm run test",
+    "check": "npm run typecheck && npm run lint"
   },
-  "dependencies": {
-    "helmet": "^8.1.0"
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

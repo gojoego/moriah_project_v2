@@ -19,7 +19,7 @@ export async function getAllPosts(options?: {
         ORDER BY p.created_at DESC
     `; 
 
-    const values: any[] = [];
+    const values: (number | string)[] = [];
 
     if (options?.limit !== undefined) {
         values.push(options.limit);

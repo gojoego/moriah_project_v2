@@ -1,3 +1,21 @@
+jest.mock("../db", () => ({
+  pool: {
+    query: jest.fn().mockResolvedValue({
+      rows: [
+        {
+          id: "1",
+          deceased_name: "Test",
+          background: "Test",
+          content: "Test",
+          status: "published",
+          created_at: new Date(),
+          author_name: "Test User",
+        },
+      ],
+    }),
+  },
+}));
+
 import request from "supertest";
 import app from "../server";
 

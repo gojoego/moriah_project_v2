@@ -7,7 +7,6 @@ import helmet from "helmet";
 // import signup from "./routes/auth/signup";
 import me from "./routes/users/me";
 import posts from "./routes/posts";
-import { error } from "node:console";
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -64,7 +63,6 @@ app.use(
         error: Error,
         _req: express.Request,
         res: express.Response, 
-        _next: express.NextFunction
     ) => {
         if (error.message === "CORS not allowed") {
             return res.status(403).json({
