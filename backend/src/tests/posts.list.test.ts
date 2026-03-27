@@ -1,4 +1,4 @@
-jest.mock("../../db", () => ({
+jest.mock("../db", () => ({
   pool: {
     query: jest.fn().mockResolvedValue({
       rows: [
