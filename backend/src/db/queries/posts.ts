@@ -1,4 +1,5 @@
 import { pool } from "..";
+import { Post } from "../../types/post";
 
 export async function getAllPosts(options?: {
     limit?: number;
@@ -53,5 +54,32 @@ export async function getPostsById(id: string){
         [id]
     );
     
+    return result.rows[0];
+}
+
+export async function insertPost(
+    author_id: string,
+    input: {
+        deceased_name: string;
+        background?: string;
+        content: string;   
+    }
+): Promise<Post>{
+    const query =
+        `
+        INSERT INTO Posts (author_id,deceased_name, background, content) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+        `;
+
+    const values = [
+        author_id, 
+        input.deceased_name, 
+        input.background ?? null, 
+        input.content
+    ];
+
+    const result = await pool.query(query, values);
+
     return result.rows[0];
 }
