@@ -1,5 +1,6 @@
-import { Router } from "express";
-import { getAllPosts, getPostsById } from "../../db/queries/posts";
+import { NextFunction, Router, Request, Response } from "express";
+import { getAllPosts, getPostsById, insertPost } from "../../db/queries/posts";
+import { CreatePostInput } from "../../types/post";
 
 const router = Router();
 
@@ -15,28 +16,83 @@ router.get("/", async (req, res) => {
         res.status(500).json({ error: "getAllPosts() failed" });  }
     });
     
-    router.get("/:id", async (req, res) => {
-        const { id } = req.params;
+router.get("/:id", async (req, res) => {
+    const { id } = req.params;
         
-        const uuidRegex =
+    const uuidRegex =
         /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
         
-        if (!uuidRegex.test(id)) {
-            return res.status(400).json({ error: "Invalid post id" });
-        }
+    if (!uuidRegex.test(id)) {
+        return res.status(400).json({ error: "Invalid post id" });
+    }
         
-        try {
-            const post = await getPostsById(req.params.id);
+    try {
+        const post = await getPostsById(id);
             
-            if (!post) return res.status(404).json({ error: "post not found"});
+        if (!post) return res.status(404).json({ error: "post not found"});
             
-            res.json(post);
-        } catch (error) {
-            console.error("getPostById error:", error);
-            res.status(500).json({ error: "Failed to fetch post" });
+        res.json(post);
+    } catch (error) {
+        console.error("getPostById error:", error);
+        res.status(500).json({ error: "Failed to fetch post" });
+    }
+});
+
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if (!req.body) {
+            return res.status(400).json({ error: "Missing body" });
         }
-    });
-    
-    export default router;
+
+        const body = req.body as Partial<CreatePostInput>;
+        
+        const name = body.deceased_name;
+        if (typeof name !== "string") {
+            return res.status(400).json({ error: "Invalid deceased_name" });
+        }
+
+        const cleanName = name.trim();
+
+        if (!cleanName){
+            return res.status(400).json({ error: "Invalid deceased_name" })
+        }
+
+        const contentVal = body.content;
+        if (typeof contentVal !== "string") {
+            return res.status(400).json({ error: "Invalid content" });
+        }
+
+        const cleanContent = contentVal.trim();
+
+        if (!cleanContent) {
+            return res.status(400).json({ error: "Invalid content" });
+        }
+
+        const backgroundVal = body.background;
+
+        const cleanBackground = 
+            typeof backgroundVal === "string" && backgroundVal.trim()
+            ? backgroundVal.trim()
+            : undefined;
+        
+        const mockUserId = "1ceb0a50-2380-4a83-a87f-d24d2d16b78b";
+
+        const newPost = await insertPost(mockUserId, {
+            deceased_name: cleanName,
+            content: cleanContent,
+            ...(cleanBackground ? { background: cleanBackground } : {}),
+        });
+
+        if (!newPost) {
+            return res.status(500).json({ error: "Failed to create post" });
+        }
+
+        return res.status(201).json(newPost);
+    } catch (error) {
+        next(error)
+    }
+});
+
+export default router;
     
     

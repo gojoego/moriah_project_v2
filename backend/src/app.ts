@@ -58,11 +58,19 @@ app.use("/api/auth", (_req, res) => {
 app.use("/api/users", me);
 app.use("/api/posts", postsLimiter, posts);
 
+app.use((_req, res) => {
+    res.status(404).json({
+        error: "Not found",
+        path: _req.originalUrl,
+    });
+});
+
 app.use(
     (
         error: Error,
         _req: express.Request,
         res: express.Response, 
+        _next: express.NextFunction
     ) => {
         if (error.message === "CORS not allowed") {
             return res.status(403).json({
