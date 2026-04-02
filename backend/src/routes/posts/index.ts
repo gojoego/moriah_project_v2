@@ -75,7 +75,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
             ? backgroundVal.trim()
             : undefined;
         
-        const mockUserId = "1ceb0a50-2380-4a83-a87f-d24d2d16b78b";
+        const mockUserId = "753e195a-7c48-4aa7-8f03-4bfd28cd9a7e";
 
         const newPost = await insertPost(mockUserId, {
             deceased_name: cleanName,
