@@ -1,6 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { createPost } from "@/lib/api";
 
 export default function NewPost(){
     const [deceasedName, setDeceasedName] = useState("");
@@ -24,31 +25,16 @@ export default function NewPost(){
             return; 
         }
 
-        // hitting create post endpoint 
         setIsSubmitting(true);
         
         try {
-            const response = await fetch("http://localhost:4000/api/posts", {
-                method: "POST", 
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    deceased_name: deceasedName.trim(),
-                    background: background ? background.trim() || undefined : undefined,
-                    content: content.trim()
-                }),
+            const result = await createPost({
+                deceased_name: deceasedName.trim(),
+                content: content.trim(),
+                ...(background?.trim() ? { background: background.trim() } : {}),
             });
 
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.error || "Failed to create post")
-            }
-
-            const newPost = await response.json();
-            
-            
-            router.push(`/posts/${newPost.id}`);
+            router.push(`/posts/${result.post.id}`);
         } catch (error) {
             if (error instanceof Error) {
                 setError(error.message);

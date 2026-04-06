@@ -7,3 +7,14 @@ export interface Post {
     created_at: string;   
     author_name: string;
 }
+
+export interface CreatePostInput {
+    deceased_name: string;
+    content: string;
+    background?: string;
+}
+
+export interface CreatePostResponse {
+    success: boolean;
+    post: Post;
+}
