@@ -67,10 +67,10 @@ export default function HomePage() {
             {!loading && (
                 hasPosts ? (
                     <Link
-                        href={`/posts/${posts[0].id}`}
+                        href={`/posts/new`}
                         className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
                     >
-                        Read an example
+                        Write a message
                     </Link>
                 ) : (
                     <Link

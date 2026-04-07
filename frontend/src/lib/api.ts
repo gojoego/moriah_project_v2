@@ -1,4 +1,4 @@
-import { Post } from "@/types/post";
+import { CreatePostInput, CreatePostResponse, Post } from "@/types/post";
 
 const ApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -23,3 +23,31 @@ export async function fetchPostById(id:string): Promise<Post> {
 
     return response.json();
 }
+
+export async function createPost(
+    data: CreatePostInput
+): Promise<CreatePostResponse> {
+    const response = await fetch(`${ApiBaseUrl}/api/posts`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+        let errorMessage = "Failed to create post";
+
+        try {
+            const err = await response.json();
+            errorMessage = err.error || errorMessage;
+        } catch {}
+
+        throw new Error(errorMessage);
+    }
+
+    return response.json();
+}
+
+
+    

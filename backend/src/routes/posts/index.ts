@@ -74,8 +74,9 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
             typeof backgroundVal === "string" && backgroundVal.trim()
             ? backgroundVal.trim()
             : undefined;
-        
-        const mockUserId = "1ceb0a50-2380-4a83-a87f-d24d2d16b78b";
+            
+        // TEMP: using hardcoded user until auth + deterministic seed is implemented
+        const mockUserId = "753e195a-7c48-4aa7-8f03-4bfd28cd9a7e";
 
         const newPost = await insertPost(mockUserId, {
             deceased_name: cleanName,
