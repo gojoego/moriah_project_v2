@@ -61,45 +61,48 @@ export default function NewPost(){
                     </p>     
                 </header>
 
-                <section className="space-y-4">
+                <section className="form-section">
                     <div className="space-y-1">
-                        <label className="block text-sm text-muted-foreground">
+                        <label className="form-label">
                             name of the loved one you are writing to
                         </label>
                         <input
                             type="text"
-                            className="w-full rounded border border-border bg-background px-3 py-2"
+                            className="form-input"
                             value={deceasedName}
                             onChange={(e) => setDeceasedName(e.target.value)}
                             required
                             disabled={isSubmitting}
+                            placeholder="e.g. my friend, Moriah"
                         />                        
                     </div>
 
                     <div className="space-y-1">
-                        <label className="block text-sm text-muted-foreground">
+                        <label className="form-label">
                             Background or context (optional)
                         </label>
                         <textarea 
                             value={background}
                             onChange={(e) => setBackground(e.target.value)}
                             rows={5}
-                            className="w-full rounded border border-border bg-background px-3 py-2 resize-y"
+                            className="form-textarea"
                             disabled={isSubmitting} 
+                            placeholder="who they were, your relationship with them"
                         />
                     </div>
                               
                     <div className="space-y-1">
-                        <label className="block text-sm text-muted-foreground">
+                        <label className="form-label">
                         What I wish I could say
                         </label>
                         <textarea
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             rows={10}
-                            className="w-full rounded border border-border bg-background px-3 py-2 resize-y"
+                            className="form-textarea"
                             required
                             disabled={isSubmitting}
+                            placeholder="What do you wish you could've said to them before their passing?"
                         />
                     </div>
                 </section>
@@ -113,7 +116,7 @@ export default function NewPost(){
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full rounded bg-primary py-3 text-white hover:opacity-90 disabled:opacity-50"
+                    className="form-button"
                 >
                     {isSubmitting ? "creating post…" : "create post"}
                 </button>
