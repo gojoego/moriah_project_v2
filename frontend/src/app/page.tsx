@@ -84,7 +84,7 @@ export default function HomePage() {
             </div>
         </header>
 
-        <section className="space-y-4">
+        <section className="form-section">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold tracking-tight">
                     recent stories
@@ -96,7 +96,7 @@ export default function HomePage() {
             {renderContent()}
         </section>
 
-                <section className="space-y-4">
+        <section className="form-section">
             <h2 className="text-2xl font-medium text-center">How This Works…</h2>
 
             <ol className="space-y-2 text-muted-foreground text-xl list-decimal list-inside">
