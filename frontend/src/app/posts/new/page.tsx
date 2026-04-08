@@ -63,12 +63,13 @@ export default function NewPost(){
 
                 <section className="form-section">
                     <div className="space-y-1">
-                        <label className="form-label">
+                        <label className="form-label" htmlFor="name">
                             name of the loved one you are writing to
                         </label>
                         <input
                             type="text"
                             className="form-input"
+                            id="name"
                             value={deceasedName}
                             onChange={(e) => setDeceasedName(e.target.value)}
                             required
@@ -78,7 +79,7 @@ export default function NewPost(){
                     </div>
 
                     <div className="space-y-1">
-                        <label className="form-label">
+                        <label className="form-label" htmlFor="background">
                             Background or context (optional)
                         </label>
                         <textarea 
@@ -86,13 +87,14 @@ export default function NewPost(){
                             onChange={(e) => setBackground(e.target.value)}
                             rows={5}
                             className="form-textarea"
+                            id="background"
                             disabled={isSubmitting} 
                             placeholder="who they were, your relationship with them"
                         />
                     </div>
                               
                     <div className="space-y-1">
-                        <label className="form-label">
+                        <label className="form-label" htmlFor="content">
                         What I wish I could say
                         </label>
                         <textarea
@@ -101,6 +103,7 @@ export default function NewPost(){
                             rows={10}
                             className="form-textarea"
                             required
+                            id="content"
                             disabled={isSubmitting}
                             placeholder="What do you wish you could've said to them before their passing?"
                         />
