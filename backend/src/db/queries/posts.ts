@@ -36,6 +36,26 @@ export async function getAllPosts(options?: {
     return result.rows;
 }
 
+export async function getPostsByAuthorId(id: string): Promise<Post[]> {
+    const result = await pool.query(
+        `
+        SELECT
+            p.id,
+            p.deceased_name,
+            p.background,
+            p.content,
+            p.status,
+            p.created_at
+        FROM posts p
+        WHERE p.author_id = $1
+        ORDER BY p.created_at DESC
+        `,
+        [id]
+    );
+
+    return result.rows;
+}
+
 export async function getPostsById(id: string){
     const result = await pool.query(
         `

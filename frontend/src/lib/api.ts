@@ -2,26 +2,49 @@ import { CreatePostInput, CreatePostResponse, Post } from "@/types/post";
 
 const ApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-if (!ApiBaseUrl) throw new Error("NEXT_PUBLIC_API_BASE_URL not set")
+if (!ApiBaseUrl){
+    throw new Error("NEXT_PUBLIC_API_BASE_URL not set");
+};
+
+async function handleResponse<T>(res: Response): Promise<T> {
+    if (!res.ok) {
+        let message = "Request Failed"
+
+        try {
+            const err = await res.json();
+            message = err.error || message;
+        } catch {}
+
+        throw new Error(message);
+    }
+    return res.json();
+}
 
 export async function fetchPosts(limit?: number) {
     const baseUrl = `${ApiBaseUrl}/api/posts`
 
     const url = limit ? `${baseUrl}?limit=${limit}` : baseUrl;
 
-    const response = await fetch(url);
+    const res = await fetch(url);
 
-    if (!response.ok) throw new Error("failed to fetch posts");
-
-    return response.json();
+    return handleResponse<Post[]>(res);
 }
 
 export async function fetchPostById(id:string): Promise<Post> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts/${id}`, {cache: "no-store"});
+    const res = await fetch(`${ApiBaseUrl}/api/posts/${id}`);
 
-    if (!response.ok) throw new Error("failed to fetch post");
+    return handleResponse<Post>(res);
+}
 
-    return response.json();
+export async function fetchMyPosts(token: string): Promise<Post[]> {
+    const url = `${ApiBaseUrl}/api/posts/me`
+    const res = await fetch(url, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return handleResponse<Post[]>(res);
 }
 
 export async function createPost(
@@ -36,14 +59,7 @@ export async function createPost(
     });
 
     if (!response.ok) {
-        let errorMessage = "Failed to create post";
-
-        try {
-            const err = await response.json();
-            errorMessage = err.error || errorMessage;
-        } catch {}
-
-        throw new Error(errorMessage);
+        return handleResponse<CreatePostResponse>(response);
     }
 
     return response.json();

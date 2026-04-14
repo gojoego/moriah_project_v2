@@ -1,5 +1,5 @@
 import { NextFunction, Router, Request, Response } from "express";
-import { getAllPosts, getPostsById, insertPost } from "../../db/queries/posts";
+import { getAllPosts, getPostsById, insertPost, getPostsByAuthorId } from "../../db/queries/posts";
 import { CreatePostInput } from "../../types/post";
 
 const router = Router();
@@ -15,7 +15,20 @@ router.get("/", async (req, res) => {
     } catch {
         res.status(500).json({ error: "getAllPosts() failed" });  }
     });
-    
+
+router.get("/me", async (req, res) => {
+    try {
+        const userId = "753e195a-7c48-4aa7-8f03-4bfd28cd9a7e"
+
+        const posts = await getPostsByAuthorId(userId);
+
+        res.json(posts);
+    } catch (error) {
+        console.error("getPostsByAuthorId error:", error);
+        res.status(500).json({ error: "Failed to fetch posts" });
+    }
+})
+
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
         
