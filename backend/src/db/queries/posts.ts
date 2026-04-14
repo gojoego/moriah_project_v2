@@ -45,8 +45,10 @@ export async function getPostsByAuthorId(id: string): Promise<Post[]> {
             p.background,
             p.content,
             p.status,
-            p.created_at
+            p.created_at,
+            u.display_name as author_name
         FROM posts p
+        JOIN users u on p.author_id = u.id
         WHERE p.author_id = $1
         ORDER BY p.created_at DESC
         `,
