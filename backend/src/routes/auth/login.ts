@@ -1,26 +1,28 @@
 import { Router } from "express";
+import { signToken } from "../../utils/jwt";
+import { getUserByEmail } from "../../db/queries/users";
 
 const router = Router();
 
-router.post("/auth/login", (req, res) => {
-    const {
-        email,
-        password
-    } = req.body;
+router.post("/auth/login", async (req, res) => {
+    const { email } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ error: "invalid creds"});
-    }
+    try {
+        const user = await getUserByEmail(email);
 
-    return res.json({
-        user: {
-            id: "demo-user-id",
-            email, 
-            displayName: "demo user",
-            role: "user"
-        }, 
-        token: "demo-token",
-    });
+        if (!user) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        const token = signToken({
+            id: user.id, 
+            email: user.email
+        });
+
+        res.json({ token });
+    } catch (error) {
+        res.status(500).json({ error: "Login failed"})
+    };
 });
 
 export default router;

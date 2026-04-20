@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { getUserById } from "../../db/queries/users";
+import { authMiddleware, AuthRequest } from "../../middleware/auth";
 
 const router = Router(); 
 
-router.get("/me", async (_req, res) => {
+router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
     try {
-        const userId = "753e195a-7c48-4aa7-8f03-4bfd28cd9a7e";
+        const userId = req.user.id;
 
         const user = await getUserById(userId);
 
@@ -14,11 +15,12 @@ router.get("/me", async (_req, res) => {
         }
 
         res.json({
+            id: user.id,
             displayName: user.display_name,
             email: user.email,
-        });
+            role: user.role
+        })
     } catch (error) {
-        console.error("getUserById error: ", error);
         res.status(500).json({ error: "Failed to fetch user"});
     }
 });
