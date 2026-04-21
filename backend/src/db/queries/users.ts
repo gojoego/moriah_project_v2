@@ -6,7 +6,8 @@ export async function getUserById(id:string) {
         SELECT 
             id, 
             display_name, 
-            email 
+            email, 
+            role 
         FROM users
         WHERE id = $1
         `,
@@ -22,7 +23,8 @@ export async function getUserByEmail(email: string){
         SELECT 
             id, 
             display_name, 
-            email 
+            email,
+            role 
         FROM users
         WHERE email = $1
         `,

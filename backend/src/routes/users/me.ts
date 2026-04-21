@@ -14,6 +14,10 @@ const meRateLimiter = rateLimit({
 
 router.get("/me", meRateLimiter, authMiddleware, async (req: AuthRequest, res) => {
     try {
+        if (!req.user) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
         const userId = req.user.id;
 
         const user = await getUserById(userId);

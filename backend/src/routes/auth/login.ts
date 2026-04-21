@@ -4,7 +4,7 @@ import { getUserByEmail } from "../../db/queries/users";
 
 const router = Router();
 
-router.post("/auth/login", async (req, res) => {
+router.post("/login", async (req, res) => {
     const { email } = req.body;
 
     try {
