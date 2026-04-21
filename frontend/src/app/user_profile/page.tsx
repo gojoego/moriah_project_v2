@@ -87,9 +87,6 @@ useEffect(() => {
     };
 }, [token]);
 
-    // =========================
-    // DERIVED USER (demo fallback)
-    // =========================
     const displayUser: User | null =
         user ??
         (isDemo
