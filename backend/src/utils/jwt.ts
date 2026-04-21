@@ -11,7 +11,7 @@ if (!SECRET && process.env.NODE_ENV !== "development" && process.env.NODE_ENV !=
     throw new Error("JWT_SECRET is required");
 }
 
-const JWT_SECRET = SECRET || "test-secret"; // ✅ fix
+const JWT_SECRET = SECRET || "test-secret";
 
 export function signToken(payload: JwtPayload) {
     return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
