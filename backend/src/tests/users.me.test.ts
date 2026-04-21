@@ -1,53 +1,59 @@
 import request from "supertest";
 import app from "../app";
 import { getUserById } from "../db/queries/users";
-import { authMiddleware } from "../middleware/auth";
-import { error } from "node:console";
+import { signToken } from "../utils/jwt";
 
 jest.mock("../db/queries/users", () => ({
-  	getUserById: jest.fn(),
-}));
-
-jest.mock("../middleware/auth", () => ({
-  	authMiddleware: jest.fn(),
+    getUserById: jest.fn(),
 }));
 
 describe("GET /api/users/me", () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-	});
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
-	it("returns the current user (200)", async () => {
-		(authMiddleware as jest.Mock).mockImplementation(
-			(req: any, _res: any, next: any) => {
-				req.user = {id: "123", email: "joe@test.com" };
-				next();
-			}
-		);
+    it("returns the current user (200)", async () => {
+        const token = signToken({
+            id: "123",
+            email: "joe@test.com",
+        });
 
-		(getUserById as jest.Mock).mockResolvedValue({
-			id: "123",
-			display_name: "Joe",
-			email: "joe@test.com",
-		});
+        (getUserById as jest.Mock).mockResolvedValue({
+            id: "123",
+            display_name: "Joe",
+            email: "joe@test.com",
+            role: "user",
+        });
 
-		const res = await request(app).get("/api/users/me");
+        const res = await request(app)
+            .get("/api/users/me")
+            .set("Authorization", `Bearer ${token}`);
 
-		expect(res.status).toBe(200);
-		expect(res.body.email).toBeDefined();
-	});
+        expect(res.status).toBe(200);
+        expect(res.body.email).toBe("joe@test.com");
+        expect(res.body.role).toBe("user");
+    });
 
-	it("returns 401 if no auth user (unauthorized)", async () => {
-		(authMiddleware as jest.Mock).mockImplementation(
-			(_req: any, res: any, next: any) => {
-				_req.user = undefined;
-				next();
-			}	
-		);
+    it("returns 401 if no token is provided", async () => {
+        const res = await request(app).get("/api/users/me");
 
-		const res = await request(app).get("api/users/me");
+        expect(res.status).toBe(401);
+        expect(res.body.error).toBeDefined();
+    });
 
-		expect(res.status).toBe(401);
-		expect(res.body.error).toBeDefined();
-	});
+    it("returns 404 if user is not found", async () => {
+        const token = signToken({
+            id: "123",
+            email: "joe@test.com",
+        });
+
+        (getUserById as jest.Mock).mockResolvedValue(null);
+
+        const res = await request(app)
+            .get("/api/users/me")
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe("User not found");
+    });
 });
