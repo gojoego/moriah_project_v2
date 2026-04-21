@@ -1,10 +1,18 @@
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import { getUserById } from "../../db/queries/users";
 import { authMiddleware, AuthRequest } from "../../middleware/auth";
 
 const router = Router(); 
 
-router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
+const meRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per window
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+router.get("/me", meRateLimiter, authMiddleware, async (req: AuthRequest, res) => {
     try {
         const userId = req.user.id;
 
