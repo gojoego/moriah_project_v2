@@ -39,8 +39,9 @@ describe("GET /api/users/me", () => {
 
 	it("returns 401 if no auth user (unauthorized)", async () => {
 		(authMiddleware as jest.Mock).mockImplementation(
-			(_req: any, res: any) => {
-				return res.status(401).json({ error: "Unauthorized"});
+			(_req: any, res: any, next: any) => {
+				_req.user = undefined;
+				next();
 			}	
 		);
 
