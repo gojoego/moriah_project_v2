@@ -10,9 +10,6 @@ import { fetchMyPosts } from "@/lib/api";
 export default function ProfilePage() {
     const router = useRouter();
 
-    // =========================
-    // TOKEN (lazy init - no effect)
-    // =========================
     const [token] = useState<string | null>(() => {
         if (typeof window === "undefined") return null;
         return localStorage.getItem("token");
@@ -20,23 +17,14 @@ export default function ProfilePage() {
 
     const isDemo = !token;
 
-    // =========================
-    // USER STATE
-    // =========================
     const [user, setUser] = useState<User | null>(null);
 
-    // =========================
-    // POSTS STATE
-    // =========================
     const [posts, setPosts] = useState<Post[]>([]);
     const [postsLoading, setPostsLoading] = useState(false);
     const [postsError, setPostsError] = useState<string | null>(null);
 
     const [isEditing, setIsEditing] = useState(false);
 
-    // =========================
-    // USER FETCH (only async updates)
-    // =========================
     useEffect(() => {
         if (!token) return;
 
@@ -60,9 +48,6 @@ export default function ProfilePage() {
             });
     }, [token, router]);
 
-    // =========================
-    // POSTS FETCH
-    // =========================
 useEffect(() => {
     if (!token) return;
 
@@ -97,14 +82,8 @@ useEffect(() => {
               }
             : null);
 
-    // =========================
-    // DERIVED LOADING STATE
-    // =========================
     const isLoadingUser = !!token && !user;
 
-    // =========================
-    // RENDER GUARD (safe for hooks)
-    // =========================
     if (typeof window === "undefined") return null;
 
     if (isLoadingUser) {
@@ -156,7 +135,6 @@ useEffect(() => {
                     </div>
                 </header>
 
-                {/* PROFILE SETTINGS */}
                 <section className="space-y-6">
                     <div className="space-y-2">
                         <label className="block text-xs uppercase tracking-wide text-muted-foreground">
@@ -199,7 +177,6 @@ useEffect(() => {
 
                 <hr className="border-border" />
 
-                {/* POSTS SECTION */}
                 <section className="space-y-3">
                     <h2 className="text-xl font-semibold">
                         Remembrances

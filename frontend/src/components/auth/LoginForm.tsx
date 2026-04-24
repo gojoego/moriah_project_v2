@@ -10,25 +10,16 @@ export function LoginForm(){
     const [password, setPassword] = useState("");
 
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const LOGIN_DISABLED = true;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (LOGIN_DISABLED) {
-            setError(
-                "logging in is currently disabled while The Moriah Project is operating in read-only mode."
-            );
-            return;
-        }
+        setError(null);
 
-        setSuccess(false);
 
-        if (!email || !password) {
-            setError('please enter your email and password');
+        if (!email) {
+            setError('please enter your email');
             return;
         }
         
@@ -40,56 +31,50 @@ export function LoginForm(){
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({email, password}),
+                body: JSON.stringify({email}),
             });
 
-            if (!res.ok) throw new Error("invalid creds");
+            if (!res.ok) throw new Error("invalid login");
 
             const data = await res.json();
 
             localStorage.setItem("token", data.token);
 
-            setSuccess(true);
-
             router.push("/user_profile")
         } catch (err) {
-            console.log(err)
+            setError("Invalid email or login failed");
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <form 
+        <form
             onSubmit={handleSubmit}
             className="space-y-4 max-w-sm mx-auto"
         >
-            <h1 className="text-2xl font-semibold text-center">
+            <h2 className="text-xl font-semibold text-center">
                 Log In
-            </h1>
+            </h2>
+
             <input
-                disabled={LOGIN_DISABLED}
-                type="email" 
-                placeholder="email"
-                className="w-full border p-2"
+                type="email"
+                placeholder="Email"
+                className="w-full border p-2 rounded"
                 value={email}
                 onChange={(e) => {
                     setEmail(e.target.value);
-                    setError(null);   
+                    setError(null); 
                 }}
                 required
             />
+
             <input
-                disabled={LOGIN_DISABLED} 
-                type="password" 
-                placeholder="password"
+                type="password"
+                placeholder="Password (not required yet)"
                 className="w-full border p-2 rounded"
                 value={password}
-                onChange={(e) => {
-                    setPassword(e.target.value);
-                    setError(null);   
-                }}
-                required
+                onChange={(e) => setPassword(e.target.value)}
             />
 
             {error && (
@@ -98,23 +83,13 @@ export function LoginForm(){
                 </p>
             )}
 
-            {!LOGIN_DISABLED && success && (
-            <p className="text-sm text-green-600 text-center">
-                Account created successfully.
-            </p>
-            )}
-
             <button
                 type="submit"
-                disabled={LOGIN_DISABLED || isSubmitting}
-                className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isSubmitting}
+                className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
             >
-                {LOGIN_DISABLED
-                    ? "Login Disabled"
-                    : isSubmitting
-                    ? "Logging in…"
-                    : "Log in"}
+                {isSubmitting ? "Logging in…" : "Log in"}
             </button>
         </form>
-    )
+    );
 }
