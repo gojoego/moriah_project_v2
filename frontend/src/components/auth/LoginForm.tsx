@@ -18,8 +18,8 @@ export function LoginForm(){
         setError(null);
 
 
-        if (!email) {
-            setError('please enter your email');
+        if (!email || !password) {
+            setError('please enter your creds');
             return;
         }
         
@@ -31,10 +31,17 @@ export function LoginForm(){
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({email}),
+                body: JSON.stringify({email,password}),
             });
 
-            if (!res.ok) throw new Error("invalid login");
+            if (!res.ok) {
+                if (res.status === 401) {
+                    setError("Invalid email or password");
+                } else {
+                    setError("Something went wrong");
+                }
+                return;
+            }
 
             const data = await res.json();
 

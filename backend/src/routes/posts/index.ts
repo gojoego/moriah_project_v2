@@ -6,15 +6,25 @@ const router = Router();
 
 router.get("/", async (req, res) => {
     console.log("query param limit:", req.query.limit);
+
     const limit = req.query.limit
         ? parseInt(req.query.limit as string, 10)
         : undefined;
+
     try {
-        const posts = await getAllPosts({limit});
+        const posts = await getAllPosts({ limit });
+
+        console.log("Posts fetched:", posts.length);
+
         res.json(posts);
-    } catch {
-        res.status(500).json({ error: "getAllPosts() failed" });  }
-    });
+    } catch (error) {
+        console.error("❌ getAllPosts error:", error); // 🔥 KEY CHANGE
+
+        res.status(500).json({
+            error: "getAllPosts() failed",
+        });
+    }
+});
 
 router.get("/me", async (req, res) => {
     try {

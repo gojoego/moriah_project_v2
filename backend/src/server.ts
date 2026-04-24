@@ -4,22 +4,21 @@ import app from "./app";
 
 const PORT = Number(process.env.PORT) || 4000;
 
-async function start() {
-  try {
-    const res = await pool.query("SELECT NOW()");
-    console.log("DB connected:", res.rows[0]);
+console.log("PORT ENV:", process.env.PORT);
+console.log("Listening on:", PORT);
 
-    app.listen(PORT, () => {
-      console.log(`Backend running on port ${PORT}`);
-    });
-  } catch (err) {
-    console.error("DB connection failed:", err);
-    process.exit(1);
-  }
-}
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
+});
 
 if (process.env.NODE_ENV !== "test") {
-  void start();
+  pool.query("SELECT NOW()")
+    .then((res) => {
+      console.log("DB connected:", res.rows[0]);
+    })
+    .catch((err) => {
+      console.error("DB connection failed:", err);
+    });
 }
 
 export default app;
