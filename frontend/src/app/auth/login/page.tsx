@@ -1,14 +1,28 @@
+"use client"
+
 import { LoginForm } from "@/components/auth/LoginForm";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function LoginPage(){
+	const router = useRouter();
+	
+	useEffect (() => {
+		const token = localStorage.getItem("token");
+
+		if (token) {
+			router.push("/user_profile");
+		}
+	}, [router]);
+
 	return (
-		<div className="text-center flex flex-col gap-10">
-			<h4 className="text-lg font-semibold">The Moriah Project is currently in development mode - logging into an account is disabled.</h4>
-			<LoginForm/>
-			<Link href="/user_profile" className="text-lg font-medium underline-offset-4 hover:underline">
-				If you would like to see a demo version of the user profile, click here.
-          	</Link>
-		</div>
+		<main className="min-h-screen flex items-center justify-center px-4">
+			<div className="w-full max-w-md space-y-8 text-center">
+				<h1 className="text-2xl font-semibold">
+					Login to your account
+				</h1>
+				<LoginForm />
+			</div>
+		</main>
   	)
 }

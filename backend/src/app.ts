@@ -25,6 +25,13 @@ const postsLimiter = rateLimit({
 
 const app = express();
 
+app.get("/health", (_req, res) => {
+    res.status(200).json({
+        status: "ok", 
+        timeStamp: new Date().toISOString(),
+    });
+});
+
 app.disable("x-powered-by");
 app.use(helmet());
 app.use(
@@ -40,13 +47,6 @@ app.use(
     })
 );
 app.use(express.json());
-
-app.get("/health", (_req, res) => {
-    res.status(200).json({
-        status: "ok", 
-        timeStamp: new Date().toISOString(),
-    });
-});
 
 app.use("/api/auth", login);
 
