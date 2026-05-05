@@ -21,28 +21,31 @@ router.post("/signup", async (req, res) => {
             displayName
         } = req.body;
 
-        if (!email || !password || !displayName) {
-            return res.status(400).json({ error: "Missing required fields"});
-        }
+        const normalizedEmail = email?.toLowerCase().trim();
+        const trimmedDisplayName = displayName?.trim();
 
-        const normalizedEmail = email.toLowerCase().trim();
+        if (!normalizedEmail || !password || !trimmedDisplayName) {
+            return res.status(400).json({ error: "missing or invalid fields"});
+        }
 
         if (password.length < 8){
             return res.status(400).json({error: "Password must be 8 characters or more"})
         }
 
-        const existingUser = await getUserByEmail(email);
+        const existingUser = await getUserByEmail(normalizedEmail);
 
         if (existingUser) {
-            return res.status(409).json({ error: "User already exists" });
+            return res.status(400).json({ error: "Invalid signup credentials" });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const trimmedPassword = password.trim();
+
+        const hashedPassword = await bcrypt.hash(trimmedPassword, 10);
 
         const newUser = await createUser({
             email: normalizedEmail, 
             password: hashedPassword, 
-            displayName,
+            displayName: trimmedDisplayName,
         });
 
         const token = signToken({

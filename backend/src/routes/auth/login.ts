@@ -18,7 +18,7 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ error: "Missing credentials" });
         }
 
-        const normalizedEmail = email.toLowerCase();
+        const normalizedEmail = email.toLowerCase().trim();
 
         const user = await getUserByEmail(normalizedEmail);
 

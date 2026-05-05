@@ -24,6 +24,7 @@ export async function getUserByEmail(email: string){
             id, 
             display_name, 
             email,
+            password,
             role 
         FROM users
         WHERE email = $1
