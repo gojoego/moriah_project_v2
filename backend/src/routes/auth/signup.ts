@@ -21,11 +21,19 @@ router.post("/signup", async (req, res) => {
             displayName
         } = req.body;
 
-        const normalizedEmail = email?.toLowerCase().trim();
-        const trimmedDisplayName = displayName?.trim();
+        if (
+            typeof email !== "string" ||
+            typeof password !== "string" ||
+            typeof displayName !== "string" 
+        ) {
+            return res.status(400).json({ error: "Missing or invalid fields" });
+        }
 
-        if (!normalizedEmail || !password || !trimmedDisplayName) {
-            return res.status(400).json({ error: "missing or invalid fields"});
+        const normalizedEmail = email.toLowerCase().trim();
+        const trimmedDisplayName = displayName.trim();
+
+        if (!normalizedEmail || !trimmedDisplayName) {
+            return res.status(400).json({ error: "Missing or invalid fields"});
         }
 
         if (password.length < 8){
@@ -38,9 +46,7 @@ router.post("/signup", async (req, res) => {
             return res.status(400).json({ error: "Invalid signup credentials" });
         }
 
-        const trimmedPassword = password.trim();
-
-        const hashedPassword = await bcrypt.hash(trimmedPassword, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await createUser({
             email: normalizedEmail, 
