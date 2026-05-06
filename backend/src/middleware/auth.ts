@@ -17,7 +17,7 @@ export function authMiddleware(
     const authHeader = req.headers.authorization;
 
     if (!authHeader?.startsWith("Bearer ")) {
-        return res.status(401).json({ error: "no token provided"});
+        return res.status(401).json({ error: "Missing or invalid auth header" });
     }
 
     const token = authHeader.slice("Bearer ".length).trim();
@@ -32,10 +32,14 @@ export function authMiddleware(
         if (typeof decoded === "string") {
             return res.status(401).json({ error: "Invalid token"});
         }
-        req.user = decoded as AuthUser;
+        req.user = decoded;
 
         next();
-    } catch {
-        return res.status(401).json({ error: "Invalid token"});
+    } catch (error) {
+        console.error("Auth middleware error:", {
+            message: error instanceof Error ? error.message : "Unknown error",
+        });
+        
+        return res.status(401).json({ error: "Unauthorized" });
     }
 }

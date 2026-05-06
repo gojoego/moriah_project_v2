@@ -4,7 +4,7 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
 import login from "./routes/auth/login";
-// import signup from "./routes/auth/signup";
+import signup from "./routes/auth/signup";
 import me from "./routes/users/me";
 import posts from "./routes/posts";
 
@@ -50,7 +50,7 @@ app.use(express.json());
 
 app.use("/api/auth", login);
 
-// app.use("/api/auth", signup);
+app.use("/api/auth", signup);
 app.use("/api/users", me);
 app.use("/api/posts", postsLimiter, posts);
 

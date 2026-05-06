@@ -1,5 +1,7 @@
 import { Router } from "express";
+import bcrypt from "bcrypt";
 import { signToken } from "../../utils/jwt";
+import { getUserByEmail } from "../../db/queries/users";
 
 const router = Router();
 
@@ -16,21 +18,19 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ error: "Missing credentials" });
         }
 
-        if (process.env.NODE_ENV !== "production") {
-            if (!process.env.DEV_PASSWORD) {
-                console.error("DEV_PASSWORD not set");
-                return res.status(500).json({ error: "Server misconfigured" });
-            }
+        const normalizedEmail = email.toLowerCase().trim();
 
-            if (password !== process.env.DEV_PASSWORD) {
-                return res.status(401).json({ error: "Invalid credentials" });
-            }
+        const user = await getUserByEmail(normalizedEmail);
+
+        if (!user) {
+            return res.status(401).json({ error: "Invalid credentials"});
         }
 
-        const user = {
-            id: "753e195a-7c48-4aa7-8f03-4bfd28cd9a7e",
-            email,
-        };
+        const isValid = await bcrypt.compare(password, user.password);
+
+        if (!isValid) {
+            return res.status(401).json({ error: "Invalid credentials"})
+        }
 
         const token = signToken({
             id: user.id,
