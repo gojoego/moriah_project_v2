@@ -1,54 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function SignupForm() {  
+import { signupUser } from "@/lib/api";
+import { setToken } from "@/lib/auth";
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+export default function SignupForm() { 
+	const router = useRouter();
 
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+	const [username, setUsername] = useState("");
+  	const [email, setEmail] = useState("");
+  	const [password, setPassword] = useState("");
+  	const [confirmPassword, setConfirmPassword] = useState("");
 
-  const SIGNUP_DISABLED = true;
+  	const [error, setError] = useState<string | null>(null);
+  	const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
 
-    if (SIGNUP_DISABLED) {
-      setError(
-        "Signup is currently disabled while The Moriah Project is operating in read-only mode."
-      );
-      return;
-    }
-    
-    setSuccess(false);
+		setError(null);
 
-    if (username.trim().length < 3) {
-      setError("Username must be at least 3 characters.");
-      return;
-    }
+		if (username.trim().length < 8) {
+			setError("Username must be at least 8 characters.")
+			return;
+		}
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
+		if (password !== confirmPassword){
+			setError("Passwords do not match.")
+			return;
+		}
 
-    setIsSubmitting(true);
-    await new Promise((res) => setTimeout(res, 800));
-    setIsSubmitting(false);
+		setIsSubmitting(true);
 
-    setSuccess(true);
+		try {
+			const data = await signupUser({
+				displayName: username,
+				email, 
+				password,
+			});
+			
+			setToken(data.token);
 
-
-  };
+			router.push("/user_profile");
+		} catch(err) {
+			if (err instanceof Error) {
+				setError(err.message);
+			} else {
+				setError("Signup failed");
+			}
+		} finally {
+			setIsSubmitting(false);
+		} 	
+	};
 
   return (
     <div>
-      <h4 className="text-lg font-semibold text-center">The Moriah Project is currently in development mode - signing up for an account is disabled.</h4>
       <form
         onSubmit={handleSubmit}
         className="space-y-4 max-w-sm mx-auto mt-12"
@@ -58,43 +66,51 @@ export default function SignupForm() {
         </h1>
 
         <input
-          disabled={SIGNUP_DISABLED}
           type="text"
           placeholder="Username"
           className="w-full border p-2 rounded"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+			setUsername(e.target.value);
+			setError(null);
+		  }}
           required
         />
 
         <input
-          disabled={SIGNUP_DISABLED}
-          type="email"
-          placeholder="Email"
-          className="w-full border p-2 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+			type="email"
+			placeholder="Email"
+			className="w-full border p-2 rounded"
+			value={email}
+			onChange={(e) => {
+				setEmail(e.target.value);
+				setError(null);
+			}}
+			required
         />
 
         <input
-          disabled={SIGNUP_DISABLED}
-          type="password"
-          placeholder="Password"
-          className="w-full border p-2 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+			type="password"
+			placeholder="Password"
+			className="w-full border p-2 rounded"
+			value={password}
+			onChange={(e) => {
+				setPassword(e.target.value);
+				setError(null);
+			}}
+			required
         />
 
         <input
-          disabled={SIGNUP_DISABLED}
-          type="password"
-          placeholder="Confirm Password"
-          className="w-full border p-2 rounded"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
+			type="password"
+			placeholder="Confirm Password"
+			className="w-full border p-2 rounded"
+			value={confirmPassword}
+			onChange={(e) => {
+				setConfirmPassword(e.target.value);
+				setError(null);
+			}}
+			required
         />
 
         {error && (
@@ -103,21 +119,13 @@ export default function SignupForm() {
           </p>
         )}
 
-        {!SIGNUP_DISABLED && success && (
-          <p className="text-sm text-green-600 text-center">
-            Account created successfully.
-          </p>
-        )}
-
         <button
           type="submit"
-          disabled={SIGNUP_DISABLED || isSubmitting}
+		  disabled={isSubmitting}
           className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
         >
           {
-            SIGNUP_DISABLED
-            ? "Signup Disabled"
-            : isSubmitting
+            isSubmitting
             ? "Creating account…"
             : "Create Account"
           }

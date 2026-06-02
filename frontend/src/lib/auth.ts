@@ -1,5 +1,3 @@
-import { get } from "react-hook-form";
-
 const TOKEN_KEY = "moriah-token";
 
 export function getToken(): string | null {
@@ -14,8 +12,8 @@ export function setToken(token: string): void {
     localStorage.setItem(TOKEN_KEY, token);
 }
 
-export function removeToken(token:string): void {
-    localStorage.removeItem(token)
+export function removeToken(): void {
+    localStorage.removeItem(TOKEN_KEY)
 }
 
 export function isAuthenticated(): boolean {
