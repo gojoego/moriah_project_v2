@@ -1,6 +1,7 @@
 import { NextFunction, Router, Request, Response } from "express";
 import { getAllPosts, getPostsById, insertPost, getPostsByAuthorId } from "../../db/queries/posts";
 import { CreatePostInput } from "../../types/post";
+import { authMiddleware, AuthRequest } from "../../middleware/auth";
 
 const router = Router();
 
@@ -26,9 +27,13 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/me", async (req, res) => {
+router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
     try {
-        const userId = "753e195a-7c48-4aa7-8f03-4bfd28cd9a7e"
+        const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(401).json({ error: "Unauthorized"});
+        }
 
         const posts = await getPostsByAuthorId(userId);
 
@@ -37,7 +42,7 @@ router.get("/me", async (req, res) => {
         console.error("getPostsByAuthorId error:", error);
         res.status(500).json({ error: "Failed to fetch posts" });
     }
-})
+});
 
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
