@@ -21,11 +21,13 @@ export default function SignupForm() {
 		e.preventDefault();
 
 		setError(null);
-
-		if (username.trim().length < 8) {
+		
+		const trimmedUsername = username.trim();
+		if (trimmedUsername.trim().length < 8) {
 			setError("Username must be at least 8 characters.")
 			return;
 		}
+		
 
 		if (password !== confirmPassword){
 			setError("Passwords do not match.")
@@ -36,7 +38,7 @@ export default function SignupForm() {
 
 		try {
 			const data = await signupUser({
-				displayName: username,
+				displayName: trimmedUsername,
 				email, 
 				password,
 			});
