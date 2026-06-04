@@ -1,4 +1,4 @@
-import { NextFunction, Router, Request, Response } from "express";
+import { NextFunction, Router, Response } from "express";
 import { getAllPosts, getPostsById, insertPost, getPostsByAuthorId } from "../../db/queries/posts";
 import { CreatePostInput } from "../../types/post";
 import { authMiddleware, AuthRequest } from "../../middleware/auth";
@@ -66,61 +66,72 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.post("/", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        if (!req.body) {
-            return res.status(400).json({ error: "Missing body" });
-        }
+router.post(
+    "/",
+    authMiddleware,
+    async (req: AuthRequest, res: Response, next: NextFunction) => {
+        try {
+            if (!req.body) {
+                return res.status(400).json({ error: "Missing body" });
+            }
 
-        const body = req.body as Partial<CreatePostInput>;
-        
-        const name = body.deceased_name;
-        if (typeof name !== "string") {
-            return res.status(400).json({ error: "Invalid deceased_name" });
-        }
-
-        const cleanName = name.trim();
-
-        if (!cleanName){
-            return res.status(400).json({ error: "Invalid deceased_name" })
-        }
-
-        const contentVal = body.content;
-        if (typeof contentVal !== "string") {
-            return res.status(400).json({ error: "Invalid content" });
-        }
-
-        const cleanContent = contentVal.trim();
-
-        if (!cleanContent) {
-            return res.status(400).json({ error: "Invalid content" });
-        }
-
-        const backgroundVal = body.background;
-
-        const cleanBackground = 
-            typeof backgroundVal === "string" && backgroundVal.trim()
-            ? backgroundVal.trim()
-            : undefined;
+            const body = req.body as Partial<CreatePostInput>;
             
-        // TEMP: using hardcoded user until auth + deterministic seed is implemented
-        const mockUserId = "753e195a-7c48-4aa7-8f03-4bfd28cd9a7e";
+            const name = body.deceased_name;
 
-        const newPost = await insertPost(mockUserId, {
-            deceased_name: cleanName,
-            content: cleanContent,
-            ...(cleanBackground ? { background: cleanBackground } : {}),
-        });
+            if (typeof name !== "string") {
+                return res.status(400).json({ error: "Invalid deceased_name" });
+            }
 
-        if (!newPost) {
-            return res.status(500).json({ error: "Failed to create post" });
+            const cleanName = name.trim();
+
+            if (!cleanName){
+                return res.status(400).json({ error: "Invalid deceased_name" })
+            }
+
+            const contentVal = body.content;
+
+            if (typeof contentVal !== "string") {
+                return res.status(400).json({ error: "Invalid content" });
+            }
+
+            const cleanContent = contentVal.trim();
+
+            if (!cleanContent) {
+                return res.status(400).json({ error: "Invalid content" });
+            }
+
+            const backgroundVal = body.background;
+
+            const cleanBackground = 
+                typeof backgroundVal === "string" && backgroundVal.trim()
+                ? backgroundVal.trim()
+                : undefined;
+
+            const userId = req.user?.id;
+
+            if (!userId) {
+                return res.status(401).json({ error: "Unauthorized"})
+            }
+
+            const newPost = await insertPost(userId, {
+                deceased_name: cleanName,
+                content: cleanContent,
+                ...(cleanBackground 
+                    ? { background: cleanBackground } 
+                    : {}),
+            });
+
+            if (!newPost) {
+                return res.status(500).json({ error: "Failed to create post" });
+            }
+
+            return res.status(201).json(newPost);
+        } catch (error) {
+            next(error)
         }
-
-        return res.status(201).json(newPost);
-    } catch (error) {
-        next(error)
     }
-});
+);
 
 export default router;
     
