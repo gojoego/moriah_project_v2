@@ -3,15 +3,16 @@
 import { LoginForm } from "@/components/auth/LoginForm";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { getToken } from "@/lib/auth"
 
 export default function LoginPage(){
 	const router = useRouter();
 	
 	useEffect (() => {
-		const token = localStorage.getItem("token");
+		const token = getToken();
 
 		if (token) {
-			router.push("/user_profile");
+			router.replace("/user_profile");
 		}
 	}, [router]);
 

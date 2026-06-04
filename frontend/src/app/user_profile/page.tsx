@@ -6,6 +6,8 @@ import { fetchMyPosts } from "@/lib/api";
 import { Post } from "@/types/post";
 import { User } from "@/types/user";
 
+import { getToken } from "@/lib/auth";
+
 export default function ProfilePage() {
     const router = useRouter();
 
@@ -21,7 +23,7 @@ export default function ProfilePage() {
     useEffect(() => {
         if (!mounted) return;
 
-        const token = localStorage.getItem("token");
+        const token = getToken();
 
         if (!token) {
             router.push("/auth/login");
@@ -50,7 +52,7 @@ export default function ProfilePage() {
     useEffect(() => {
         if (!mounted) return;
 
-        const token = localStorage.getItem("token");
+        const token = getToken();
         if (!token) return;
 
         fetchMyPosts(token)

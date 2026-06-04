@@ -1,4 +1,5 @@
 import { CreatePostInput, CreatePostResponse, Post } from "@/types/post";
+import { LoginInput, LoginResponse, SignupInput, SignupResponse } from "@/types/auth"
 
 const ApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -58,12 +59,38 @@ export async function createPost(
         body: JSON.stringify(data),
     });
 
-    if (!response.ok) {
-        return handleResponse<CreatePostResponse>(response);
-    }
-
-    return response.json();
+    return handleResponse<CreatePostResponse>(response);
 }
 
+export async function loginUser(
+        data: LoginInput
+    ): Promise<LoginResponse> {
+    const response = await fetch(
+        `${ApiBaseUrl}/api/auth/login`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        }
+    );
 
+    return handleResponse<LoginResponse>(response);
+}
+
+export async function signupUser(data: SignupInput): Promise<SignupResponse> {
+    const response = await fetch(
+        `${ApiBaseUrl}/api/auth/signup`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        }
+    );
+
+    return handleResponse<SignupResponse>(response);
+}
     

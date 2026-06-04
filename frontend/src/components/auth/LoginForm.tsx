@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { setToken } from "@/lib/auth";
+
+import { loginUser } from "@/lib/api";
+
 export function LoginForm(){
     const router = useRouter();
 
@@ -17,7 +21,6 @@ export function LoginForm(){
 
         setError(null);
 
-
         if (!email || !password) {
             setError('please enter your creds');
             return;
@@ -26,30 +29,20 @@ export function LoginForm(){
         setIsSubmitting(true);
         
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({email,password}),
+            const data = await loginUser({
+                email,
+                password,
             });
 
-            if (!res.ok) {
-                if (res.status === 401) {
-                    setError("Invalid email or password");
-                } else {
-                    setError("Something went wrong");
-                }
-                return;
-            }
-
-            const data = await res.json();
-
-            localStorage.setItem("token", data.token);
+            setToken(data.token)
 
             router.push("/user_profile")
         } catch (err) {
-            setError("Invalid email or login failed");
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Login failed")
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -81,7 +74,10 @@ export function LoginForm(){
                 placeholder="Password (not required yet)"
                 className="w-full border p-2 rounded"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError(null);  
+                }}
             />
 
             {error && (
