@@ -41,6 +41,7 @@ export async function getPostsByAuthorId(id: string): Promise<Post[]> {
         `
         SELECT
             p.id,
+            p.author_id
             p.deceased_name,
             p.background,
             p.content,
@@ -63,6 +64,7 @@ export async function getPostsById(id: string){
         `
         SELECT
             p.id,
+            p.author_id,
             p.deceased_name,
             p.background,
             p.content,
@@ -104,4 +106,60 @@ export async function insertPost(
     const result = await pool.query(query, values);
 
     return result.rows[0];
+}
+
+export async function updatePost(
+    postId: string, 
+    data: {
+        deceased_name?: string;
+        background?: string;
+        content?: string;   
+    }
+) {
+    const fields: string[] = [];
+    const values: unknown[] = [];
+
+    let index = 1;
+
+    if (data.deceased_name !== undefined) {
+        fields.push(`deceased name = $${index++}`);
+        values.push(data.deceased_name);
+    }
+
+    if (data.content !== undefined) {
+        fields.push(`content = $${index++}`);
+        values.push(data.content);
+    }
+
+    if (data.background !== undefined) {
+        fields.push(`background = $${index++}`);
+        values.push(data.background);
+    }
+
+    values.push(postId);
+
+    const query = 
+        `
+        UPDATE posts 
+        SET ${fields.join(", ")}
+        WHERE id = $${index}
+        RETURNING *
+        `;       
+
+    const result = await pool.query(query, values);
+
+    return result.rows[0] ?? null;
+}
+
+export async function deletePost(id: string) {
+    const result = await pool.query(
+        `
+        DELETE FROM posts
+        WHERE id = $1
+        RETURNING *
+        `,
+        [id]
+    )
+
+    return result.rows[0] ?? null;
 }

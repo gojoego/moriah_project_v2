@@ -1,5 +1,6 @@
 import { CreatePostInput, CreatePostResponse, Post } from "@/types/post";
 import { LoginInput, LoginResponse, SignupInput, SignupResponse } from "@/types/auth"
+import { getAuthHeaders } from "@/lib/auth";
 
 const ApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -53,9 +54,7 @@ export async function createPost(
 ): Promise<CreatePostResponse> {
     const response = await fetch(`${ApiBaseUrl}/api/posts`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
     });
 
