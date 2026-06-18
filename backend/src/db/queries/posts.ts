@@ -41,7 +41,7 @@ export async function getPostsByAuthorId(id: string): Promise<Post[]> {
         `
         SELECT
             p.id,
-            p.author_id
+            p.author_id,
             p.deceased_name,
             p.background,
             p.content,
@@ -122,7 +122,7 @@ export async function updatePost(
     let index = 1;
 
     if (data.deceased_name !== undefined) {
-        fields.push(`deceased name = $${index++}`);
+        fields.push(`deceased_name = $${index++}`);
         values.push(data.deceased_name);
     }
 

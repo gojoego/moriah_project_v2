@@ -160,6 +160,16 @@ export default function ProfilePage() {
                         ))
                     )}
                 </section>
+                <section className="space-y-6">
+                    <button
+                        onClick={() => setIsEditing((prev) => !prev)}
+                        className="underline"
+                    >
+                        {isEditing ? "Cancel" : "Edit profile"}
+                    </button>
+
+                    <LogoutButton/>
+                </section>
             </div>
             
         </main>
