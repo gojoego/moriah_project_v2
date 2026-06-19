@@ -124,6 +124,8 @@ export default function ProfilePage() {
                     >
                         {isEditing ? "Cancel" : "Edit profile"}
                     </button>
+                    
+                    <LogoutButton/>
                 </section>
 
                 <hr />
@@ -159,16 +161,6 @@ export default function ProfilePage() {
                             </div>
                         ))
                     )}
-                </section>
-                <section className="space-y-6">
-                    <button
-                        onClick={() => setIsEditing((prev) => !prev)}
-                        className="underline"
-                    >
-                        {isEditing ? "Cancel" : "Edit profile"}
-                    </button>
-
-                    <LogoutButton/>
                 </section>
             </div>
             
