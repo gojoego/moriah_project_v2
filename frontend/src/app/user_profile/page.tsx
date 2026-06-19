@@ -7,6 +7,7 @@ import { Post } from "@/types/post";
 import { User } from "@/types/user";
 
 import { getToken } from "@/lib/auth";
+import { LogoutButton } from "@/components/auth/LogoutForm"
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -123,6 +124,8 @@ export default function ProfilePage() {
                     >
                         {isEditing ? "Cancel" : "Edit profile"}
                     </button>
+                    
+                    <LogoutButton/>
                 </section>
 
                 <hr />
@@ -160,6 +163,7 @@ export default function ProfilePage() {
                     )}
                 </section>
             </div>
+            
         </main>
     );
 }

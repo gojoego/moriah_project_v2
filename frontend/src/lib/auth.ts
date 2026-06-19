@@ -26,17 +26,15 @@ export function isAuthenticated(): boolean {
     return !!getToken();
 }
 
-export function getAuthHeaders(){
+export function getAuthHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+    }
     const token = getToken();
 
-    if (!token){
-        return {
-            "Content-Type": "application/json",
-        };
+    if (token){
+        headers.Authorization = `Bearer ${token}`;
     }
 
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-    };
+    return headers;
 }
