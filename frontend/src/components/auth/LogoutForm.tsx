@@ -9,7 +9,7 @@ export function LogoutButton() {
 
     const handleLogout = () => {
         removeToken();
-        router.push("/auth/logout");
+        router.push("/auth/login");
     }
 
     return (
