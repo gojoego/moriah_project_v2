@@ -36,19 +36,18 @@ export default function NewPost(){
 
             router.push(`/posts/${result.id}`);
         } catch (error) {
-            if (error instanceof Error) {
-                if (
+            if (error instanceof Error && (
                     error.message === "Missing or invalid auth header" ||
                     error.message === "No token provided" ||
                     error.message === "Invalid token" ||
-                    error.message === "Unauthorized"
-                ) {
-                    setError("Please log in to create a post.");
-                    return;
-                }
-            } else {
-                setError("Something went wrong");
-            }
+                    error.message === "Unauthorized"                
+                )
+        )   {
+                setError("Please log in to create a post.");
+                return;
+            } 
+            
+            setError("Something went wrong");
         } finally {
             setIsSubmitting(false);
         }
