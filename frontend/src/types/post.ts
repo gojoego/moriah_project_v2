@@ -14,7 +14,4 @@ export interface CreatePostInput {
     background?: string;
 }
 
-export interface CreatePostResponse {
-    success: boolean;
-    post: Post;
-}
+export type CreatePostResponse = Post

@@ -57,6 +57,8 @@ export async function createPost(
         headers: getAuthHeaders(),
         body: JSON.stringify(data),
     });
+    
+    console.log("auth headers:", getAuthHeaders());
 
     return handleResponse<CreatePostResponse>(response);
 }
