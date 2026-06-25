@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPostById, updatePostById } from "@/lib/api";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { Button } from "@/components/ui/button";
 
 export default function EditPostPage() {
     const router = useRouter();
@@ -204,20 +206,16 @@ export default function EditPostPage() {
                     </div>
                 </section>
 
-                {error && (
-                    <p className="text-sm text-red-600 text-center">
-                        {error}
-                    </p>
-                )}
+                <ErrorMessage message={error} />
 
                 <div className="flex gap-3">
-                    <button
+                    <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="form-button"
                     >
                         {isSubmitting ? "Saving..." : "Save changes"}
-                    </button>
+                    </Button>
+                    
                     <button
                         type="button"
                         disabled={isSubmitting}

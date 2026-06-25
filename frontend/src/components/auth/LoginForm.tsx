@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { setToken } from "@/lib/auth";
 
 import { loginUser } from "@/lib/api";
+import { ErrorMessage } from "../ui/ErrorMessage";
 
 export function LoginForm(){
     const router = useRouter();
@@ -80,11 +81,7 @@ export function LoginForm(){
                 }}
             />
 
-            {error && (
-                <p className="text-sm text-red-600 text-center">
-                    {error}
-                </p>
-            )}
+            <ErrorMessage message={error} />
 
             <button
                 type="submit"

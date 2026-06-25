@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { removeToken } from "@/lib/auth"
+import { Button } from "../ui/button";
 
 export function LogoutButton() {
     const router = useRouter();
@@ -13,12 +14,12 @@ export function LogoutButton() {
     }
 
     return (
-        <button
+        <Button
             type="button"
+            variant="outline"
             onClick={handleLogout}
-            className="px-4 py-2 rounded border"
         >
             Log Out
-        </button>
+        </Button>
     )
 }
