@@ -1,10 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { 
+    useEffect, 
+    useState 
+} from "react";
+
 import { useRouter } from "next/navigation";
-import { fetchMyPosts } from "@/lib/api";
+
+import { 
+    fetchMyPosts, 
+    deletePostById
+} from "@/lib/api";
+
 import { Post } from "@/types/post";
 import { User } from "@/types/user";
+import { PostList } from "@/components/posts/PostList"; 
 
 import { getToken } from "@/lib/auth";
 import { LogoutButton } from "@/components/auth/LogoutForm"
@@ -61,6 +71,28 @@ export default function ProfilePage() {
             .catch((err: Error) => setPostsError(err.message));
     }, [mounted]);
 
+    const handleDeletePost = async (postId: string) => {
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this post?"
+        );
+
+        if (!confirmed) return;
+
+        try {
+            await deletePostById(postId);
+
+            setPosts((currentPosts) => 
+                currentPosts.filter((post) => post.id !== postId)    
+            );
+        } catch (error) {
+            if (error instanceof Error) {
+                setPostsError(error.message);
+            } else {
+                setPostsError("Failed to delete post");
+            }
+        }
+    };
+
     if (!mounted) {
         return null;
     }
@@ -78,8 +110,6 @@ export default function ProfilePage() {
     return (
         <main className="mx-auto max-w-2xl px-4 py-16">
             <div className="space-y-10">
-
-                {/* Header */}
                 <header className="flex items-center gap-6">
                     <div className="flex h-28 w-28 items-center justify-center rounded-full bg-muted border border-border">
                         <span className="text-muted-foreground text-lg">
@@ -97,7 +127,6 @@ export default function ProfilePage() {
                     </div>
                 </header>
 
-                {/* Profile Settings */}
                 <section className="space-y-6">
                     <div>
                         <label className="text-xs uppercase text-muted-foreground">
@@ -130,7 +159,6 @@ export default function ProfilePage() {
 
                 <hr />
 
-                {/* Posts */}
                 <section className="space-y-4">
                     <h2 className="text-xl font-semibold">
                         Remembrances
@@ -141,29 +169,14 @@ export default function ProfilePage() {
                             Failed to load posts
                         </p>
                     )}
-
-                    {posts.length === 0 ? (
-                        <p className="text-muted-foreground">
-                            No posts yet.
-                        </p>
-                    ) : (
-                        posts.map((post) => (
-                            <div
-                                key={post.id}
-                                className="border p-4 rounded"
-                            >
-                                <h3 className="font-medium">
-                                    {post.deceased_name}
-                                </h3>
-                                <p className="text-sm text-muted-foreground">
-                                    {post.content}
-                                </p>
-                            </div>
-                        ))
-                    )}
+                    
+                    <PostList
+                        posts={posts}
+                        showOwnerActions
+                        onDeletePost={handleDeletePost}
+                    />
                 </section>
             </div>
-            
         </main>
     );
 }
