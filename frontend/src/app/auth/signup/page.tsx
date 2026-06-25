@@ -117,11 +117,7 @@ export default function SignupForm() {
 			required
         />
 
-        {error && (
-          <p className="text-sm text-red-600 text-center">
-            {error}
-          </p>
-        )}
+		<ErrorMessage message={error} />
 
         <button
           type="submit"
