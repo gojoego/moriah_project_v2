@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createPost } from "@/lib/api";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { Button } from "@/components/ui/button";
 
 export default function NewPost(){
     const [deceasedName, setDeceasedName] = useState("");
@@ -117,19 +119,14 @@ export default function NewPost(){
                     </div>
                 </section>
 
-                { error && (
-                    <p className="text-sm text-red-600 text-center">
-                        {error}
-                    </p>
-                )}
+                <ErrorMessage message={error} />
                     
-                <button
+                <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="form-button"
                 >
                     {isSubmitting ? "creating post…" : "create post"}
-                </button>
+                </Button>
             </form>            
         </main>
 

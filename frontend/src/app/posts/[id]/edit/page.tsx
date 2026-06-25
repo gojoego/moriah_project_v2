@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPostById, updatePostById } from "@/lib/api";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { Button } from "@/components/ui/button";
 
 export default function EditPostPage() {
     const router = useRouter();
@@ -14,7 +16,9 @@ export default function EditPostPage() {
     const [background, setBackground] = useState("");
     const [content, setContent] = useState("");
 
-    const [error, setError] = useState<string | null>(null);
+    const [loadError, setLoadError] = useState<string | null>(null);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
@@ -23,7 +27,7 @@ export default function EditPostPage() {
 
         async function loadPost(){
             setIsLoading(true);
-            setError(null);
+            setSubmitError(null);
 
             try {
                 const post = await fetchPostById(postId);
@@ -37,9 +41,13 @@ export default function EditPostPage() {
                 if (!isCurrent) return;
 
                 if (error instanceof Error){
-                    setError(error.message);
+                    setLoadError(error.message);
+                    setLoadError("Failed to load post.");
+                }
+                if (error instanceof Error) {
+                    setLoadError(error.message);
                 } else {
-                    setError("Failed to load post.");
+                    setLoadError("Failed to load post.")
                 }
             } finally {
                 if (isCurrent) {
@@ -51,7 +59,7 @@ export default function EditPostPage() {
         if (postId) {
             loadPost();
         } else {
-            setError("Invalid post is.");
+            setLoadError("Invalid post id.");
             setIsLoading(false);
         }
 
@@ -63,12 +71,12 @@ export default function EditPostPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setError(null);
+        setSubmitError(null);
 
         if (isSubmitting) return;
 
         if (!deceased_name.trim() || !content.trim()) {
-            setError("Please fill in all required fields.");
+            setSubmitError("Please fill in all required fields.");
             return;
         }
 
@@ -90,18 +98,18 @@ export default function EditPostPage() {
                     error.message === "Invalid token" ||
                     error.message === "Unauthorized"
                 ) {
-                    setError("Please log in to edit this post.");
+                    setSubmitError("Please log in to edit this post.");
                     return;
                 }
 
                 if (error.message === "Forbidden") {
-                    setError("You can only edit posts that you created.");
+                    setSubmitError("You can only edit posts that you created.");
                     return;
                 }
 
-                setError(error.message);
+                setSubmitError(error.message);
             } else {
-                setError("Failed to update post.");
+                setSubmitError("Failed to update post.");
             }
         } finally {
             setIsSubmitting(false);
@@ -118,11 +126,11 @@ export default function EditPostPage() {
         );
     }
 
-    if (error) {
+    if (loadError) {
         return (
             <main className="mx-auto max-w-2xl px-4 py-8 space-y-4">
                 <p className="text-sm text-red-600 text-center">
-                    {error}
+                    {loadError}
                 </p>
                 <button
                     type="button"
@@ -204,28 +212,25 @@ export default function EditPostPage() {
                     </div>
                 </section>
 
-                {error && (
-                    <p className="text-sm text-red-600 text-center">
-                        {error}
-                    </p>
-                )}
+                <ErrorMessage message={submitError} />
 
                 <div className="flex gap-3">
-                    <button
+                    <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="form-button"
                     >
                         {isSubmitting ? "Saving..." : "Save changes"}
-                    </button>
-                    <button
+                    </Button>
+                    
+                    <Button
                         type="button"
+                        variant="outline"
                         disabled={isSubmitting}
                         onClick={() => router.push(`/posts/${postId}`)}
-                        className="px-4 py-2 rounded border"
+
                     >
                         Cancel
-                    </button>
+                    </Button>
                 </div>
             </form>
         </main>

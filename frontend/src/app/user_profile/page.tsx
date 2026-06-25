@@ -18,6 +18,7 @@ import { PostList } from "@/components/posts/PostList";
 
 import { getToken } from "@/lib/auth";
 import { LogoutButton } from "@/components/auth/LogoutForm"
+import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -147,12 +148,12 @@ export default function ProfilePage() {
                         />
                     </div>
 
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={() => setIsEditing((prev) => !prev)}
-                        className="underline"
                     >
                         {isEditing ? "Cancel" : "Edit profile"}
-                    </button>
+                    </Button>
                     
                     <LogoutButton/>
                 </section>

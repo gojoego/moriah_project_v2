@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { signupUser } from "@/lib/api";
 import { setToken } from "@/lib/auth";
 
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+
 export default function SignupForm() { 
 	const router = useRouter();
 
@@ -115,11 +117,7 @@ export default function SignupForm() {
 			required
         />
 
-        {error && (
-          <p className="text-sm text-red-600 text-center">
-            {error}
-          </p>
-        )}
+		<ErrorMessage message={error} />
 
         <button
           type="submit"

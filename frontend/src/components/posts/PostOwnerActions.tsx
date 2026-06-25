@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 interface PostOwnerActionsProps {
     postId: string;
@@ -18,13 +19,14 @@ export function PostOwnerActions({
                 Edit
             </Link>
 
-            <button
+            <Button
                 type="button"
+                variant="destructive"
+                size="sm"
                 onClick={() => onDeletePost?.(postId)}
-                className="px-3 py-1 rounded border text-red-600"
             >
                 Delete
-            </button>
+            </Button>
         </div>
     );
 }
