@@ -33,10 +33,10 @@ export function PostList({
 					</Link>
 
 					<Link
-						href="/posts/example"
+						href="/posts/new"
 						className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition"
 					>
-						read an example
+						Write a post 
 					</Link>
 				</div>
 			</div>

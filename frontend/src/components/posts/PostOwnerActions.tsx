@@ -21,7 +21,7 @@ export function PostOwnerActions({
             <button
                 type="button"
                 onClick={() => onDeletePost?.(postId)}
-                className="px-3 py-1 rounded border test-red-600"
+                className="px-3 py-1 rounded border text-red-600"
             >
                 Delete
             </button>

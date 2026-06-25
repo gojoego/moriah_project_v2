@@ -19,27 +19,45 @@ export default function EditPostPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     
     useEffect (() => {
+        let isCurrent = true;
+
         async function loadPost(){
+            setIsLoading(true);
+            setError(null);
+
             try {
                 const post = await fetchPostById(postId);
+
+                if (!isCurrent) return;
 
                 setDeceasedName(post.deceased_name);
                 setBackground(post.background ?? "");
                 setContent(post.content);
             } catch (error) {
+                if (!isCurrent) return;
+
                 if (error instanceof Error){
                     setError(error.message);
                 } else {
                     setError("Failed to load post.");
                 }
             } finally {
-                setIsLoading(false);
+                if (isCurrent) {
+                    setIsLoading(false);
+                }
             }
         }
 
         if (postId) {
             loadPost();
+        } else {
+            setError("Invalid post is.");
+            setIsLoading(false);
         }
+
+        return () => {
+            isCurrent = false;
+        };
     }, [postId]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -98,6 +116,23 @@ export default function EditPostPage() {
                 </p>
             </main>
         );
+    }
+
+    if (error) {
+        return (
+            <main className="mx-auto max-w-2xl px-4 py-8 space-y-4">
+                <p className="text-sm text-red-600 text-center">
+                    {error}
+                </p>
+                <button
+                    type="button"
+                    onClick={() => router.push("/user_profile")}
+                    className="px-4 py-2 rounded border"
+                >
+                    Back to profile
+                </button>
+            </main>
+        )
     }
 
     return (
