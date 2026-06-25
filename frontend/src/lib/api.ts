@@ -92,4 +92,33 @@ export async function signupUser(data: SignupInput): Promise<SignupResponse> {
 
     return handleResponse<SignupResponse>(response);
 }
-    
+  
+export async function updatePostById(
+    id: string, 
+    data: Partial<CreatePostInput>
+): Promise<Post> {
+    const response = await fetch(`${ApiBaseUrl}/api/posts/${id}`, {
+        method: "PUT", 
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+    });
+
+    return handleResponse<Post>(response)
+}
+
+export async function deletePostById(id: string): Promise<void> {
+    const response = await fetch(`${ApiBaseUrl}/api/posts/${id}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),        
+    });
+
+    if (!response.ok) {
+        let message = "Request failed";
+        try {
+            const err = await response.json();
+            message = err.error || message;
+        } catch {}
+
+        throw new Error(message);
+    }
+}
