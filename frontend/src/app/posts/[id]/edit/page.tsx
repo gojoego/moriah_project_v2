@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchPostById, updatePostById } from "@/lib/api";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export default function EditPostPage() {
     const router = useRouter();
