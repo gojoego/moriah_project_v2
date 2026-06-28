@@ -6,8 +6,6 @@ import {
     getUserByEmail
 } from "../../db/queries/users"
 
-import { VALIDATION } from "@/constants/validation"
-
 const router = Router();
 
 router.post("/signup", async (req, res) => {
@@ -38,7 +36,7 @@ router.post("/signup", async (req, res) => {
             return res.status(400).json({ error: "Missing or invalid fields"});
         }
 
-        if (password.length < VALIDATION.MIN_PASSWORD_LENGTH){
+        if (password.length < 8){
             return res.status(400).json({error: "Password must be 8 characters or more"})
         }
 
