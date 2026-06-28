@@ -7,6 +7,7 @@ interface PostListProps {
 	showOwnerActions?: boolean;
 	onDeletePost?:(postId: string) => void;
 }
+import { ROUTES } from "@/constants/routes";
 
 export function PostList({ 
 	posts, 
