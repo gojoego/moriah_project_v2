@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/posts", label: "Stories" },
-  { href: "/about", label: "About" },
-  { href: "/auth/signup", label: "Sign Up" },
+  { href: ROUTES.HOME, label: "Home" },
+  { href: ROUTES.POSTS, label: "Stories" },
+  { href: ROUTES.ABOUT, label: "About" },
+  { href: ROUTES.SIGNUP, label: "Sign Up" },
 ];
 
 export function SiteHeader() {
@@ -12,7 +13,7 @@ export function SiteHeader() {
     <header className="border-b border-border bg-background">
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex h-14 items-center justify-between">
-          <Link href="/" className="text-primary hover:underline">
+          <Link href={ROUTES.HOME} className="text-primary hover:underline">
             The Moriah Project
           </Link>
 
@@ -28,7 +29,7 @@ export function SiteHeader() {
             ))}
 
             <Link
-              href="/auth/login"
+              href={ROUTES.LOGIN}
               className="text-sm rounded-full border px-3 py-1.5 bg-card hover:bg-muted transition"
             >
               Log in

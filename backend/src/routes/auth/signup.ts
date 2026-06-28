@@ -36,7 +36,7 @@ router.post("/signup", async (req, res) => {
             return res.status(400).json({ error: "Missing or invalid fields"});
         }
 
-        if (password.length < 8){
+        if (password.length < VALIDATION.MIN_PASSWORD_LENGTH){
             return res.status(400).json({error: "Password must be 8 characters or more"})
         }
 

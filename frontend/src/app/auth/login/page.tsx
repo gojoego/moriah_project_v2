@@ -12,7 +12,7 @@ export default function LoginPage(){
 		const token = getToken();
 
 		if (token) {
-			router.replace("/user_profile");
+			router.replace(ROUTES.PROFILE);
 		}
 	}, [router]);
 

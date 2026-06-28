@@ -1,0 +1,7 @@
+export const UI = {
+    POSTS_PER_PAGE: 10,
+
+    MAX_POST_PREVIEW_LENGTH: 250,
+
+    SUCCESS_MESSAGE_TIMEOUT: 3000,
+};

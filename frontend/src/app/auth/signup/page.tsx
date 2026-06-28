@@ -47,7 +47,7 @@ export default function SignupForm() {
 			
 			setToken(data.token);
 
-			router.push("/user_profile");
+			router.push(ROUTES.PROFILE);
 		} catch(err) {
 			if (err instanceof Error) {
 				setError(err.message);

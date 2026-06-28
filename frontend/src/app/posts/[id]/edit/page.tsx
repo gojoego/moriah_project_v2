@@ -134,7 +134,7 @@ export default function EditPostPage() {
                 </p>
                 <button
                     type="button"
-                    onClick={() => router.push("/user_profile")}
+                    onClick={() => router.push(ROUTES.PROFILE)}
                     className="px-4 py-2 rounded border"
                 >
                     Back to profile

@@ -74,7 +74,7 @@ export default function HomePage() {
                     </Link>
                 ) : (
                     <Link
-                        href="/posts"
+                        href={ROUTES.POSTS}
                         className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
                     >
                         Browse examples
@@ -89,7 +89,7 @@ export default function HomePage() {
                 <h2 className="text-xl font-semibold tracking-tight">
                     recent stories
                 </h2>
-                <Link href="/posts" className="moriah-link text-sm">
+                <Link href={ROUTES.POSTS} className="moriah-link text-sm">
                     View all →
                 </Link>
             </div>
