@@ -18,7 +18,7 @@ import { PostList } from "@/components/posts/PostList";
 
 import { getToken } from "@/lib/auth";
 import { LogoutButton } from "@/components/auth/LogoutForm"
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
 
 export default function ProfilePage() {

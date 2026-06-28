@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createPost } from "@/lib/api";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 export default function NewPost(){
     const [deceasedName, setDeceasedName] = useState("");
