@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchPostById, updatePostById } from "@/lib/api";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { Button } from "@/components/ui/Button";
+import { ROUTES } from "@/constants/routes";
 
 export default function EditPostPage() {
     const router = useRouter();

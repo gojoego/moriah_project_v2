@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Post } from "@/types/post";
 import { fetchPosts } from "@/lib/api";
 import { ErrorState } from "@/components/ui/ErrorState";
+import { ROUTES } from "@/constants/routes";
 
 export default function HomePage() {
     const [posts, setPosts] = useState<Post[]>([]);

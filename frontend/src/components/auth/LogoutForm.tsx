@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
 import { removeToken } from "@/lib/auth"
 import { Button } from "@/components/ui/Button";
+import { ROUTES } from "@/constants/routes";
 
 export function LogoutButton() {
     const router = useRouter();
