@@ -7,6 +7,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { ROUTES } from "@/constants/routes";
 
 import { fetchPostById } from "@/lib/api";
 
@@ -34,7 +35,7 @@ export default async function PostDetailPage({
   	return (
 		<main className="mx-auto max-w-3xl space-y-8 px-4 py-8">
 			<Link
-				href="/posts"
+				href={ROUTES.POSTS}
 				className="moriah-link text-sm"
 			>
 				← Back to stories

@@ -7,6 +7,7 @@ import { setToken } from "@/lib/auth";
 
 import { loginUser } from "@/lib/api";
 import { ErrorMessage } from "../ui/ErrorMessage";
+import { ROUTES } from "@/constants/routes";
 
 export function LoginForm(){
     const router = useRouter();
@@ -37,7 +38,7 @@ export function LoginForm(){
 
             setToken(data.token)
 
-            router.push("/user_profile")
+            router.push(ROUTES.PROFILE)
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

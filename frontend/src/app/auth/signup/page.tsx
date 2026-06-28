@@ -7,6 +7,7 @@ import { signupUser } from "@/lib/api";
 import { setToken } from "@/lib/auth";
 
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { ROUTES } from "@/constants/routes";
 
 export default function SignupForm() { 
 	const router = useRouter();
@@ -47,7 +48,7 @@ export default function SignupForm() {
 			
 			setToken(data.token);
 
-			router.push("/user_profile");
+			router.push(ROUTES.PROFILE);
 		} catch(err) {
 			if (err instanceof Error) {
 				setError(err.message);

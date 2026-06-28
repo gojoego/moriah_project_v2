@@ -7,6 +7,7 @@ interface PostListProps {
 	showOwnerActions?: boolean;
 	onDeletePost?:(postId: string) => void;
 }
+import { ROUTES } from "@/constants/routes";
 
 export function PostList({ 
 	posts, 
@@ -26,14 +27,14 @@ export function PostList({
 				
 				<div className="flex justify-center gap-4">
 					<Link
-						href="/posts"
+						href={ROUTES.POSTS}
           				className="px-4 py-2 border rounded-lg hover:bg-slate-100 transition"
 					>
 						browse stories 
 					</Link>
 
 					<Link
-						href="/posts/new"
+						href={ROUTES.NEW_POST}
 						className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition"
 					>
 						Write a post 

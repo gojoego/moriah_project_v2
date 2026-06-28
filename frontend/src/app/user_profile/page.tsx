@@ -19,6 +19,7 @@ import { PostList } from "@/components/posts/PostList";
 import { getToken } from "@/lib/auth";
 import { LogoutButton } from "@/components/auth/LogoutForm"
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -38,7 +39,7 @@ export default function ProfilePage() {
         const token = getToken();
 
         if (!token) {
-            router.push("/auth/login");
+            router.push(ROUTES.LOGIN);
             return;
         }
 
@@ -57,7 +58,7 @@ export default function ProfilePage() {
                 setUser(data);
             })
             .catch(() => {
-                router.push("/auth/login");
+                router.push(ROUTES.LOGIN);
             });
     }, [mounted, router]);
 
