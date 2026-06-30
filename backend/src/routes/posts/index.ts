@@ -114,7 +114,7 @@ router.post(
             const newPost = await insertPost(userId, {
                 deceased_name,
                 content,
-                ...(background
+                ...(background !== undefined
                     ? { background }
                     : {}),
             });
