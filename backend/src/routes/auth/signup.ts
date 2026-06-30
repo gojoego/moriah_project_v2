@@ -1,10 +1,15 @@
 import { Router } from "express";
+
 import bcrypt from "bcrypt";
 import { signToken } from "../../utils/jwt";
+
 import {
     createUser,
     getUserByEmail
 } from "../../db/queries/users"
+
+import { signupSchema } from "../../schemas/auth";
+import { getZodErrorMessage } from "../../utils/zod";
 
 const router = Router();
 
@@ -15,32 +20,22 @@ router.post("/signup", async (req, res) => {
             return res.status(400).json({ error: "Missing request body"})
         }
 
+        const parsed = signupSchema.safeParse(req.body);
+
+        if (!parsed.success) {
+            return res.status(400).json({
+                error: getZodErrorMessage(parsed.error),
+            });
+        }
+
         const {
             email, 
             password, 
             displayName
-        } = req.body;
+        } = parsed.data;
 
-        if (
-            typeof email !== "string" ||
-            typeof password !== "string" ||
-            typeof displayName !== "string" 
-        ) {
-            return res.status(400).json({ error: "Missing or invalid fields" });
-        }
 
-        const normalizedEmail = email.toLowerCase().trim();
-        const trimmedDisplayName = displayName.trim();
-
-        if (!normalizedEmail || !trimmedDisplayName) {
-            return res.status(400).json({ error: "Missing or invalid fields"});
-        }
-
-        if (password.length < 8){
-            return res.status(400).json({error: "Password must be 8 characters or more"})
-        }
-
-        const existingUser = await getUserByEmail(normalizedEmail);
+        const existingUser = await getUserByEmail(email);
 
         if (existingUser) {
             return res.status(400).json({ error: "Invalid signup credentials" });
@@ -49,9 +44,9 @@ router.post("/signup", async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await createUser({
-            email: normalizedEmail, 
+            email: email, 
             password: hashedPassword, 
-            displayName: trimmedDisplayName,
+            displayName: displayName,
         });
 
         const token = signToken({

@@ -13,8 +13,9 @@ import {
     deletePost
 } from "../../db/queries/posts";
 
-import { CreatePostInput } from "../../types/post";
 import { authMiddleware, AuthRequest } from "../../middleware/auth";
+import { createPostSchema, updatePostSchema } from "../../schemas/posts";
+import { getZodErrorMessage } from "../../utils/zod";
 
 const router = Router();
 
@@ -90,50 +91,31 @@ router.post(
                 return res.status(400).json({ error: "Missing body" });
             }
 
-            const body = req.body as Partial<CreatePostInput>;
-            
-            const name = body.deceased_name;
-
-            if (typeof name !== "string") {
-                return res.status(400).json({ error: "Invalid deceased_name" });
-            }
-
-            const cleanName = name.trim();
-
-            if (!cleanName){
-                return res.status(400).json({ error: "Invalid deceased_name" })
-            }
-
-            const contentVal = body.content;
-
-            if (typeof contentVal !== "string") {
-                return res.status(400).json({ error: "Invalid content" });
-            }
-
-            const cleanContent = contentVal.trim();
-
-            if (!cleanContent) {
-                return res.status(400).json({ error: "Invalid content" });
-            }
-
-            const backgroundVal = body.background;
-
-            const cleanBackground = 
-                typeof backgroundVal === "string" && backgroundVal.trim()
-                ? backgroundVal.trim()
-                : undefined;
-
             const userId = req.user?.id;
 
             if (!userId) {
                 return res.status(401).json({ error: "Unauthorized"})
             }
 
+            const parsed = createPostSchema.safeParse(req.body);
+
+            if (!parsed.success) {
+                return res.status(400).json({
+                    error: getZodErrorMessage(parsed.error),
+                });
+            }
+
+            const {
+                deceased_name, 
+                content,
+                background
+            } = parsed.data;
+
             const newPost = await insertPost(userId, {
-                deceased_name: cleanName,
-                content: cleanContent,
-                ...(cleanBackground 
-                    ? { background: cleanBackground } 
+                deceased_name,
+                content,
+                ...(background
+                    ? { background }
                     : {}),
             });
 
@@ -198,63 +180,15 @@ router.put(
                 });
             }
 
-            const body = req.body as Partial<CreatePostInput>;
+            const parsed = updatePostSchema.safeParse(req.body);
 
-            const updates: Partial<CreatePostInput> = {};
-
-            if (body.deceased_name !== undefined) {
-                if (typeof body.deceased_name !== "string") {
-                    return res.status(400).json({
-                        error: "Invalid deceased name",
-                    });
-                }
-
-                const cleanName = body.deceased_name.trim();
-
-                if (!cleanName) {
-                    return res.status(400).json({
-                        error: "Invalid deceased name",
-                    });
-                }
-
-                updates.deceased_name = cleanName;
-            }
-
-            if (body.content !== undefined) {
-                if (typeof body.content !== "string") {
-                    return res.status(400).json({
-                        error: "Invalid content",
-                    });
-                }
-
-                const cleanContent = body.content.trim();
-
-                if (!cleanContent) {
-                    return res.status(400).json({
-                        error: "Invalid content",
-                    });
-                }
-
-                updates.content = cleanContent;
-            }
-
-            if (body.background !== undefined) {
-                if (typeof body.background !== "string") {
-                    return res.status(400).json({
-                        error: "Invalid background",
-                    });
-                }
-
-                const cleanBackground = body.background.trim();
-
-                updates.background = cleanBackground || undefined;
-            }
-
-            if (Object.keys(updates).length === 0) {
-                return res.status(400).json({
-                    error: "No valid fields to update",
+            if (!parsed.success){
+                return res.status(400).json({ 
+                    error: getZodErrorMessage(parsed.error)
                 });
             }
+
+            const updates = parsed.data;
 
             const updatedPost = await updatePost(id, updates);
 

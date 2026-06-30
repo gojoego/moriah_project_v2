@@ -1,7 +1,12 @@
 import { Router } from "express";
+
 import bcrypt from "bcrypt";
 import { signToken } from "../../utils/jwt";
+
 import { getUserByEmail } from "../../db/queries/users";
+
+import { loginSchema } from "../../schemas/auth";
+import { getZodErrorMessage } from "../../utils/zod";
 
 const router = Router();
 
@@ -12,15 +17,18 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ error: "Missing request body" });
         }
 
-        const { email, password } = req.body;
+        const parsed = loginSchema.safeParse(req.body);
 
-        if (!email || !password) {
-            return res.status(400).json({ error: "Missing credentials" });
+        if (!parsed.success) {
+            return res.status(400).json({
+                error: getZodErrorMessage(parsed.error),
+            });
         }
 
-        const normalizedEmail = email.toLowerCase().trim();
+        
+        const { email, password } = parsed.data;
 
-        const user = await getUserByEmail(normalizedEmail);
+        const user = await getUserByEmail(email);
 
         if (!user) {
             return res.status(401).json({ error: "Invalid credentials"});
