@@ -1,17 +1,23 @@
 import sgMail from "@sendgrid/mail";
 
-const apiKey = process.env.SENDGRID_API_KEY;
-
-if (!apiKey) {
-    throw new Error("SENDGRID_API_KEY is not configured");
-}
-
-sgMail.setApiKey(apiKey);
-
 export async function sendPasswordResetEmail(
     email: string,
     resetUrl: string,
 ) {
+    const apiKey = process.env.SENDGRID_API_KEY;
+
+    if (!apiKey) {
+        throw new Error("SENDGRID_API_KEY is not configured");
+    }
+
+    const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+
+    if (!fromEmail) {
+        throw new Error("SENDGRID_FROM_EMAIL is not configured")
+    }
+
+    sgMail.setApiKey(apiKey);
+    
     await sgMail.send({
         to: email,
         from: process.env.SENDGRID_FROM_EMAIL!,
@@ -51,5 +57,5 @@ export async function sendPasswordResetEmail(
                 you can safely ignore this email.
             </p>
             `
-    })
+    });
 }
