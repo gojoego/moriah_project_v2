@@ -24,8 +24,7 @@ router.post("/login", async (req, res) => {
                 error: getZodErrorMessage(parsed.error),
             });
         }
-
-        
+ 
         const { email, password } = parsed.data;
 
         const user = await getUserByEmail(email);

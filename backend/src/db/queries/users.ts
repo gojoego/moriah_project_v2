@@ -1,4 +1,5 @@
 import { pool } from "..";
+import crypto from "crypto";
 
 export async function getUserById(id:string) {
     const result = await pool.query(
@@ -56,6 +57,90 @@ export async function createUser({
             displayName
         ]
     ) 
+
+    return result.rows[0];
+}
+
+export async function setPasswordResetToken(
+    userId: string, 
+    token: string, 
+    expiresAt: Date
+) {
+    const tokenHash = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+        const result = await pool.query(
+            `
+            UPDATE users 
+            SET password_reset_token_hash = $1,
+                password_reset_expires_at = $2
+            WHERE id = $3 
+            RETURNING id, email    
+            `,
+            [tokenHash, expiresAt, userId]
+        );
+
+        return result.rows[0];
+}
+
+export async function getUserByPasswordResetToken(token: string) {
+    const tokenHash = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex")
+
+        const result = await pool.query(
+            `
+            SELECT id, email, password_reset_expires_at
+            FROM users
+            WHERE password_reset_token_hash = $1
+            `,
+            [tokenHash]
+        )
+
+        const user = result.rows[0];
+
+        if (!user) return null;
+
+        const isExpired = 
+            !user.password_reset_expires_at ||
+            new Date(user.password_reset_expires_at) < new Date();
+
+        if (isExpired) return null;
+
+        return user;
+}
+
+export async function clearPasswordResetToken(userId: string) {
+    const result = await pool.query(
+        `
+        UPDATE users
+        SET password_reset_token_hash = NULL,
+            password_reset_expires_at = NULL
+        WHERE id = $1 
+        RETURNING id
+        `,
+        [userId]
+    );
+
+    return result.rows[0];
+}
+
+export async function updateUserPassword(
+    userId: string, 
+    hashedPassword: string
+) {
+    const result = await pool.query(
+        `
+        UPDATE users
+        SET password = $1
+        WHERE id = $2
+        RETURNING id 
+        `,
+        [hashedPassword, userId]
+    );
 
     return result.rows[0];
 }
