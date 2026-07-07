@@ -27,15 +27,15 @@ router.post("/forgot-password", async (req, res) => {
 
         const user = await getUserByEmail(email);
 
-        console.log("Sending reset email to:", email);
-
         if (!user) {
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
             return res.json({ message: GENERIC_RESET_MESSAGE });
         }
 
         const token = crypto.randomBytes(32).toString("hex");
 
-        const expiresAt = new Date(Date.now() + 60 + 60 * 1000);
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
         await setPasswordResetToken(user.id, token, expiresAt);
 
@@ -47,10 +47,6 @@ router.post("/forgot-password", async (req, res) => {
 
         const resetUrl = `${frontendUrl}/auth/reset-password?token=${token}`;
 
-
-        console.log("RESET URL:", resetUrl);
-
-        
         await sendPasswordResetEmail(user.email, resetUrl);
 
         return res.json({
