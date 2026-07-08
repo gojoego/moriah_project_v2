@@ -5,5 +5,7 @@ export const ROUTES = {
     PROFILE: "/user_profile",
     ABOUT: "/about",
     POSTS: "/posts",
-    NEW_POST: "/posts/new"
+    NEW_POST: "/posts/new", 
+    FORGOT_PASSWORD: "/auth/forgot-password",
+    RESET_PASSWORD: "/auth/reset-password"
 }
