@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
                     </label>
                     <input 
                         id="email"
-                        type="text"
+                        type="email"
                         className="form-input"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
