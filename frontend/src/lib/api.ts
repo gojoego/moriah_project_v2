@@ -122,3 +122,30 @@ export async function deletePostById(id: string): Promise<void> {
         throw new Error(message);
     }
 }
+
+export async function forgotPassword(email: string): Promise<{message: string}> {
+    const response = await fetch(`${ApiBaseUrl}/api/auth/forgot-password`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+    });
+
+    return handleResponse<{message: string}>(response);
+}
+
+export async function resetPassword( data: {
+    token: string;
+    password: string;
+}): Promise<{ message: string }> {
+    const response = await fetch(`${ApiBaseUrl}/api/auth/reset-password`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),  
+    })
+
+    return handleResponse<{ message: string }>(response);
+}

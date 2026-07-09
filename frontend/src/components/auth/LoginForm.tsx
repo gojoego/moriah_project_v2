@@ -8,6 +8,7 @@ import { setToken } from "@/lib/auth";
 import { loginUser } from "@/lib/api";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { ROUTES } from "@/constants/routes";
+import Link from "next/link";
 
 export function LoginForm(){
     const router = useRouter();
@@ -81,6 +82,13 @@ export function LoginForm(){
                     setError(null);  
                 }}
             />
+
+            <Link
+                href={ROUTES.FORGOT_PASSWORD}
+                className="text-sm underline"
+            >
+                Forgot password?
+            </Link>
 
             <ErrorMessage message={error} />
 
