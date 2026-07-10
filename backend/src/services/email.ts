@@ -22,15 +22,15 @@ export async function sendPasswordResetEmail(
         to: email,
         subject: "Reset your Moriah Project password",
         text:
-            `
-                You requested a password reset.
-
-                Reset your password here:
-
-                ${resetUrl}
-
-                If you did not request this, you can safely ignore this email.
-            `.trim(),
+            [
+                "You requested a password reset.",
+                "",
+                "Reset your password here:",
+                "",
+                resetUrl,
+                "",
+                "If you did not request this, you can safely ignore this email.",
+            ].join("\n"),
         html: 
             `
                 <p>You requested a password reset.</p>
