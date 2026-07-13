@@ -1,8 +1,16 @@
 import { Router } from "express";
 import crypto from "crypto";
+import bcrypt from "bcrypt";
 import { getZodErrorMessage } from "../../utils/zod";
-import { getUserByEmail, setPasswordResetToken } from "../../db/queries/users";
-import { forgotPasswordSchema } from "../../schemas/passwordReset";
+
+import { 
+    getUserByEmail, 
+    getUserByPasswordResetToken, 
+    setPasswordResetToken, 
+    resetUserPassword
+} from "../../db/queries/users";
+
+import { forgotPasswordSchema, resetPasswordSchema } from "../../schemas/passwordReset";
 import { sendPasswordResetEmail } from "../../services/email";
 
 const router = Router();
@@ -64,7 +72,47 @@ router.post("/forgot-password", async (req, res) => {
 });
 
 router.post("/reset-password", async (req, res) => {
-    // TODO
+    try {
+        if (!req.body) {
+            return res.status(400).json({
+                error: "Missing request body"
+            });
+        }
+
+        const parsed = resetPasswordSchema.safeParse(req.body);
+
+        if (!parsed.success) {
+            return res.status(400).json({
+                error: getZodErrorMessage(parsed.error),
+            });
+        }
+
+        const { token, password } = parsed.data;
+
+        const user = await getUserByPasswordResetToken(token);
+
+        if (!user) {
+            return res.status(400).json({
+                error: "Invalid or expired reset token",
+            })
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await resetUserPassword(user.id, hashedPassword);
+
+        return res.json({
+            message: "Password reset successful",
+        });
+    } catch (error) {
+        console.error("Reset password error", {
+            message: error instanceof Error ? error.message : "Unknown error",
+        });
+
+        return res.status(500).json({
+            error: "Failed to reset password",
+        });
+    }
 });
 
 export default router;
