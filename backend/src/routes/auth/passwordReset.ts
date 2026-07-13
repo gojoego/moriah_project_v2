@@ -99,11 +99,18 @@ router.post("/reset-password", async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await resetUserPassword(user.id, hashedPassword);
+        const updatedUser = await resetUserPassword(user.id, hashedPassword);
+
+        if (!updatedUser){
+            return res.status(400).json({
+                error: "Invalid or expired reset token",
+            });
+        }
 
         return res.json({
             message: "Password reset successful",
         });
+
     } catch (error) {
         console.error("Reset password error", {
             message: error instanceof Error ? error.message : "Unknown error",
