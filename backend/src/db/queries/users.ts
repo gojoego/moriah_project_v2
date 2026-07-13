@@ -82,7 +82,7 @@ export async function setPasswordResetToken(
             [tokenHash, expiresAt, userId]
         );
 
-        return result.rows[0];
+        return result.rows[0] ?? null;
 }
 
 export async function getUserByPasswordResetToken(token: string) {
@@ -91,56 +91,34 @@ export async function getUserByPasswordResetToken(token: string) {
         .update(token)
         .digest("hex")
 
-        const result = await pool.query(
-            `
-            SELECT id, email, password_reset_expires_at
+    const result = await pool.query(
+        `
+            SELECT id, email 
             FROM users
             WHERE password_reset_token_hash = $1
-            `,
+            AND password_reset_expires_at > NOW()
+        `,
             [tokenHash]
         )
 
-        const user = result.rows[0];
-
-        if (!user) return null;
-
-        const isExpired = 
-            !user.password_reset_expires_at ||
-            new Date(user.password_reset_expires_at) < new Date();
-
-        if (isExpired) return null;
-
-        return user;
+    return result.rows[0] ?? null;
 }
 
-export async function clearPasswordResetToken(userId: string) {
-    const result = await pool.query(
-        `
-        UPDATE users
-        SET password_reset_token_hash = NULL,
-            password_reset_expires_at = NULL
-        WHERE id = $1 
-        RETURNING id
-        `,
-        [userId]
-    );
-
-    return result.rows[0];
-}
-
-export async function updateUserPassword(
+export async function resetUserPassword(
     userId: string, 
     hashedPassword: string
 ) {
     const result = await pool.query(
         `
-        UPDATE users
+        UPDATE users,
         SET password = $1
-        WHERE id = $2
-        RETURNING id 
+            password_reset_token_hash = NULL,
+            password_reset_expires_at = NULL
+        WHERE id = $2 
+        RETURNING id
         `,
         [hashedPassword, userId]
     );
 
-    return result.rows[0];
+    return result.rows[0] ?? null;
 }

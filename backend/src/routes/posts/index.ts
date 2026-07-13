@@ -20,7 +20,6 @@ import { getZodErrorMessage } from "../../utils/zod";
 const router = Router();
 
 router.get("/", async (req, res) => {
-    console.log("query param limit:", req.query.limit);
 
     const limit = req.query.limit
         ? parseInt(req.query.limit as string, 10)
@@ -28,8 +27,6 @@ router.get("/", async (req, res) => {
 
     try {
         const posts = await getAllPosts({ limit });
-
-        console.log("Posts fetched:", posts.length);
 
         res.json(posts);
     } catch (error) {

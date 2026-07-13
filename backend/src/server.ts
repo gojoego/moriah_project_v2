@@ -4,7 +4,6 @@ import app from "./app";
 
 const PORT = Number(process.env.PORT) || 4000;
 
-console.log("PORT ENV:", process.env.PORT);
 console.log("Listening on:", PORT);
 
 app.listen(PORT, () => {
