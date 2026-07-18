@@ -17,7 +17,7 @@ export async function sendPasswordResetEmail(
 
     const resend = new Resend(apiKey);
 
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
         from: fromEmail,
         to: email,
         subject: "Reset your Moriah Project password",

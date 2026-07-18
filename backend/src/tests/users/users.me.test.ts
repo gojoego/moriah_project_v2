@@ -3,7 +3,7 @@ import app from "../../app";
 import { getUserById } from "../../db/queries/users";
 import { signToken } from "../../utils/jwt";
 
-jest.mock("../db/queries/users", () => ({
+jest.mock("../../db/queries/users", () => ({
     getUserById: jest.fn(),
 }));
 

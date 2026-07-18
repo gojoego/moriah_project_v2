@@ -1,4 +1,7 @@
-jest.mock("../db", () => ({
+import request from "supertest";
+import app from "../../app";
+
+jest.mock("../../db", () => ({
   pool: {
     query: jest.fn().mockResolvedValue({
       rows: [
@@ -15,9 +18,6 @@ jest.mock("../db", () => ({
     }),
   },
 }));
-
-import request from "supertest";
-import app from "../../server";
 
 describe("GET /api/posts", () => {
   it("returns a list of posts", async () => {
