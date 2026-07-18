@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../server";
+import app from "../../app";
 
 describe.skip("POST /api/auth/login", () => {
     it("returns user and token when valid data provided", async () => {

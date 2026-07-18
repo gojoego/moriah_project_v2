@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../server";
+import app from "../../app";
 
 describe.skip("POST /api/posts", () => {
   it("creates a post with required fields", async () => {

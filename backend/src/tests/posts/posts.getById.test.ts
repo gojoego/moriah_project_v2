@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../app";
+import app from "../../app";
 
 describe.skip("GET /api/posts/:id", () => {
   it("returns a post by id", async () => {

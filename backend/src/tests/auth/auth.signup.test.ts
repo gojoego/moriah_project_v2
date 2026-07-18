@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../server";
+import app from "../../app";
 
 describe.skip("POST /api/auth/signup", () => {
   it("creates a user when valid data is provided", async () => {
