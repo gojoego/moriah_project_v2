@@ -3,7 +3,7 @@ import { Resend } from "resend";
 export async function sendPasswordResetEmail(
     email: string,
     resetUrl: string,
-) {
+): Promise<void>  {
     const apiKey = process.env.RESEND_API_KEY;
     const fromEmail = process.env.RESEND_FROM_EMAIL;
 
@@ -17,7 +17,7 @@ export async function sendPasswordResetEmail(
 
     const resend = new Resend(apiKey);
 
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
         from: fromEmail,
         to: email,
         subject: "Reset your Moriah Project password",
@@ -46,6 +46,11 @@ export async function sendPasswordResetEmail(
     });
 
     if (error) {
-        throw new Error(error.message);
+        console.error("Resend password reset error: ", {
+            name: error.name,
+            message: error.message,
+        });
+
+        throw new Error("Email provider rejected password reset email");
     }
 }
