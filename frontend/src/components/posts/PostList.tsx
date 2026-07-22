@@ -48,7 +48,11 @@ export function PostList({
 		<div className="grid gap-6">
 			{posts.map((post) => (
 				<div key={post.id} className="space-y-3">
-					<PostCard key={post.id} post={post} />
+					<PostCard 
+						key={post.id} 
+						post={post} 
+						currentUserId={post.author_id}
+					/>
 
 					{showOwnerActions && (
 						<PostOwnerActions

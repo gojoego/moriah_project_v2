@@ -8,6 +8,7 @@ export async function getAllPosts(options?: {
     let query = `
         SELECT
             p.id,
+            p.author_id,
             p.deceased_name,
             p.background,
             p.content,
