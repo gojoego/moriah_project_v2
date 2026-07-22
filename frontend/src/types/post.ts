@@ -6,6 +6,7 @@ export interface Post {
     status: string;
     created_at: string;   
     author_name: string;
+    author_id: string;
 }
 
 export interface CreatePostInput {

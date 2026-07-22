@@ -110,8 +110,8 @@ export async function resetUserPassword(
 ) {
     const result = await pool.query(
         `
-        UPDATE users,
-        SET password = $1
+        UPDATE users
+        SET password = $1,
             password_reset_token_hash = NULL,
             password_reset_expires_at = NULL
         WHERE id = $2 
