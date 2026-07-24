@@ -1,14 +1,13 @@
 export interface Post { 
     id: string;
+    author_id: string;
     deceased_name: string;
     background: string;
     content: string;
     status: string;
     created_at: string;   
     author_name: string;
-    author_id: string;
 }
-
 export interface CreatePostInput {
     deceased_name: string;
     content: string;

@@ -6,6 +6,7 @@ interface PostListProps {
   	posts: Post[];
 	showOwnerActions?: boolean;
 	onDeletePost?:(postId: string) => void;
+	currentUserId?: string;
 }
 import { ROUTES } from "@/constants/routes";
 
@@ -13,6 +14,7 @@ export function PostList({
 	posts, 
 	showOwnerActions = false, 
 	onDeletePost, 
+	currentUserId
 }: PostListProps) {
 	if (posts.length === 0) {
     	return (
@@ -49,9 +51,8 @@ export function PostList({
 			{posts.map((post) => (
 				<div key={post.id} className="space-y-3">
 					<PostCard 
-						key={post.id} 
 						post={post} 
-						currentUserId={post.author_id}
+						currentUserId={currentUserId}
 					/>
 
 					{showOwnerActions && (

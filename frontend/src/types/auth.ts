@@ -16,3 +16,10 @@ export interface SignupInput {
 export interface SignupResponse {
     token: string;
 }
+
+export interface CurrentUser {
+    id: string;
+    displayName: string;
+    email: string;
+    role: string;
+}

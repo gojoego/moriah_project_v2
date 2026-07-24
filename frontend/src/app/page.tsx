@@ -1,24 +1,36 @@
 "use client";
 
 import Link from "next/link";
+import { 
+    useEffect, 
+    useState 
+} from "react";
+
 import { PostList } from "@/components/posts/PostList";
-import { useEffect, useState } from "react";
-import { Post } from "@/types/post";
-import { fetchPosts } from "@/lib/api";
 import { ErrorState } from "@/components/ui/ErrorState";
+
+import { Post } from "@/types/post";
+import { CurrentUser } from "@/types/auth";
+
+import { 
+    fetchPosts, 
+    getCurrentUser 
+} from "@/lib/api";
 import { ROUTES } from "@/constants/routes";
 
 export default function HomePage() {
     const [posts, setPosts] = useState<Post[]>([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
     async function loadTopPosts() {
         setLoading(true);
         setError(null);
 
         try {
-            const posts = await fetchPosts(5);
+            const posts = await fetchPosts(5)
             setPosts(posts);
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -31,8 +43,18 @@ export default function HomePage() {
         }
     }
 
+    async function loadCurrentUser(){
+        try {
+            const user = await getCurrentUser();
+            setCurrentUser(user);
+        } catch {
+            setCurrentUser(null);
+        }
+    }
+
     useEffect(() => {
         loadTopPosts();
+        loadCurrentUser();
     }, []);
 
     const hasPosts = posts.length > 0;
@@ -50,7 +72,10 @@ export default function HomePage() {
             return <ErrorState onRetry={loadTopPosts} />
         }
 
-        return <PostList posts={posts} />;      
+        return  <PostList 
+                    posts={posts}
+                    currentUserId={currentUser?.id} 
+                />;         
     }
 
 

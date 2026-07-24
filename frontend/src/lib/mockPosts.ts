@@ -3,6 +3,7 @@ import type { Post } from "@/types/post";
 export const mockPosts: Post[] = [
     {
         id: "1",
+        author_id: "mock-user-1",
         deceased_name: "Moriah",
         background: "how I knew Moriah",
         content: "how we lost Moriah to suicide",
@@ -12,6 +13,7 @@ export const mockPosts: Post[] = [
     },
     {
         id: "2",
+        author_id: "mock-user-1",
         deceased_name: "Thomas",
         background: "how I met Thomas",
         content: "how Thomas was taken from us",
@@ -21,6 +23,7 @@ export const mockPosts: Post[] = [
     },
     {
         id: "3",
+        author_id: "mock-user-1",
         deceased_name: "Danny",
         background: "how I met Danny",
         content: "how Danny was taken from us",
@@ -30,6 +33,7 @@ export const mockPosts: Post[] = [
     },
     {
         id: "4",
+        author_id: "mock-user-1",
         deceased_name: "uncle",
         background: "how my uncle influenced me",
         content: "how my uncle was taken from us",
@@ -39,6 +43,7 @@ export const mockPosts: Post[] = [
     },
     {
         id: "5",
+        author_id: "mock-user-1",
         deceased_name: "father",
         background: "how I knew my father",
         content: "how father was taken from us",
@@ -48,6 +53,7 @@ export const mockPosts: Post[] = [
     },
     {
         id: "6",
+        author_id: "mock-user-1",
         deceased_name: "auntie",
         background: "how I knew my auntie",
         content: "how my auntie was taken from us",
@@ -57,6 +63,7 @@ export const mockPosts: Post[] = [
     },
     {
         id: "7",
+        author_id: "mock-user-1",
         deceased_name: "grandpa",
         background: "how my grandpa influenced me",
         content: "how my grandpa was taken from us",
@@ -66,6 +73,7 @@ export const mockPosts: Post[] = [
     },
     {
         id: "8",
+        author_id: "mock-user-1",
         deceased_name: "eight",
         background: "eight",
         content: "eight",

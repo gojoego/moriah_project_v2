@@ -1,5 +1,11 @@
 import { CreatePostInput, CreatePostResponse, Post } from "@/types/post";
-import { LoginInput, LoginResponse, SignupInput, SignupResponse } from "@/types/auth"
+import { 
+    LoginInput, 
+    LoginResponse, 
+    SignupInput, 
+    SignupResponse,
+    CurrentUser 
+} from "@/types/auth"
 import { getAuthHeaders } from "@/lib/auth";
 
 const ApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -22,6 +28,17 @@ async function handleResponse<T>(res: Response): Promise<T> {
     return res.json();
 }
 
+export async function getCurrentUser(): Promise<CurrentUser> {
+    const response = await fetch(
+        `${ApiBaseUrl}/api/users/me`,
+        {
+            headers: getAuthHeaders(),
+        }
+    );
+
+    return handleResponse<CurrentUser>(response);
+}
+
 export async function fetchPosts(limit?: number) {
     const baseUrl = `${ApiBaseUrl}/api/posts`
 
@@ -41,9 +58,7 @@ export async function fetchPostById(id:string): Promise<Post> {
 export async function fetchMyPosts(token: string): Promise<Post[]> {
     const url = `${ApiBaseUrl}/api/posts/me`
     const res = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeaders(),
     });
 
     return handleResponse<Post[]>(res);
