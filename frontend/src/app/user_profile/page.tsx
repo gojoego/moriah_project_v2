@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation";
 
 import { 
     fetchMyPosts, 
-    deletePostById
+    deletePostById, 
+    getCurrentUser
 } from "@/lib/api";
 
 import { Post } from "@/types/post";
@@ -24,8 +25,6 @@ import { ROUTES } from "@/constants/routes";
 export default function ProfilePage() {
     const router = useRouter();
 
-    const mounted = typeof window !== "undefined";
-
     const [user, setUser] = useState<User | null>(null);
 
     const [posts, setPosts] = useState<Post[]>([]);
@@ -34,7 +33,6 @@ export default function ProfilePage() {
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
-        if (!mounted) return;
 
         const token = getToken();
 
@@ -42,28 +40,16 @@ export default function ProfilePage() {
             router.push(ROUTES.LOGIN);
             return;
         }
-
-        const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
-
-        fetch(`${apiBase}/api/users/me`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => {
-                if (!res.ok) throw new Error("Unauthorized");
-                return res.json();
-            })
-            .then((data: User) => {
+        getCurrentUser()
+            .then((data) => {
                 setUser(data);
             })
             .catch(() => {
                 router.push(ROUTES.LOGIN);
-            });
-    }, [mounted, router]);
+            })
+    }, [router]);
 
     useEffect(() => {
-        if (!mounted) return;
 
         const token = getToken();
         if (!token) return;
@@ -71,7 +57,7 @@ export default function ProfilePage() {
         fetchMyPosts(token)
             .then((data) => setPosts(data))
             .catch((err: Error) => setPostsError(err.message));
-    }, [mounted]);
+    }, []);
 
     const handleDeletePost = async (postId: string) => {
         const confirmed = window.confirm(
@@ -94,10 +80,6 @@ export default function ProfilePage() {
             }
         }
     };
-
-    if (!mounted) {
-        return null;
-    }
 
     if (!user) {
         return (
@@ -174,6 +156,7 @@ export default function ProfilePage() {
                     
                     <PostList
                         posts={posts}
+                        currentUserId={user.id}
                         showOwnerActions
                         onDeletePost={handleDeletePost}
                     />

@@ -3,14 +3,16 @@
 import { useEffect, useState } from "react";
 import { PostList } from "@/components/posts/PostList";
 import { Post } from "@/types/post";
-import { fetchPosts } from "@/lib/api";
+import { fetchPosts, getCurrentUser } from "@/lib/api";
 import { ErrorState } from "@/components/ui/ErrorState";
 import Link from "next/link";
+import { CurrentUser } from "@/types/auth";
 
 export default function PostsPage() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
     useEffect(() => {
         async function loadPosts() {
@@ -19,6 +21,13 @@ export default function PostsPage() {
                 const posts = await fetchPosts();
 
                 setPosts(posts);
+
+                try {
+                    const user = await getCurrentUser();
+                    setCurrentUser(user);
+                } catch {
+                    setCurrentUser(null);
+                }
             } catch (err: unknown) {
                 if (err instanceof Error) {
                     setError(err.message);
@@ -68,7 +77,11 @@ export default function PostsPage() {
                 </Link>                
             </header>
 
-            <PostList posts={posts} />
+
+            <PostList 
+                posts={posts}
+                currentUserId={currentUser?.id} 
+            />;    
         </main>
     )
 }

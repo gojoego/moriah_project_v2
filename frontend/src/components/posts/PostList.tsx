@@ -6,6 +6,7 @@ interface PostListProps {
   	posts: Post[];
 	showOwnerActions?: boolean;
 	onDeletePost?:(postId: string) => void;
+	currentUserId?: string;
 }
 import { ROUTES } from "@/constants/routes";
 
@@ -13,6 +14,7 @@ export function PostList({
 	posts, 
 	showOwnerActions = false, 
 	onDeletePost, 
+	currentUserId
 }: PostListProps) {
 	if (posts.length === 0) {
     	return (
@@ -48,7 +50,10 @@ export function PostList({
 		<div className="grid gap-6">
 			{posts.map((post) => (
 				<div key={post.id} className="space-y-3">
-					<PostCard key={post.id} post={post} />
+					<PostCard 
+						post={post} 
+						currentUserId={currentUserId}
+					/>
 
 					{showOwnerActions && (
 						<PostOwnerActions
