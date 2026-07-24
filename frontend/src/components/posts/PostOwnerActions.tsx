@@ -12,13 +12,6 @@ export function PostOwnerActions({
 }: PostOwnerActionsProps) {
     return (
         <div>
-            <Link
-                href={`/posts/${postId}/edit`}
-                className="px-3 py-1 rounded border"
-            >
-                Edit
-            </Link>
-
             <Button
                 type="button"
                 variant="destructive"

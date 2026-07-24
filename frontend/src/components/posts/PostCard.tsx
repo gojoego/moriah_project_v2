@@ -8,7 +8,11 @@ interface Props {
 
 export function PostCard({ 
 	post,
+	currentUserId,
 }: Props) {
+	const isOwner =
+		Boolean(currentUserId) &&
+		currentUserId === post.author_id;
 	return (
 		<article>
 			<Link
@@ -27,6 +31,16 @@ export function PostCard({
 					By {post.author_name}
 				</p>
 			</Link>		
+			{isOwner && (
+				<div className="px-6 py-3">
+					<Link
+						href={`/posts/${post.id}/edit`}
+						className="text-sm underline"
+					>
+						Edit post
+					</Link>
+				</div>
+			)}
 		</article>
 	)
 }
