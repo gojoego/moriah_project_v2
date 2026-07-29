@@ -8,6 +8,7 @@ import signup from "./routes/auth/signup";
 import me from "./routes/users/me";
 import posts from "./routes/posts";
 import pwreset from "./routes/auth/passwordReset"
+import admin from "./routes/admin";
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -50,11 +51,17 @@ app.use(
 app.use(express.json());
 
 app.use("/api/auth", login);
-
 app.use("/api/auth", signup);
+
 app.use("/api/users", me);
+
 app.use("/api/posts", postsLimiter, posts);
-app.use("/api/auth", pwreset)
+
+app.use("/api/auth", pwreset);
+
+app.use("/api/admin", admin);
+
+console.log("Admin routes loaded");
 
 app.use((_req, res) => {
     res.status(404).json({

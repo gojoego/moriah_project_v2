@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
-
+import { UserRole } from "../types/auth";
 export interface JwtPayload {
     id: string;
     email: string;
+    role: UserRole;
 }
 
 class AuthError extends Error {
