@@ -6,8 +6,8 @@ import { authMiddleware, AuthRequest } from "../../middleware/auth";
 const router = Router(); 
 
 const meRateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per window
+    windowMs: 15 * 60 * 1000, 
+    max: 100,
     standardHeaders: true,
     legacyHeaders: false,
 });
@@ -18,6 +18,12 @@ router.get(
     authMiddleware, 
     async (req: AuthRequest, res) => {
         try {
+
+            if (!req.user) {
+                return res.status(401).json({
+                    error: "Unauthorized",
+                });
+            }
 
             const userId = req.user!.id;
 
