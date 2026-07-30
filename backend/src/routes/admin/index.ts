@@ -1,4 +1,4 @@
-import { Router, Response } from "express";
+import { Router, Response, Request } from "express";
 import { authMiddleware, AuthRequest } from "../../middleware/auth";
 import { adminMiddleware } from "../../middleware/adminMiddleware";
 import {
@@ -6,17 +6,59 @@ import {
     getAllPostsAdmin,
     deletePostAdmin,
     updateUserRole
-} from "../../db/queries/admin"
+} from "../../db/queries/admin";
+import rateLimit from "express-rate-limit";
+
+import {
+    updateUserRoleSchema,
+    adminPaginationSchema,
+} from "../../schemas/admin";
 
 const router = Router();
+
+const adminRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100, 
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+function getPaginationParams(req: Request) {
+    const rawLimit = Number(req.query.limit ?? 20);
+    const rawOffset = Number(req.query.offset ?? 0);
+
+    const limit = Math.min(
+        Number.isNaN(rawLimit) ? 20 : rawLimit,
+        100
+    );
+
+    const offset = Math.max(
+        Number.isNaN(rawOffset) ? 0 : rawOffset,
+        0
+    );
+
+    return {
+        limit,
+        offset,
+    };
+}
+
+router.use(adminRateLimiter);
 
 router.get(
     "/users", 
     authMiddleware, 
     adminMiddleware, 
+    adminRateLimiter,
     async (_req: AuthRequest, res: Response) => {
         try {
-            const users = await getAllUsers();
+            const { limit, offset } = getPaginationParams(_req);
+
+            const users = await getAllUsers({
+                limit,
+                offset,
+            });
+            
             return res.json(users);
         } catch (error) {
             console.error("Admin get users error: ", error);
@@ -31,9 +73,23 @@ router.get(
     "/posts",
     authMiddleware, 
     adminMiddleware,
+    adminRateLimiter,
     async (_req: AuthRequest, res: Response) => {
         try {
-            const posts = await getAllPostsAdmin();
+            const parsed = adminPaginationSchema.safeParse(_req.query);
+
+            if (!parsed.success) {
+                return res.status(400).json({
+                    error: "Invalid pagination parameters",
+                });
+            }
+
+            const { limit, offset } = parsed.data;
+
+            const posts = await getAllPostsAdmin({
+                limit, 
+                offset,
+        });
             return res.json(posts);
         } catch (error) {
             console.error("Admin get posts error: ", error);
@@ -48,6 +104,7 @@ router.delete(
     "/posts/:id",
     authMiddleware, 
     adminMiddleware,
+    adminRateLimiter,
     async (req: AuthRequest, res: Response) => {
         try {
             const { id } = req.params;
@@ -57,7 +114,7 @@ router.delete(
                     error: "Invalid user id",
                 });
             }
-            
+
             const deletedPost = await deletePostAdmin(id);
 
             if (!deletedPost) {
@@ -84,10 +141,19 @@ router.patch(
     "/users/:id/role",
     authMiddleware,
     adminMiddleware,
+    adminRateLimiter,
     async (req: AuthRequest, res: Response) => {
         try {
             const { id } = req.params;
-            const { role } = req.body;
+            const parsed = updateUserRoleSchema.safeParse(req.body);
+
+            if (!parsed.success) {
+                return res.status(400).json({
+                    error: "Invalid role",
+                });
+            }
+
+            const { role } = parsed.data;
 
             if (Array.isArray(id)) {
                 return res.status(400).json({
