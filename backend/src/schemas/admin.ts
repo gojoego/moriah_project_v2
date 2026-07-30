@@ -1,11 +1,8 @@
 import { z } from "zod";
+import { USER_ROLES } from "../types/roles";
 
 export const updateUserRoleSchema = z.object({
-    role: z.enum([
-        "user",
-        "moderator",
-        "admin",
-    ]),
+    role: z.enum(USER_ROLES)
 });
 
 export const adminPaginationSchema = z.object({

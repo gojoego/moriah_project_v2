@@ -1,4 +1,5 @@
 import { pool } from "..";
+import { UserRole } from "../../types/roles";
 
 export async function getAllUsers(options?: {
     limit?: number;
@@ -84,7 +85,7 @@ export async function deletePostAdmin(id: string) {
 
 export async function updateUserRole(
     id: string, 
-    role: "user" | "moderator" | "admin"
+    role: UserRole,
 ) {
     const result = await pool.query(
         `
