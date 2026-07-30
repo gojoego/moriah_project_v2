@@ -1,6 +1,6 @@
 The Moriah Project
 
-forum created for people to express what they wish they could say to someone who has passed away from suicide
+A forum created for people to express what they wish they could say to someone who has passed away from suicide
 
 ## Architecture
 
@@ -25,15 +25,6 @@ forum created for people to express what they wish they could say to someone who
     - Build verification
 
 (currently expanding )
-
-Key Features
-1. Memorial Post Creation
-    - long-form writing experience
-    - structured fields for: name of the deceased, background/context, “What I wish I could say” reflection
-
-2. Post Browsing
-    - list of recent posts
-    - individual post pages
 
 # Key Features
 
@@ -78,7 +69,7 @@ Authenticated users can:
 | email | Unique user email |
 | password | Hashed password |
 | role | User permission level |
-| password_reset_token_hash | Secure password reset token |
+| password_reset_token_hash | Hash of the password reset token |
 | password_reset_expires_at | Password reset expiration timestamp |
 | created_at | Account creation timestamp |
 | updated_at | Last update timestamp |
