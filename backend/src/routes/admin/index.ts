@@ -14,6 +14,8 @@ import {
     adminPaginationSchema,
 } from "../../schemas/admin";
 
+import { USER_ROLES } from "../../types/roles";
+
 const router = Router();
 
 const adminRateLimiter = rateLimit({
@@ -161,13 +163,7 @@ router.patch(
                 });
             }
 
-            const allowedRoles = [
-                "user",
-                "moderator",
-                "admin",
-            ] as const;
-
-            if (!allowedRoles.includes(role)) {
+            if (!USER_ROLES.includes(role)) {
                 return res.status(400).json({
                     error: "Invalid role",
                 });
