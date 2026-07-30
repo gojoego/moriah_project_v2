@@ -3,7 +3,6 @@ import {
     NextFunction
 } from "express";
 import { AuthRequest } from "./auth";
-import { json } from "zod";
 
 export function adminMiddleware (
     req: AuthRequest,
