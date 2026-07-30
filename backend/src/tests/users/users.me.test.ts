@@ -16,6 +16,7 @@ describe("GET /api/users/me", () => {
         const token = signToken({
             id: "123",
             email: "joe@test.com",
+            role: "user"
         });
 
         (getUserById as jest.Mock).mockResolvedValue({
@@ -45,6 +46,7 @@ describe("GET /api/users/me", () => {
         const token = signToken({
             id: "123",
             email: "joe@test.com",
+            role: "user",
         });
 
         (getUserById as jest.Mock).mockResolvedValue(null);
