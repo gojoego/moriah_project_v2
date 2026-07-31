@@ -2,7 +2,7 @@ import {
     Response, 
     NextFunction
 } from "express";
-import { AuthRequest } from "./auth";
+import { AuthRequest } from "../types/auth";
 
 export function adminMiddleware (
     req: AuthRequest,
