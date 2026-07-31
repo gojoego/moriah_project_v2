@@ -4,7 +4,7 @@ export default function SideBar() {
     return (
         <aside className="w-64 min-h-screen border-r p-6">
             <h1 className="text-2xl font-bold mb-8">
-                Moriah Project Admininstrator 
+                Moriah Project Administrator 
             </h1>
             <nav className="flex flex-col gap-4">
                 <NavItem

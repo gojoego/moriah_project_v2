@@ -8,7 +8,7 @@ import RecentPosts from "@/components/admin/RecentPosts";
 export default function AdminHomePage() {
 
     return (
-        <div className="flex">
+        <div className="flex flex-col md:flex-row">
 
             <Sidebar/>
 
@@ -18,7 +18,7 @@ export default function AdminHomePage() {
                     Dashboard
                 </h1>
                 
-                <div className="grid grid-cols-4 gap-4 mb-8">
+                <div className="grid grid-cols-4 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-4">
                     <StatCard
                         title="Total Users"
                         value={160}
@@ -40,7 +40,7 @@ export default function AdminHomePage() {
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-6 lg:grid-cols-2">
 
                     <RecentUsers/>
                     
