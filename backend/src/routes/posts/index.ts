@@ -13,9 +13,10 @@ import {
     deletePost
 } from "../../db/queries/posts";
 
-import { authMiddleware, AuthRequest } from "../../middleware/auth";
+import { authMiddleware } from "../../middleware/auth";
 import { createPostSchema, updatePostSchema } from "../../schemas/posts";
 import { getZodErrorMessage } from "../../utils/zod";
+import  { AuthRequest } from "../../types/auth"
 
 const router = Router();
 
