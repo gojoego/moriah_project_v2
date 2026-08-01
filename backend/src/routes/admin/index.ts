@@ -1,5 +1,5 @@
 import { Router, Response, Request } from "express";
-import { authMiddleware, AuthRequest } from "../../middleware/auth";
+import { authMiddleware } from "../../middleware/auth";
 import { adminMiddleware } from "../../middleware/adminMiddleware";
 import {
     getAllUsers,
@@ -8,6 +8,7 @@ import {
     updateUserRole
 } from "../../db/queries/admin";
 import rateLimit from "express-rate-limit";
+import { AuthRequest } from "../../types/auth"
 
 import {
     updateUserRoleSchema,
@@ -15,6 +16,8 @@ import {
 } from "../../schemas/admin";
 
 import { USER_ROLES } from "../../types/roles";
+
+import { requireRole } from "../../middleware/authorize";
 
 const router = Router();
 
@@ -50,8 +53,8 @@ router.use(adminRateLimiter);
 router.get(
     "/users", 
     authMiddleware, 
-    adminMiddleware, 
     adminRateLimiter,
+    requireRole("admin"),
     async (_req: AuthRequest, res: Response) => {
         try {
             const { limit, offset } = getPaginationParams(_req);
@@ -74,8 +77,7 @@ router.get(
 router.get(
     "/posts",
     authMiddleware, 
-    adminMiddleware,
-    adminRateLimiter,
+    requireRole("admin"),
     async (_req: AuthRequest, res: Response) => {
         try {
             const parsed = adminPaginationSchema.safeParse(_req.query);
@@ -105,8 +107,8 @@ router.get(
 router.delete(
     "/posts/:id",
     authMiddleware, 
-    adminMiddleware,
     adminRateLimiter,
+    requireRole("admin"),
     async (req: AuthRequest, res: Response) => {
         try {
             const { id } = req.params;
@@ -142,8 +144,8 @@ router.delete(
 router.patch(
     "/users/:id/role",
     authMiddleware,
-    adminMiddleware,
     adminRateLimiter,
+    requireRole("admin"),
     async (req: AuthRequest, res: Response) => {
         try {
             const { id } = req.params;

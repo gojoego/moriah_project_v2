@@ -1,8 +1,8 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import { getUserById } from "../../db/queries/users";
-import { authMiddleware, AuthRequest } from "../../middleware/auth";
-
+import { authMiddleware } from "../../middleware/auth";
+import { AuthRequest } from "../../types/auth"
 const router = Router(); 
 
 const meRateLimiter = rateLimit({

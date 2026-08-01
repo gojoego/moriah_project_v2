@@ -1,9 +1,6 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt";
-import { AuthUser } from "../types/auth"
-export interface AuthRequest extends Request {
-    user?: AuthUser;
-}
+import { AuthRequest } from "../types/auth"
 
 export function authMiddleware(
     req: AuthRequest,
