@@ -1,7 +1,7 @@
 import { pool } from "..";
 import { UserRole } from "../../types/roles";
 
-export async function getAllUsers(options?: {
+export async function getAllUsersAdmin(options?: {
     limit?: number;
     offset?: number;
 }){
