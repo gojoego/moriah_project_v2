@@ -3,7 +3,7 @@ import app from "../../app";
 import { signToken } from "../../utils/jwt";
 
 jest.mock("../../db/queries/admin", () => ({
-    getAllUsers: jest.fn(),
+    getAllUsersAdmin: jest.fn(),
     getAllPostsAdmin: jest.fn(),
     deletePostAdmin: jest.fn(),
     updateUserRole: jest.fn(),
