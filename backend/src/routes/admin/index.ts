@@ -1,8 +1,7 @@
 import { Router, Response, Request } from "express";
 import { authMiddleware } from "../../middleware/auth";
-import { adminMiddleware } from "../../middleware/adminMiddleware";
 import {
-    getAllUsers,
+    getAllUsersAdmin,
     getAllPostsAdmin,
     deletePostAdmin,
     updateUserRole
@@ -59,7 +58,7 @@ router.get(
         try {
             const { limit, offset } = getPaginationParams(_req);
 
-            const users = await getAllUsers({
+            const users = await getAllUsersAdmin({
                 limit,
                 offset,
             });

@@ -3,7 +3,7 @@ import app from "../../app";
 import { signToken } from "../../utils/jwt";
 
 jest.mock("../../db/queries/admin", () => ({
-    getAllUsers: jest.fn(),
+    getAllUsersAdmin: jest.fn(),
     getAllPostsAdmin: jest.fn(),
     deletePostAdmin: jest.fn(),
     updateUserRole: jest.fn(),
@@ -11,11 +11,11 @@ jest.mock("../../db/queries/admin", () => ({
 
 
 import {
-    getAllUsers,
+    getAllUsersAdmin,
 } from "../../db/queries/admin";
 
 
-const mockGetAllUsers = jest.mocked(getAllUsers);
+const mockGetAllUsers = jest.mocked(getAllUsersAdmin);
 
 
 describe("Admin authorization", () => {
