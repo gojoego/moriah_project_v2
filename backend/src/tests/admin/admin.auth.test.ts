@@ -11,11 +11,11 @@ jest.mock("../../db/queries/admin", () => ({
 
 
 import {
-    getAllUsers,
+    getAllUsersAdmin,
 } from "../../db/queries/admin";
 
 
-const mockGetAllUsers = jest.mocked(getAllUsers);
+const mockGetAllUsers = jest.mocked(getAllUsersAdmin);
 
 
 describe("Admin authorization", () => {

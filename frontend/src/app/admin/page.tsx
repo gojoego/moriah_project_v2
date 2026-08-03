@@ -11,7 +11,6 @@ import { fetchAdminUsers, fetchAdminPosts } from "@/lib/api/admin";
 
 import { AdminUser, AdminPost } from "@/types/admin";
 
-
 export default function AdminHomePage() {
 
     const [users, setUsers] = useState<AdminUser[]>([]);
@@ -19,7 +18,6 @@ export default function AdminHomePage() {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-
 
     useEffect(() => {
 
@@ -57,8 +55,11 @@ export default function AdminHomePage() {
 
     if (loading) {
         return (
-            <div className="p-8">
-                Loading dashboard...
+            <div className="flex flex-col md:flex-row">
+                <Sidebar/>
+                <main className="flex-1 p-8">
+                    Loading dashboard...
+                </main>
             </div>
         );
     }
@@ -67,13 +68,14 @@ export default function AdminHomePage() {
 
     if (error) {
         return (
-            <div className="p-8">
-                Error: {error}
+            <div className="flex flex-col md:flex-row">
+                <Sidebar/>
+                <main className="flex-1 p-8">
+                    Error {error}
+                </main>
             </div>
         );
     }
-
-
 
     return (
         <div className="flex flex-col md:flex-row">
