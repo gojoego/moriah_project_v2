@@ -2,7 +2,6 @@ export type AdminUserRole =
     "user"
     | "moderator"
     | "admin";
-
 export interface AdminUser {
     id: string;
     display_name: string;
@@ -10,7 +9,6 @@ export interface AdminUser {
     role: AdminUserRole;
     created_at: string;
 }
-
 export interface AdminPost {
     id: string;
     deceased_name: string;
@@ -18,4 +16,10 @@ export interface AdminPost {
     author_name: string;
     status: string;
     created_at: string;
+}
+export type AdminStats = {
+    totalUsers: number;
+    totalPosts: number;
+    newUsers: number;
+    recentPosts: number;
 }
