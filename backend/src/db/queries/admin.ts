@@ -1,5 +1,6 @@
 import { pool } from "..";
 import { UserRole } from "../../types/roles";
+import { AdminStats } from "../../types/stats";
 
 export async function getAllUsersAdmin(options?: {
     limit?: number;
@@ -102,4 +103,43 @@ export async function updateUserRole(
     );
 
     return result.rows[0] ?? null;
+}
+
+export async function getAdminStats(): Promise<AdminStats> {
+    const query = 
+        `
+            SELECT 
+            (
+                SELECT COUNT(*)
+                from users
+            ) AS total_users,
+            
+            (
+                SELECT COUNT(*)
+                from posts
+            ) AS total_posts,
+
+            (
+                SELECT COUNT(*)
+                from users 
+                WHERE created_at >= NOW() - INTERVAL '7 days' 
+            ) AS new_users,
+
+            (
+                SELECT COUNT(*)
+                from posts
+                WHERE created_at >= NOW() - INTERVAL '7 days'            
+            ) AS recent_posts;
+        `;
+
+        const result = await pool.query(query);
+
+        const row = result.rows[0];
+
+        return {
+            totalUsers: Number(row.total_users),
+            totalPosts: Number(row.total_posts),
+            newUsers: Number(row.new_users),
+            recentPosts: Number(row.recent_posts),
+        };
 }

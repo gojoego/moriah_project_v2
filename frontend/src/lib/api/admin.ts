@@ -1,6 +1,6 @@
 import { ApiBaseUrl, handleResponse } from "./client";
 import { getAuthHeaders } from "@/lib/auth";
-import { AdminUser, AdminPost } from "@/types/admin";
+import { AdminUser, AdminPost, AdminStats } from "@/types/admin";
 
 export async function fetchAdminUsers(
     limit?: number,
@@ -58,4 +58,15 @@ export async function fetchAdminPosts(
     );
 
     return handleResponse<AdminPost[]>(response);
+}
+
+export async function fetchAdminStats(): Promise<AdminStats> {
+    const response = await fetch(
+        `${ApiBaseUrl}/api/admin/stats`,
+        {
+            headers: getAuthHeaders(),
+        }
+    )
+    
+    return handleResponse<AdminStats>(response);
 }

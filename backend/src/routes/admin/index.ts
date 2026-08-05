@@ -4,7 +4,8 @@ import {
     getAllUsersAdmin,
     getAllPostsAdmin,
     deletePostAdmin,
-    updateUserRole
+    updateUserRole,
+    getAdminStats
 } from "../../db/queries/admin";
 import rateLimit from "express-rate-limit";
 import { AuthRequest } from "../../types/auth"
@@ -191,5 +192,25 @@ router.patch(
         }
     }
 )
+
+router.get(
+    "/stats", 
+    authMiddleware, 
+    requireRole("admin"),    
+    adminRateLimiter,
+    async (_req: AuthRequest, res: Response) => {
+        try {
+
+            const stats = await getAdminStats();
+            
+            return res.json(stats);
+        } catch (error) {
+            console.error("Admin get stats error: ", error);
+            return res.status(500).json({
+                error: "Failed to fetch stats",
+            });
+        }
+    }
+);
 
 export default router;
