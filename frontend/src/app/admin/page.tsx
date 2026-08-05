@@ -25,10 +25,15 @@ export default function AdminHomePage() {
         async function loadDashboardData() {
 
             try {
-
-                const usersData = await fetchAdminUsers(5);
-                const postsData = await fetchAdminPosts(5);
-                const statsData = await fetchAdminStats();
+                const [
+                    usersData,
+                    postsData,
+                    statsData
+                ] = await Promise.all([
+                    fetchAdminUsers(5),
+                    fetchAdminPosts(5),
+                    fetchAdminStats(),
+                ]);
 
                 setUsers(usersData);
                 setPosts(postsData);
