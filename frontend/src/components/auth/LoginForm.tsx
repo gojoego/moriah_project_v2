@@ -74,7 +74,7 @@ export function LoginForm(){
 
             <input
                 type="password"
-                placeholder="Password (not required yet)"
+                placeholder="Password"
                 className="w-full border p-2 rounded"
                 value={password}
                 onChange={(e) => {

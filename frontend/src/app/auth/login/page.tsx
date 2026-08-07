@@ -3,18 +3,22 @@
 import { LoginForm } from "@/components/auth/LoginForm";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { getToken } from "@/lib/auth";
+import { checkAuth } from "@/lib/auth";
 import { ROUTES } from "@/constants/routes";
 
 export default function LoginPage(){
 	const router = useRouter();
 	
 	useEffect (() => {
-		const token = getToken();
+		async function redirectIfAuthenticated() {
+			const authenticated = await checkAuth();
 
-		if (token) {
-			router.replace(ROUTES.PROFILE);
+			if (authenticated) {
+				router.replace(ROUTES.PROFILE)
+			}
 		}
+
+		redirectIfAuthenticated();
 	}, [router]);
 
 	return (

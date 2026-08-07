@@ -17,7 +17,7 @@ import { Post } from "@/types/post";
 import { User } from "@/types/user";
 import { PostList } from "@/components/posts/PostList"; 
 
-import { getToken } from "@/lib/auth";
+import { getToken, checkAuth } from "@/lib/auth";
 import { LogoutButton } from "@/components/auth/LogoutForm"
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
@@ -33,20 +33,20 @@ export default function ProfilePage() {
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
+        async function loadProfile() {
+            const authenticated = await checkAuth();
 
-        const token = getToken();
-
-        if (!token) {
-            router.push(ROUTES.LOGIN);
-            return;
-        }
-        getCurrentUser()
-            .then((data) => {
-                setUser(data);
-            })
-            .catch(() => {
+            if (!authenticated) {
                 router.push(ROUTES.LOGIN);
-            })
+                return;
+            }
+
+            const data = await getCurrentUser();
+
+            setUser(data);
+            }
+
+        loadProfile();      
     }, [router]);
 
     useEffect(() => {
@@ -93,6 +93,7 @@ export default function ProfilePage() {
 
     return (
         <main className="mx-auto max-w-2xl px-4 py-16">
+            <h1>Welcome</h1>
             <div className="space-y-10">
                 <header className="flex items-center gap-6">
                     <div className="flex h-28 w-28 items-center justify-center rounded-full bg-muted border border-border">

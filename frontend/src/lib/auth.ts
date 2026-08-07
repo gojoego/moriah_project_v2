@@ -38,3 +38,30 @@ export function getAuthHeaders(): Record<string, string> {
 
     return headers;
 }
+
+export async function checkAuth(): Promise<boolean> {
+    const token = getToken();
+
+    if (!token) {
+        return false;
+    }
+
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/me`,
+            {
+                headers: getAuthHeaders(),
+            }
+        );
+
+        if (!response.ok) {
+            removeToken();
+            return false;
+        }
+
+        return true;
+    } catch {
+        removeToken();
+        return false;
+    }
+}
