@@ -2,54 +2,69 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: frontend
-
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: |
+            frontend/package-lock.json
+            backend/package-lock.json
 
+      # Frontend dependencies
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
 
+      # Backend dependencies (needed if building/testing backend locally)
       - name: Install backend dependencies
         working-directory: backend
         run: npm ci
 
+      # Build backend so dist/server.js exists
       - name: Build backend
         working-directory: backend
         run: npm run build
 
+      # Start backend locally
       - name: Start backend
         working-directory: backend
         run: npm run start &
 
+      # Build Next.js production app
+      - name: Build frontend
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+        run: npm run build
+
+      # Install browsers
       - name: Install Playwright Browsers
+        working-directory: frontend
         run: npx playwright install --with-deps
 
+      # Run E2E tests
       - name: Run Playwright tests
+        working-directory: frontend
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
           PLAYWRIGHT_TEST_EMAIL: ${{ secrets.PLAYWRIGHT_TEST_EMAIL }}
           PLAYWRIGHT_TEST_EMAIL_PASSWORD: ${{ secrets.PLAYWRIGHT_TEST_EMAIL_PASSWORD }}
         run: npx playwright test
 
+      # Save artifacts if tests fail
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
