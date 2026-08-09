@@ -7,9 +7,9 @@ test.describe('Signup', () => {
 
     test('user can sign up successfully', async ({ page }) => {
 
-        const timestamp = Date.now()
-        const testUsername = `playwright-${timestamp}`;
-        const testEmail = `playwright-${timestamp}@moriahproject.org`;
+        const testId = crypto.randomUUID();
+        const testUsername = `playwright-${testId}`;
+        const testEmail = `playwright-${testId}@moriahproject.org`;
         const testPassword = `Password123!`;
 
         await page.goto('/auth/signup');
