@@ -54,6 +54,11 @@ export async function checkAuth(): Promise<boolean> {
             }
         );
 
+        if (response.status === 401 || response.status === 403) {
+            removeToken();
+            return false;
+        }
+
         if (!response.ok) {
             removeToken();
             return false;
@@ -61,7 +66,6 @@ export async function checkAuth(): Promise<boolean> {
 
         return true;
     } catch {
-        removeToken();
         return false;
     }
 }
