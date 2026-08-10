@@ -41,6 +41,9 @@ jobs:
       # Start backend locally
       - name: Start backend
         working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: npm run start &
 
       # Build Next.js production app
