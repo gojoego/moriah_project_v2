@@ -12,7 +12,7 @@ export default function AboutPage(){
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed">
                     My name is Joe. Born in the sun of San Diego and raised in the fog of San Francisco, I currently live in the
-                    heat of the Texan sun. I am social worker who found himself immersed in the burgeoning tech scene of 
+                    heat of the Texan sun. I am a former social worker who found himself immersed in the burgeoning tech scene of 
                     Silicon Valley. I eventually learned to code and decided to start building applications that could possibly 
                     help individuals with mental health struggles. As someone who has struggled with clinical depression since 
                     age 5, I strive to build products imbued with empathy, kindness and acceptance.  
@@ -25,14 +25,13 @@ export default function AboutPage(){
                 </h2>
                 <div className="mt-3 space-y-4 text-sm leading-relaxed text-muted-foreground">
                     <p>
-                            At the end of 2022, my friend Moriah passed away from suicide. We were not particularly close but her 
-                            death had an incredible impact on me. After I moved cities, we lost touch. There were times I thought 
-                            about texting her. It was usually after some intense workout because we had been workout buddies. But I never did. 
+                        At the end of 2022, my friend Moriah passed away from suicide. We were not particularly close but her 
+                        death had an incredible impact on me. After I moved cities, we lost touch. There were times I thought 
+                        about texting her. It was usually after some intense workout because we had been workout buddies. But I never did. 
                     </p>
                     <p>
-                        And I have never stopped wondering if I there was something I could have done to prevent her passing. Maybe, just maybe 
-                        if I had reached out to her, maybe that one text would have made a difference. What could I have said? What could I 
-                        have told her?             
+                        And I have never stopped wondering if there was something I could have done to prevent her passing. Maybe if I had 
+                        reached out to her... maybe that one text would have made a difference. What could I have said? What could I have told her?             
                     </p>
                     <p>
                         My hope is that someone might be able to find answers to these questions in this forum. I built this space so 
