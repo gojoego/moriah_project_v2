@@ -144,3 +144,13 @@ Currently working on:
 # Motivation
 
 The Moriah Project was created to provide a dedicated space for people to process grief through writing, reflection, and remembrance after losing someone to suicide.
+
+## Ownership
+
+The Moriah Project and its original source code are owned by **gojoego LLC**.
+
+Copyright © 2025–2026 gojoego LLC. All rights reserved.
+
+This repository is publicly viewable for portfolio and demonstration purposes.
+No license is granted for reuse, modification, or distribution of the original
+project code. Third-party dependencies remain subject to their respective licenses.
