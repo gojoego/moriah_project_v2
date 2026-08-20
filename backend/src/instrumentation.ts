@@ -4,4 +4,5 @@ Sentry.init({
     dsn: process.env.SENTRY_DSN,
     tracesSampleRate: 0.1,
     enableLogs: true,
+    enabled: process.env.NODE_ENV !== "test",
 });
