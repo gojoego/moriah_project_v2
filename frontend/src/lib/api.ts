@@ -37,7 +37,7 @@ export async function fetchPostById(id:string): Promise<Post> {
     return handleResponse<Post>(res);
 }
 
-export async function fetchMyPosts(token: string): Promise<Post[]> {
+export async function fetchMyPosts(): Promise<Post[]> {
     const url = `${ApiBaseUrl}/api/posts/me`
     const res = await fetch(url, {
         headers: getAuthHeaders(),

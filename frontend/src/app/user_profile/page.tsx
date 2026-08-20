@@ -54,7 +54,7 @@ export default function ProfilePage() {
         const token = getToken();
         if (!token) return;
 
-        fetchMyPosts(token)
+        fetchMyPosts()
             .then((data) => setPosts(data))
             .catch((err: Error) => setPostsError(err.message));
     }, []);
