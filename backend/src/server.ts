@@ -1,4 +1,6 @@
 import "dotenv/config";
+import "./instrumentation";
+
 import { pool } from "./db";
 import app from "./app";
 
