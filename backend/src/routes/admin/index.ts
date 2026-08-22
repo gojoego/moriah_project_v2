@@ -1,194 +1,31 @@
-import { Router, Response, Request } from "express";
+import { Router } from "express";
+
+import {
+    deletePostAdminController,
+    getAdminStatsController,
+    getAllPostsAdminController,
+    getAllUsersAdminController,
+    updateUserRoleController
+} from "../../controllers/adminController"
+
+import { adminRateLimiter } from "../../middleware/rateLimit";
 import { authMiddleware } from "../../middleware/auth";
-import {
-    getAllUsersAdmin,
-    getAllPostsAdmin,
-    deletePostAdmin,
-    updateUserRole,
-    getAdminStats
-} from "../../db/queries/admin";
-import rateLimit from "express-rate-limit";
-import { AuthRequest } from "../../types/auth"
-
-import {
-    updateUserRoleSchema,
-    adminPaginationSchema,
-} from "../../schemas/admin";
-
-import { USER_ROLES } from "../../types/roles";
-
 import { requireRole } from "../../middleware/authorize";
 
 const router = Router();
 
-const adminRateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100, 
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-
 router.use(adminRateLimiter);
+router.use(authMiddleware);
+router.use(requireRole("admin"));
 
-router.get(
-    "/users", 
-    authMiddleware, 
-    requireRole("admin"),
-    async (_req: AuthRequest, res: Response) => {
-        try {
-            const parsed = adminPaginationSchema.safeParse(_req.query);
+router.get("/users", getAllUsersAdminController);
 
-            if (!parsed.success) {
-                return res.status(400).json({
-                    error: "Invalid pagination parameters",
-                });
-            }
-            const { limit, offset } = parsed.data;
+router.get("/posts", getAllPostsAdminController);
 
-            const users = await getAllUsersAdmin({
-                limit,
-                offset,
-            });
-            
-            return res.json(users);
-        } catch (error) {
-            console.error("Admin get users error: ", error);
-            return res.status(500).json({
-                error: "Failed to fetch users",
-            });
-        }
-    }
-);
+router.delete("/posts/:id", deletePostAdminController);
 
-router.get(
-    "/posts",
-    authMiddleware, 
-    requireRole("admin"),
-    async (_req: AuthRequest, res: Response) => {
-        try {
-            const parsed = adminPaginationSchema.safeParse(_req.query);
+router.patch("/users/:id/role", updateUserRoleController);
 
-            if (!parsed.success) {
-                return res.status(400).json({
-                    error: "Invalid pagination parameters",
-                });
-            }
-
-            const { limit, offset } = parsed.data;
-
-            const posts = await getAllPostsAdmin({
-                limit, 
-                offset,
-        });
-            return res.json(posts);
-        } catch (error) {
-            console.error("Admin get posts error: ", error);
-            return res.status(500).json({
-                error: "Failed to fetch posts",
-            });
-        }
-    }
-)
-
-router.delete(
-    "/posts/:id",
-    authMiddleware, 
-    requireRole("admin"),
-    async (req: AuthRequest, res: Response) => {
-        try {
-            const { id } = req.params;
-
-            if (Array.isArray(id)) {
-                return res.status(400).json({
-                    error: "Invalid user id",
-                });
-            }
-
-            const deletedPost = await deletePostAdmin(id);
-
-            if (!deletedPost) {
-                return res.status(404).json({
-                    error: "Post not found",
-                });
-            }
-
-            return res.json({
-                message: "Post deleted",
-                post: deletedPost,
-            });
-        } catch (error) {
-            console.error("Admin delete post error:", error);
-
-            return res.status(500).json({
-                error: "Failed to delete post",
-            });
-        }
-    }
-);
-
-router.patch(
-    "/users/:id/role",
-    authMiddleware,
-    requireRole("admin"),
-    async (req: AuthRequest, res: Response) => {
-        try {
-            const { id } = req.params;
-
-            if (Array.isArray(id)) {
-                return res.status(400).json({
-                    error: "Invalid user id",
-                });
-            }
-
-            const parsed = updateUserRoleSchema.safeParse(req.body);
-
-            if (!parsed.success) {
-                return res.status(400).json({
-                    error: "Invalid role",
-                });
-            }
-
-            const { role } = parsed.data;
-            
-            const updatedUser = await updateUserRole(
-                id, 
-                role
-            );
-
-            if (!updatedUser) {
-                return res.status(404).json({
-                    error: "User not found",
-                });
-            }
-
-            return res.json(updatedUser);
-        } catch (error) {
-            console.error("Admin update role error:", error);
-
-            return res.status(500).json({
-                error: "Failed to update role",
-            });           
-        }
-    }
-)
-
-router.get(
-    "/stats", 
-    authMiddleware, 
-    requireRole("admin"),    
-    async (_req: AuthRequest, res: Response) => {
-        try {
-
-            const stats = await getAdminStats();
-            
-            return res.json(stats);
-        } catch (error) {
-            console.error("Admin get stats error: ", error);
-            return res.status(500).json({
-                error: "Failed to fetch stats",
-            });
-        }
-    }
-);
+router.get("/stats", getAdminStatsController);
 
 export default router;

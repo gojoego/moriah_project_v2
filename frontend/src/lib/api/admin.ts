@@ -1,4 +1,4 @@
-import { ApiBaseUrl, handleResponse } from "./client";
+import { API_BASE_URL, handleResponse } from "./client";
 import { getAuthHeaders } from "@/lib/auth";
 import { AdminUser, AdminPost, AdminStats } from "@/types/admin";
 
@@ -22,7 +22,7 @@ export async function fetchAdminUsers(
         : "";
 
     const response = await fetch(
-        `${ApiBaseUrl}/api/admin/users${queryString}`,
+        `${API_BASE_URL}/api/admin/users${queryString}`,
         {
             headers: getAuthHeaders(),
         }
@@ -51,7 +51,7 @@ export async function fetchAdminPosts(
         : "";
 
     const response = await fetch(
-        `${ApiBaseUrl}/api/admin/posts${queryString}`,
+        `${API_BASE_URL}/api/admin/posts${queryString}`,
         {
             headers: getAuthHeaders(),
         }
@@ -62,7 +62,7 @@ export async function fetchAdminPosts(
 
 export async function fetchAdminStats(): Promise<AdminStats> {
     const response = await fetch(
-        `${ApiBaseUrl}/api/admin/stats`,
+        `${API_BASE_URL}/api/admin/stats`,
         {
             headers: getAuthHeaders(),
         }

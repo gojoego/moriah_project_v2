@@ -4,13 +4,13 @@ import {
     SignupInput, 
     SignupResponse 
 } from "@/types/auth"
-import { ApiBaseUrl, handleResponse } from "./client";
+import { API_BASE_URL, handleResponse } from "./client";
 
 export async function loginUser(
         data: LoginInput
     ): Promise<LoginResponse> {
     const response = await fetch(
-        `${ApiBaseUrl}/api/auth/login`,
+        `${API_BASE_URL}/api/auth/login`,
         {
             method: "POST",
             headers: {
@@ -25,7 +25,7 @@ export async function loginUser(
 
 export async function signupUser(data: SignupInput): Promise<SignupResponse> {
     const response = await fetch(
-        `${ApiBaseUrl}/api/auth/signup`,
+        `${API_BASE_URL}/api/auth/signup`,
         {
             method: "POST",
             headers: {
@@ -39,7 +39,7 @@ export async function signupUser(data: SignupInput): Promise<SignupResponse> {
 }
 
 export async function forgotPassword(email: string): Promise<{message: string}> {
-    const response = await fetch(`${ApiBaseUrl}/api/auth/forgot-password`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export async function resetPassword( data: {
     token: string;
     password: string;
 }): Promise<{ message: string }> {
-    const response = await fetch(`${ApiBaseUrl}/api/auth/reset-password`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
