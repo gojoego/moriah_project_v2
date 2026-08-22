@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 
         res.json(posts);
     } catch (error) {
-        console.error("❌ getAllPosts error:", error); // 🔥 KEY CHANGE
+        console.error("❌ getAllPosts error:", error);
 
         res.status(500).json({
             error: "getAllPosts() failed",

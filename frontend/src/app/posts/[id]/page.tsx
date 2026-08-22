@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
 
-import { fetchPostById } from "@/lib/api";
+import { fetchPostById } from "@/lib/api/posts";
 
 export default async function PostDetailPage({
 	params,

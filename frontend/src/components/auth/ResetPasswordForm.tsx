@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter} from "next/navigation";
 import { useState } from "react";
 
-import { resetPassword } from "@/lib/api";
+import { resetPassword } from "@/lib/api/auth";
 import { ROUTES } from "@/constants/routes";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { Button } from "@/components/ui/button";

@@ -10,8 +10,12 @@ import { useRouter } from "next/navigation";
 import { 
     fetchMyPosts, 
     deletePostById, 
+    
+} from "@/lib/api/posts";
+
+import {
     getCurrentUser
-} from "@/lib/api";
+} from "@/lib/api/users"
 
 import { Post } from "@/types/post";
 import { User } from "@/types/user";

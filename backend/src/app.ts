@@ -5,7 +5,8 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
 import login from "./routes/auth/login";
-import signup from "./routes/auth/signup";
+import authRoutes from "./routes/auth/"
+import signup from "./routes/auth/index";
 import me from "./routes/users/me";
 import posts from "./routes/posts";
 import pwreset from "./routes/auth/passwordReset"
@@ -27,6 +28,8 @@ const postsLimiter = rateLimit({
 });
 
 const app = express();
+
+app.set("trust proxy", 1);
 
 app.get("/health", (_req, res) => {
     res.status(200).json({
@@ -51,6 +54,7 @@ app.use(
 );
 app.use(express.json());
 
+app.use("/api/auth", authRoutes);
 app.use("/api/auth", login);
 app.use("/api/auth", signup);
 
