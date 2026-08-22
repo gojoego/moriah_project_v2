@@ -13,10 +13,12 @@ import { Post } from "@/types/post";
 import { CurrentUser } from "@/types/auth";
 
 import { 
-    fetchPosts, 
-    getCurrentUser 
-} from "@/lib/api";
+    fetchPosts
+} from "@/lib/api/posts";
 import { ROUTES } from "@/constants/routes";
+import {
+    getCurrentUser
+} from "@/lib/api/users"
 
 export default function HomePage() {
     const [posts, setPosts] = useState<Post[]>([]);
