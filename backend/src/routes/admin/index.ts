@@ -53,7 +53,6 @@ router.use(adminRateLimiter);
 router.get(
     "/users", 
     authMiddleware, 
-    adminRateLimiter,
     requireRole("admin"),
     async (_req: AuthRequest, res: Response) => {
         try {
@@ -107,7 +106,6 @@ router.get(
 router.delete(
     "/posts/:id",
     authMiddleware, 
-    adminRateLimiter,
     requireRole("admin"),
     async (req: AuthRequest, res: Response) => {
         try {
@@ -144,7 +142,6 @@ router.delete(
 router.patch(
     "/users/:id/role",
     authMiddleware,
-    adminRateLimiter,
     requireRole("admin"),
     async (req: AuthRequest, res: Response) => {
         try {
@@ -197,7 +194,6 @@ router.get(
     "/stats", 
     authMiddleware, 
     requireRole("admin"),    
-    adminRateLimiter,
     async (_req: AuthRequest, res: Response) => {
         try {
 
