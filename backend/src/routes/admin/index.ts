@@ -28,26 +28,6 @@ const adminRateLimiter = rateLimit({
     legacyHeaders: false,
 });
 
-function getPaginationParams(req: Request) {
-    const rawLimit = Number(req.query.limit ?? 20);
-    const rawOffset = Number(req.query.offset ?? 0);
-
-    const limit = Math.min(
-        Number.isNaN(rawLimit) ? 20 : rawLimit,
-        100
-    );
-
-    const offset = Math.max(
-        Number.isNaN(rawOffset) ? 0 : rawOffset,
-        0
-    );
-
-    return {
-        limit,
-        offset,
-    };
-}
-
 router.use(adminRateLimiter);
 
 router.get(
@@ -56,7 +36,14 @@ router.get(
     requireRole("admin"),
     async (_req: AuthRequest, res: Response) => {
         try {
-            const { limit, offset } = getPaginationParams(_req);
+            const parsed = adminPaginationSchema.safeParse(_req.query);
+
+            if (!parsed.success) {
+                return res.status(400).json({
+                    error: "Invalid pagination parameters",
+                });
+            }
+            const { limit, offset } = parsed.data;
 
             const users = await getAllUsersAdmin({
                 limit,
@@ -146,6 +133,13 @@ router.patch(
     async (req: AuthRequest, res: Response) => {
         try {
             const { id } = req.params;
+
+            if (Array.isArray(id)) {
+                return res.status(400).json({
+                    error: "Invalid user id",
+                });
+            }
+
             const parsed = updateUserRoleSchema.safeParse(req.body);
 
             if (!parsed.success) {
@@ -155,19 +149,7 @@ router.patch(
             }
 
             const { role } = parsed.data;
-
-            if (Array.isArray(id)) {
-                return res.status(400).json({
-                    error: "Invalid user id",
-                });
-            }
-
-            if (!USER_ROLES.includes(role)) {
-                return res.status(400).json({
-                    error: "Invalid role",
-                });
-            }
-
+            
             const updatedUser = await updateUserRole(
                 id, 
                 role
