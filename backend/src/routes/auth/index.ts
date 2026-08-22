@@ -7,3 +7,5 @@ import {
 const router = Router();
 
 router.post("/signup", signupController);
+
+export default router;

@@ -12,6 +12,7 @@ import {
 import {
     updateUserRoleSchema,
     adminPaginationSchema,
+    idSchema,
 } from "../schemas/admin";
 
 export async function getAllUsersAdminController(_req: AuthRequest, res: Response) {
@@ -69,15 +70,15 @@ export async function getAllPostsAdminController(_req: AuthRequest, res: Respons
 
 export async function deletePostAdminController(req: AuthRequest, res: Response) {
     try {
-        const { id } = req.params;
+        const parsedId = idSchema.safeParse(req.params.id);
 
-        if (Array.isArray(id)) {
+        if (!parsedId.success) {
             return res.status(400).json({
-                error: "Invalid user id",
+                error: "Invalid post id",
             });
         }
 
-        const deletedPost = await deletePostAdmin(id);
+        const deletedPost = await deletePostAdmin(parsedId.data);
 
         if (!deletedPost) {
             return res.status(404).json({
@@ -100,27 +101,25 @@ export async function deletePostAdminController(req: AuthRequest, res: Response)
 
 export async function updateUserRoleController(req: AuthRequest, res: Response) {
     try {
-        const { id } = req.params;
+        const parsedId = idSchema.safeParse(req.params.id);
 
-        if (Array.isArray(id)) {
+        if (!parsedId.success) {
             return res.status(400).json({
-                error: "Invalid user id",
+                error: "Invalid post id",
             });
         }
 
-        const parsed = updateUserRoleSchema.safeParse(req.body);
+        const parsedBody = updateUserRoleSchema.safeParse(req.body);
 
-        if (!parsed.success) {
+        if (!parsedBody.success) {
             return res.status(400).json({
                 error: "Invalid role",
             });
         }
-
-        const { role } = parsed.data;
         
         const updatedUser = await updateUserRole(
-            id, 
-            role
+            parsedId.data, 
+            parsedBody.data.role
         );
 
         if (!updatedUser) {

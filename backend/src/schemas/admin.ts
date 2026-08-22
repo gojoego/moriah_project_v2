@@ -5,6 +5,8 @@ export const updateUserRoleSchema = z.object({
     role: z.enum(USER_ROLES)
 });
 
+export const idSchema = z.uuid();
+
 export const adminPaginationSchema = z.object({
     limit: z
         .coerce

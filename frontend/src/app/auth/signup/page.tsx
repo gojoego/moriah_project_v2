@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { signupUser } from "@/lib/api";
+import { signupUser } from "@/lib/api/auth";
 import { setToken } from "@/lib/auth";
 
 import { ErrorMessage } from "@/components/ui/ErrorMessage";

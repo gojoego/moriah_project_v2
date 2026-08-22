@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-import { forgotPassword } from "@/lib/api";
+import { forgotPassword } from "@/lib/api/auth";
 import { ROUTES } from "@/constants/routes";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { Button } from "@/components/ui/button";

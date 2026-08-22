@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { setToken } from "@/lib/auth";
 
-import { loginUser } from "@/lib/api";
+import { loginUser } from "@/lib/api/auth";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { ROUTES } from "@/constants/routes";
 import Link from "next/link";
