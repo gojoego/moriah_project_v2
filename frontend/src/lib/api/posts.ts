@@ -58,13 +58,5 @@ export async function deletePostById(id: string): Promise<void> {
         headers: getAuthHeaders(),        
     });
 
-    if (!response.ok) {
-        let message = "Request failed";
-        try {
-            const err = await response.json();
-            message = err.error || message;
-        } catch {}
-
-        throw new Error(message);
-    }
+    return handleResponse<void>(response);
 }
