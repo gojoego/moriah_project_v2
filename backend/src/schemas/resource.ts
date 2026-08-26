@@ -1,11 +1,18 @@
 import { z } from "zod";
 
+import {
+    RESOURCE_CATEGORIES,
+    RESOURCE_TYPES,
+    RESOURCE_AUDIENCES,
+    RESOURCE_FORMATS,
+} from "../constants/resources";
+
 export const resourceSchema = z.object({
     name: z
         .string()
         .trim()
         .min(1, "resource name required")
-        .max(20, "resource name must be 20 characters or less"),
+        .max(150, "resource name must be 150 characters or less"),
     
     description: z
         .string()
@@ -15,30 +22,16 @@ export const resourceSchema = z.object({
     
     url: z.url("valid URL required"),
 
-    category: z
-        .string()
-        .trim()
-        .min(1, "category required"),
+    category: z.enum(RESOURCE_CATEGORIES),
 
-    resourceType: z
-        .string()
-        .trim()
-        .min(1, "resource type required"),
+    resourceType: z.enum(RESOURCE_TYPES),
 
     audience: z
-        .array(z
-            .string()
-            .trim()
-            .min(1)
-        )
+        .array(z.enum(RESOURCE_AUDIENCES))
         .optional(),
     
     format: z
-        .array(z
-            .string()
-            .trim()
-            .min(1)
-        )
+        .array(z.enum(RESOURCE_FORMATS))
         .min(1, "at least one format is required"),
     
     locationScope: z
