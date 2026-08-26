@@ -11,6 +11,7 @@ import me from "./routes/users/me";
 import posts from "./routes/posts";
 import pwreset from "./routes/auth/passwordReset"
 import admin from "./routes/admin";
+import resources from "./routes/resources/"
 
 const allowedOrigins =  new Set([
   "http://localhost:3000",
@@ -66,7 +67,7 @@ app.use("/api/auth", pwreset);
 
 app.use("/api/admin", admin);
 
-console.log("Admin routes loaded");
+app.use("/api/resources", resources);
 
 app.use((_req, res) => {
     res.status(404).json({
