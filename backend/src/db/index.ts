@@ -20,7 +20,7 @@ export const pool = new Pool({
 if (!isTest) {
     pool.query("SELECT NOW()")
         .then(() => {
-            console.log("DB connected");
+            console.log("Database connected");
         })
         .catch((err: unknown) => {
             if (err instanceof Error) {

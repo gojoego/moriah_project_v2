@@ -69,8 +69,6 @@ app.use("/api/admin", admin);
 
 app.use("/api/resources", resources);
 
-console.log("Admin routes loaded");
-
 app.use((_req, res) => {
     res.status(404).json({
         error: "Not found",
