@@ -52,6 +52,12 @@ export async function updatePostService(
 
     const updatedPost = await updatePost(id, updates);
 
+    if (!updatedPost) {
+        return {
+            status: "not_found" as const,
+        };
+    }
+    
     return {
         status: "success" as const,
         post: updatedPost,
