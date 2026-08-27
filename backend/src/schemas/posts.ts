@@ -46,3 +46,11 @@ export const updatePostSchema = z.object({
         message: "No valid fields to update",
     }
 );
+
+export const postIdParamsSchema = z.object({
+    id: z.uuid("Invalid post id")
+})
+
+export type CreatePostInput = z.infer<typeof createPostSchema>;
+
+export type UpdatePostInput = z.infer<typeof updatePostSchema>;

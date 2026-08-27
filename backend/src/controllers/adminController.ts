@@ -15,9 +15,9 @@ import {
     idSchema,
 } from "../schemas/admin";
 
-export async function getAllUsersAdminController(_req: AuthRequest, res: Response) {
+export async function getAllUsersAdminController(req: AuthRequest, res: Response) {
     try {
-        const parsed = adminPaginationSchema.safeParse(_req.query);
+        const parsed = adminPaginationSchema.safeParse(req.query);
 
         if (!parsed.success) {
             return res.status(400).json({
