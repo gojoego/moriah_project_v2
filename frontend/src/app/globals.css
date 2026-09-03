@@ -3,37 +3,28 @@
 @tailwind utilities;
 
 :root {
---background: 36 33% 97%;
-  --foreground: 30 12% 15%;
+  --background: 145 32% 15%;       /* deep forest */
+  --foreground: 45 25% 94%;        /* cream */
 
-  --card: 36 25% 99%;
-  --card-foreground: 30 10% 15%;
+  --card: 42 22% 91%;              /* warm story card */
+  --card-foreground: 145 25% 17%;
 
-  --primary: 163 31% 28%;
-  --primary-foreground: 0 0% 100%;
+  --primary: 95 12% 57%;           /* muted sage CTA */
+  --primary-foreground: 45 30% 97%;
 
-  --secondary: 140 18% 45%;
-  --secondary-foreground: 0 0% 100%;
+  --secondary: 45 30% 96%;         /* cream sections */
+  --secondary-foreground: 145 25% 17%;
 
-  --muted: 30 20% 92%;
-  --muted-foreground: 163 10% 35%;
+  --muted: 42 15% 87%;
+  --muted-foreground: 105 8% 43%;
 
-  --accent: 18 45% 50%;
-  --accent-foreground: 0 0% 100%;
-
-  --border: 30 20% 85%;
-  --ring: 163 31% 35%;
+  --border: 95 8% 65%;
+  --ring: 95 12% 57%;
 }
 
 body {
-  background: radial-gradient(
-    circle at 60% 40%,
-    hsl(158 35% 70%) 0%,
-    hsl(158 30% 82%) 35%,
-    hsl(158 25% 88%) 60%,
-    hsl(70 35% 94%) 100%
-  );
-  color: hsl(var(--foreground));
+  background: hsl(145 22% 88%);
+  color: hsl(var(--secondary-foreground));
 }
 
 @layer components {
@@ -42,23 +33,33 @@ body {
   }
 
   .form-input {
-    @apply w-full rounded border border-border bg-background px-3 py-2
-           focus:outline-none focus:ring-2 focus:ring-primary
-           disabled:opacity-50;
+    @apply w-full rounded-md border border-border bg-card px-3 py-2
+          focus:outline-none focus:ring-2 focus:ring-ring
+          disabled:opacity-50;
   }
 
   .form-textarea {
-    @apply w-full rounded border border-border bg-background px-3 py-2 resize-y
-           focus:outline-none focus:ring-2 focus:ring-primary
-           disabled:opacity-50;
+    @apply w-full rounded-md border border-border bg-card px-3 py-2 resize-y
+          focus:outline-none focus:ring-2 focus:ring-ring
+          disabled:opacity-50;
   }
 
   .form-button {
-    @apply w-full rounded bg-primary py-3 text-white
-           hover:opacity-90 disabled:opacity-50;
+    @apply w-full rounded-md bg-primary py-3 text-primary-foreground
+          transition-opacity hover:opacity-90 disabled:opacity-50;
   }
 
   .form-section {
     @apply space-y-6;
+  }
+}
+
+@layer utilities {
+  .font-sans {
+    font-family: var(--font-sans), sans-serif;
+  }
+
+  .font-display {
+    font-family: var(--font-display), serif;
   }
 }

@@ -13,29 +13,84 @@ export function PostCard({
 	const isOwner =
 		Boolean(currentUserId) &&
 		currentUserId === post.author_id;
+
 	return (
-		<article>
-			<Link
-				href={`/posts/${post.id}`}
-				className="block p-6 rounded-2xl border bg-muted/30 hover:bg-muted/50 transition"
-			>
-				<h2 className="text-lg font-semibold">
+		<article
+			className="
+				rounded-xl
+				bg-card
+				px-6
+				py-7
+				text-card-foreground
+				md:px-8
+				md:py-8
+			"	
+		>
+			<div className="flex items-start justify-between gap-6">
+				<h2
+					className="
+						font-display
+						text-2xl
+						leading-tight
+						md:text-3xl
+					"		
+				>
 					{post.deceased_name}
 				</h2>
+				<Link
+					href={`/posts/${post.id}`}
+					aria-label={`Read story about ${post.deceased_name}`}
+					className="
+						flex
+						h-10
+						w-10
+						shrink-0
+						items-center
+						justify-center
+						rounded-full
+						bg-background
+						text-foreground
+						transition-opacity
+						hover:opacity-80
+					"
+				>
+					→
+				</Link>					
+			</div>
 
-				<p className="mt-3 text-sm text-foreground/80 leading-relaxed line-clamp-3">
-					{post.content}
-				</p>
+			<p 
+				className="
+					mt-5
+					line-clamp-3
+					font-sans
+					leading-relaxed
+					text-muted-foreground
+				"
+			>
+				{post.content}
+			</p>
 
-				<p className="mt-4 text-xs text-muted-foreground">
-					By {post.author_name}
-				</p>
-			</Link>		
+			<p
+				className="
+					mt-6
+					font-sans
+					text-sm
+					text-muted-foreground
+				"
+			>
+				By {post.author_name}
+			</p>
+
 			{isOwner && (
-				<div className="px-6 py-3">
+				<div className="mt-5 border-t border-border pt-4">
 					<Link
 						href={`/posts/${post.id}/edit`}
-						className="text-sm underline"
+						className="
+							font-sans
+							text-sm
+							underline-offset-4
+							hover:underline
+						"
 					>
 						Edit post
 					</Link>

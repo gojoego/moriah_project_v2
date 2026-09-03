@@ -47,7 +47,7 @@ export function PostList({
   	}
 
   	return (
-		<div className="grid gap-6">
+		<div className="grid w-full gap-6">
 			{posts.map((post) => (
 				<div key={post.id} className="space-y-3">
 					<PostCard 

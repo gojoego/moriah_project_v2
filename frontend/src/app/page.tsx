@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { 
-    useEffect, 
-    useState 
+
+import {
+    useEffect,
+    useState,
 } from "react";
 
 import { PostList } from "@/components/posts/PostList";
@@ -12,137 +14,333 @@ import { ErrorState } from "@/components/ui/ErrorState";
 import { Post } from "@/types/post";
 import { CurrentUser } from "@/types/auth";
 
-import { 
-    fetchPosts
-} from "@/lib/api/posts";
+import { fetchPosts } from "@/lib/api/posts";
+import { getCurrentUser } from "@/lib/api/users";
+
 import { ROUTES } from "@/constants/routes";
-import {
-    getCurrentUser
-} from "@/lib/api/users"
+
 
 export default function HomePage() {
+
     const [posts, setPosts] = useState<Post[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    
-    const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
-    async function loadTopPosts() {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+
+    async function loadRecentPosts() {
         setLoading(true);
         setError(null);
 
         try {
-            const posts = await fetchPosts(5)
-            setPosts(posts);
+            const recentPosts = await fetchPosts(5);
+
+            setPosts(recentPosts);
+
         } catch (err: unknown) {
+
             if (err instanceof Error) {
-            setError(err.message);
+                setError(err.message);
             } else {
-            setError("something went wrong");
+                setError("Something went wrong");
             }
+
         } finally {
             setLoading(false);
         }
     }
 
-    async function loadCurrentUser(){
+
+    async function loadCurrentUser() {
         try {
             const user = await getCurrentUser();
+
             setCurrentUser(user);
+
         } catch {
             setCurrentUser(null);
         }
     }
 
+
     useEffect(() => {
-        loadTopPosts();
-        loadCurrentUser();
+
+        async function loadHomePageData() {
+            await Promise.allSettled([
+                loadRecentPosts(),
+                loadCurrentUser(),
+            ]);
+        }
+
+        loadHomePageData();
+
     }, []);
+
 
     const hasPosts = posts.length > 0;
 
-    function renderContent() {
+
+    function renderRecentStories() {
+
         if (loading) {
             return (
-                <div className="text-center py-8 text-muted-foreground">
-                    Loading stories... 
+                <div className="py-8 text-center font-sans text-muted-foreground">
+                    Loading stories...
                 </div>
             );
-        } 
-        
-        if (error) {
-            return <ErrorState onRetry={loadTopPosts} />
         }
 
-        return  <PostList 
-                    posts={posts}
-                    currentUserId={currentUser?.id} 
-                />;         
+
+        if (error) {
+            return (
+                <ErrorState
+                    onRetry={loadRecentPosts}
+                />
+            );
+        }
+
+
+        return (
+            <PostList
+                posts={posts}
+                currentUserId={currentUser?.id}
+            />
+        );
     }
 
 
     return (
-        <main className="mx-auto max-w-3xl space-y-8 px-4">
-        <header className="space-y-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-semibold leading-tight">
-            Welcome to the Moriah Project 
-            </h1>
-            <p className="text-muted-foreground text-2xl">
-            a place to share what you wish you could say to someone who has passed from suicide 
-            </p>
-            <div className="flex flex-col items-center gap-3">
+        <>
+            <section className="bg-background text-foreground">
 
-            {!loading && (
-                hasPosts ? (
-                    <Link
-                        href={`/posts/new`}
-                        className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
-                    >
-                        Write a message
-                    </Link>
-                ) : (
-                    <Link
-                        href={ROUTES.POSTS}
-                        className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800"
-                    >
-                        Browse examples
-                    </Link>               
-                )                
-            )}
-            </div>
-        </header>
+                <div
+                    className="
+                        mx-auto
+                        flex
+                        min-h-[500px]
+                        w-full
+                        max-w-5xl
+                        flex-col
+                        items-center
+                        justify-center
+                        px-6
+                        text-center
+                        md:min-h-[560px]
+                        md:px-8
+                    "
+                >
 
-        <section className="form-section">
-            <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold tracking-tight">
-                    recent stories
-                </h2>
-                <Link href={ROUTES.POSTS} className="moriah-link text-sm">
-                    View all →
-                </Link>
-            </div>
-            {renderContent()}
-        </section>
+                    <header className="space-y-6">
+                        <h1
+                            className="
+                                font-display
+                                text-4xl
+                                leading-[1.05]
+                                tracking-tight
+                                sm:text-5xl
+                                md:text-7xl
+                            "
+                        >
+                            Welcome to the
+                            <br />
+                            Moriah Project
+                        </h1>
 
-        <section className="form-section">
-            <h2 className="text-2xl font-medium text-center">How This Works…</h2>
 
-            <ol className="space-y-2 text-muted-foreground text-xl list-decimal list-inside">
-            <li>
-                provide some details about the individual — give as much context as you want
-            </li>
-            <li>
-                tell us what you wish you could say to this individual
-            </li>
-            </ol>
+                        <Image
+                            src="/moriah-icon.svg"
+                            alt=""
+                            width={48}
+                            height={48}
+                            className="mx-auto"
+                        />
 
-            <div className="flex flex-col gap-2 text-center">
 
-            <Link href="/community_guidelines" className="text-lg font-medium underline-offset-4 hover:underline">
-                here are some guidelines for posting
-            </Link>
-            </div>
-        </section>
-        </main>
+                        <p
+                            className="
+                                mx-auto
+                                max-w-xl
+                                font-sans
+                                text-lg
+                                leading-relaxed
+                                opacity-80
+                                md:text-xl
+                            "
+                        >
+                            a place to share what you wish you could say
+                            to someone who has passed from suicide
+                        </p>
+
+
+                        <div className="flex flex-col items-center gap-3">
+
+                            {!loading && (
+                                hasPosts ? (
+
+                                    <Link
+                                        href={ROUTES.NEW_POST}
+                                        className="
+                                            rounded-md
+                                            bg-primary
+                                            px-8
+                                            py-3
+                                            font-sans
+                                            text-sm
+                                            font-medium
+                                            text-primary-foreground
+                                            transition-opacity
+                                            hover:opacity-90
+                                        "
+                                    >
+                                        Write a message →
+                                    </Link>
+
+                                ) : (
+
+                                    <Link
+                                        href={ROUTES.POSTS}
+                                        className="
+                                            rounded-md
+                                            bg-primary
+                                            px-8
+                                            py-3
+                                            font-sans
+                                            text-sm
+                                            font-medium
+                                            text-primary-foreground
+                                            transition-opacity
+                                            hover:opacity-90
+                                        "
+                                    >
+                                        Browse examples →
+                                    </Link>
+                                )
+                            )}
+                        </div>
+                    </header>
+                </div>
+            </section>
+
+            <section className="bg-secondary text-secondary-foreground">
+
+                <div
+                    className="
+                        mx-auto
+                        w-full
+                        max-w-5xl
+                        px-6
+                        py-16
+                        md:px-8
+                    "
+                >
+
+                    <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+
+                        <h2
+                            className="
+                                font-display
+                                text-4xl
+                                leading-none
+                                md:text-5xl
+                            "
+                        >
+                            Recent stories
+                        </h2>
+
+
+                        <Link
+                            href={ROUTES.POSTS}
+                            className="
+                                shrink-0
+                                font-sans
+                                text-sm
+                                underline-offset-4
+                                hover:underline
+                            "
+                        >
+                            View all →
+                        </Link>
+
+                    </div>
+
+
+                    {renderRecentStories()}
+
+                </div>
+            </section>
+
+            <section className="bg-secondary text-secondary-foreground">
+                <div className="mx-auto w-full max-w-5xl px-6 py-14 md:px-8 md:py-16">
+
+                    <div className="mx-auto max-w-3xl space-y-8">
+
+                        <h2
+                            className="
+                                text-center
+                                font-display
+                                text-3xl
+                                leading-tight
+                                sm:text-4xl
+                            "
+                        >
+                            How This Works
+                        </h2>
+
+                        <ol
+                            className="
+                                space-y-5
+                                font-sans
+                                text-base
+                                leading-relaxed
+                                text-muted-foreground
+                                sm:text-lg
+                            "
+                        >
+                            <li className="flex gap-4">
+                                <span className="font-medium text-secondary-foreground">
+                                    1.
+                                </span>
+
+                                <span>
+                                    provide some details about the individual —
+                                    give as much context as you want
+                                </span>
+                            </li>
+
+                            <li className="flex gap-4">
+                                <span className="font-medium text-secondary-foreground">
+                                    2.
+                                </span>
+
+                                <span>
+                                    tell us what you wish you could say to this individual
+                                </span>
+                            </li>
+                        </ol>
+
+                        <div className="text-center">
+                            <Link
+                                href="/community_guidelines"
+                                className="
+                                    font-sans
+                                    text-sm
+                                    font-medium
+                                    underline
+                                    underline-offset-4
+                                    transition-opacity
+                                    hover:opacity-70
+                                    sm:text-base
+                                "
+                            >
+                                Read the community guidelines →
+                            </Link>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+        </>
     );
 }

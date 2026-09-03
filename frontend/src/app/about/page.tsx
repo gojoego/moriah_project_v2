@@ -2,15 +2,15 @@ export default function AboutPage(){
     return (
         <main className="max-w-3xl mx-auto py-12 px-4 space-y-12">
             <header className="space-y-2 text-center">
-                <h1 className="text-3xl font-semibold">
+                <h1 className="font-display text-3xl font-semibold">
                     About The Moriah Project 
                 </h1>
             </header>
             <section aria-labelledby="about-me">
-                <h2 id="about-me" className="text-xl font-medium">
+                <h2 id="about-me" className="font-display text-xl font-medium">
                     About Me
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed">
+                <p className="font-sans mt-3 space-y-4 text-sm leading-relaxed text-muted-foreground">
                     My name is Joe. Born in the sun of San Diego and raised in the fog of San Francisco, I currently live in the
                     heat of the Texan sun. I am a former social worker who found himself immersed in the burgeoning tech scene of 
                     Silicon Valley. I eventually learned to code and decided to start building applications that could possibly 
@@ -20,10 +20,10 @@ export default function AboutPage(){
             </section>
 
             <section aria-labelledby="about-site">
-                <h2 id="about-site" className="text-xl font-medium">
+                <h2 id="about-site" className="font-display text-xl font-medium">
                     About This Website
                 </h2>
-                <div className="mt-3 space-y-4 text-sm leading-relaxed text-muted-foreground">
+                <div className="font-sans mt-3 space-y-4 text-sm leading-relaxed text-muted-foreground">
                     <p>
                         At the end of 2022, my friend Moriah passed away from suicide. We were not particularly close but her 
                         death had an incredible impact on me. After I moved cities, we lost touch. There were times I thought 
