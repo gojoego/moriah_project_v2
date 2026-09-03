@@ -24,7 +24,7 @@
 
 body {
   background: hsl(145 22% 88%);
-  color: hsl(var(--foreground));
+  color: hsl(var(--secondary-foreground));
 }
 
 @layer components {

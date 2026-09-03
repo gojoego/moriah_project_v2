@@ -31,6 +31,7 @@ export function SiteHeader() {
 
 					<Link
 						href={ROUTES.HOME}
+						onClick={() => setMenuOpen(false)}
 						className="
 							font-display
 							text-xl
