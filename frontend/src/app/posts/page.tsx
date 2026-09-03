@@ -65,8 +65,8 @@ export default function PostsPage() {
         <main className="max-w-4xl mx-auto py-12 px-4">
             <header className="mb-8 flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold">
-                        stories
+                    <h1 className="font-display text-3xl font-bold">
+                        Stories
                     </h1> 
                     <p className="mt-2 text-sm text-slate-400">
                         recent posts 
