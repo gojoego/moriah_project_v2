@@ -1,11 +1,17 @@
 import { Router } from "express";
 
 import {
-    signupController
+    signupController, 
+    loginController,
+    forgotPasswordController,
+    resetPasswordController
 } from "../../controllers/authController";
 
 const router = Router();
 
 router.post("/signup", signupController);
+router.post("/login", loginController);
+router.post("/forgot-password", forgotPasswordController);
+router.post("/reset-password", resetPasswordController);
 
 export default router;

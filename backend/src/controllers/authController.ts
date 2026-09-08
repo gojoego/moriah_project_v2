@@ -1,11 +1,21 @@
 
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
-import { signupSchema } from "../schemas/auth";
+import { signupSchema, loginSchema } from "../schemas/auth";
 import { getZodErrorMessage } from "../utils/zod";
-import { signupService } from "../services/authService";
+import { 
+    signupService, 
+    loginService, 
+    forgotPasswordService, 
+    resetPasswordService
+} from "../services/authService";
+import { forgotPasswordSchema, resetPasswordSchema } from "../schemas/passwordReset";
 
-export async function signupController(req: Request, res: Response) {
+export async function signupController(
+    req: Request, 
+    res: Response,
+    next: NextFunction
+) {
     try {
         const parsed = signupSchema.safeParse(req.body);
 
@@ -25,15 +35,111 @@ export async function signupController(req: Request, res: Response) {
 
         return res.status(201).json(result);
     } catch (error) {
-        console.error("Signup error: ", {
-            message: 
-                error instanceof Error 
-                    ? error.message 
-                    : "Unknown error",
+        next(error);
+    }
+}
+
+export async function loginController(
+    req: Request,
+    res: Response, 
+    next: NextFunction
+) {
+    try {
+        if (!req.body) {
+            return res.status(400).json({ error: "Missing request body" });
+        }
+
+        const parsed = loginSchema.safeParse(req.body);
+
+        if (!parsed.success) {
+            return res.status(400).json({
+                error: getZodErrorMessage(parsed.error),
+            });
+        }
+
+        const { email, password } = parsed.data;
+
+        const result = await loginService(email, password);
+
+        if (result.status === "invalid_credentials") {
+            return res.status(401).json({
+                error: "Invalid credentials",
+            });
+        }
+
+        return res.json({ 
+            token: result.token
+        });        
+    } catch(error) {
+        next(error);
+    }
+}
+
+export async function forgotPasswordController(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+){
+    try {
+        if (!req.body) {
+            return res.status(400).json({ error: "Missing request body" });
+        }
+
+        const parsed = forgotPasswordSchema.safeParse(req.body);
+
+        if (!parsed.success) {
+            return res.status(400).json({
+                error: getZodErrorMessage(parsed.error),
+            });
+        }
+
+        const { email } = parsed.data;
+
+        const result = await forgotPasswordService(email);
+
+        return res.json({
+            message: result.message,
+        });
+    } catch (error) {
+        next(error);
+    }  
+}
+
+export async function resetPasswordController(
+    req: Request, 
+    res: Response, 
+    next: NextFunction    
+){
+    try {
+        if (!req.body) {
+            return res.status(400).json({
+                error: "Missing request body"
+            });
+        }
+
+        const parsed = resetPasswordSchema.safeParse(req.body);
+
+        if (!parsed.success) {
+            return res.status(400).json({
+                error: getZodErrorMessage(parsed.error),
+            });
+        }
+
+        const { token, password } = parsed.data;
+
+        const result = await resetPasswordService(token, password);
+
+        if (result.status === "invalid_token") {
+            return res.status(400).json({
+                error: result.message,
+            });
+        }
+
+        return res.json({
+            message: result.message,
         });
 
-        return res.status(500).json({ 
-            error: "Signup failed"
-        });
-    }
+    } catch (error) {
+        next(error);
+    }    
 }

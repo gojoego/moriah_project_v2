@@ -7,7 +7,7 @@ import helmet from "helmet";
 import login from "./routes/auth/login";
 import authRoutes from "./routes/auth/"
 import signup from "./routes/auth/index";
-import me from "./routes/users/me";
+import me from "./routes/users";
 import posts from "./routes/posts";
 import pwreset from "./routes/auth/passwordReset"
 import admin from "./routes/admin";
