@@ -85,40 +85,27 @@ export async function setPasswordResetToken(
         return result.rows[0] ?? null;
 }
 
-export async function getUserByPasswordResetToken(token: string) {
+export async function resetUserPassword(
+    token: string, 
+    hashedPassword: string
+) {
     const tokenHash = crypto
         .createHash("sha256")
         .update(token)
-        .digest("hex")
+        .digest("hex");
 
-    const result = await pool.query(
-        `
-            SELECT id, email 
-            FROM users
-            WHERE password_reset_token_hash = $1
-            AND password_reset_expires_at > NOW()
-        `,
-            [tokenHash]
-        )
-
-    return result.rows[0] ?? null;
-}
-
-export async function resetUserPassword(
-    userId: string, 
-    hashedPassword: string
-) {
     const result = await pool.query(
         `
         UPDATE users
         SET password = $1,
             password_reset_token_hash = NULL,
             password_reset_expires_at = NULL
-        WHERE id = $2 
+        WHERE password_reset_token_hash = $2
+        AND password_reset_expires_at > NOW()
         RETURNING id
         `,
-        [hashedPassword, userId]
-    );
+        [hashedPassword, tokenHash]
+        )
 
     return result.rows[0] ?? null;
 }

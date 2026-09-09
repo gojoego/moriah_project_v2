@@ -3,7 +3,6 @@ import crypto from "crypto";
 import { 
     createUser, 
     getUserByEmail,
-    getUserByPasswordResetToken, 
     setPasswordResetToken, 
     resetUserPassword    
 } from "../db/queries/users";
@@ -122,18 +121,13 @@ export async function forgotPasswordService(email: string){
     };    
 }
 
-export async function resetPasswordService(token: string, password: string){
-    const user = await getUserByPasswordResetToken(token);
-
-    if (!user){
-        return {
-            message: "Invalid or expired reset token",
-        }        
-    }
-
+export async function resetPasswordService(
+    token: string, 
+    password: string
+){
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const updatedUser = await resetUserPassword(user.id, hashedPassword);
+    const updatedUser = await resetUserPassword(token, hashedPassword);
 
     if (!updatedUser){
         return {

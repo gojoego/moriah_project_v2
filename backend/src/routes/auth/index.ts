@@ -1,4 +1,8 @@
 import { Router } from "express";
+import { 
+    rateLimiter, 
+    loginAccountRateLimiter, 
+    forgotPasswordAccountRateLimiter } from "../../middleware/rateLimit";
 
 import {
     signupController, 
@@ -9,9 +13,22 @@ import {
 
 const router = Router();
 
+router.use(rateLimiter);
+
 router.post("/signup", signupController);
-router.post("/login", loginController);
-router.post("/forgot-password", forgotPasswordController);
+
+router.post(
+    "/login", 
+    loginAccountRateLimiter, 
+    loginController
+);
+
+router.post(
+    "/forgot-password", 
+    forgotPasswordAccountRateLimiter,
+    forgotPasswordController
+);
+
 router.post("/reset-password", resetPasswordController);
 
 export default router;

@@ -8,13 +8,13 @@ import {
     updateUserRoleController
 } from "../../controllers/adminController"
 
-import { adminRateLimiter } from "../../middleware/rateLimit";
+import { rateLimiter } from "../../middleware/rateLimit";
 import { authMiddleware } from "../../middleware/auth";
 import { requireRole } from "../../middleware/authorize";
 
 const router = Router();
 
-router.use(adminRateLimiter);
+router.use(rateLimiter);
 router.use(authMiddleware);
 router.use(requireRole("admin"));
 
