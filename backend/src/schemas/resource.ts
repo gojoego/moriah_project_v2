@@ -51,4 +51,33 @@ export const resourceSchema = z.object({
         .boolean()
 })
 
-export type ResourceInput = z.infer<typeof resourceSchema>;
+export const resourceQuerySchema = z.object({
+    category: z.enum(RESOURCE_CATEGORIES).optional(), 
+
+    resourceType: z.enum(RESOURCE_TYPES).optional(), 
+
+    audience: z.enum(RESOURCE_AUDIENCES).optional(),
+
+    format: z.enum(RESOURCE_FORMATS).optional(),
+
+    search: z
+        .string()
+        .trim()
+        .min(1)
+        .optional(),
+
+    limit: z.coerce
+        .number()
+        .int()
+        .positive()
+        .max(100)
+        .optional(),
+    
+    offset: z.coerce
+        .number()
+        .int()
+        .nonnegative()
+        .optional(),
+});
+
+export type ResourceQuery = z.infer<typeof resourceQuerySchema>;

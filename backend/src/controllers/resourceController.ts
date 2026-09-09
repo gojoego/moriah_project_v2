@@ -1,37 +1,27 @@
 import { getAllResourcesService } from "../services/resourceService";
 
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
-import { paginationSchema } from "../schemas/pagination";
+import { resourceQuerySchema } from "../schemas/resource";
 
 export async function getAllResourcesController(
     req: Request, 
-    res: Response
+    res: Response, 
+    next: NextFunction
 ) {
     try {
-        const parsed = paginationSchema.safeParse(req.query);
+        const parsed = resourceQuerySchema.safeParse(req.query);
         
         if (!parsed.success) {
             return res.status(400).json({
-                error: "Invalid pagination parameters",
+                error: "Invalid resource query parameters",
             });
         }
 
-        const { limit, offset } = parsed.data;
+        const resources = await getAllResourcesService(parsed.data);
 
-        const resources = await getAllResourcesService({
-            limit, 
-            offset
-        });
         return res.status(200).json(resources);
     } catch (error) {
-        console.error("Resource error: ", {
-            message: 
-                error instanceof Error 
-                    ? error.message 
-                    : "Unknown error",
-        });
-
-        return res.status(500).json({ error: "Failed to get resources" });
+        next(error);
     }
 }
