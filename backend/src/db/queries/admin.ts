@@ -1,11 +1,9 @@
 import { pool } from "..";
 import { UserRole } from "../../types/roles";
 import { AdminStats } from "../../types/stats";
+import { PaginationOptions } from "../../types/pagination";
 
-export async function getAllUsersAdmin(options?: {
-    limit?: number;
-    offset?: number;
-}){
+export async function getAllUsersAdmin(options?: PaginationOptions){
     let query =
         `
         SELECT 
@@ -35,10 +33,7 @@ export async function getAllUsersAdmin(options?: {
     return result.rows;
 }
 
-export async function getAllPostsAdmin(options?: {
-    limit?: number;
-    offset?: number;
-}) {
+export async function getAllPostsAdmin(options?: PaginationOptions) {
     let query = `
         SELECT
             p.id,

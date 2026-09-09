@@ -4,12 +4,12 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
-import login from "./routes/auth/login";
+import login from "./routes/auth/index";
 import authRoutes from "./routes/auth/"
 import signup from "./routes/auth/index";
-import me from "./routes/users/me";
+import me from "./routes/users";
 import posts from "./routes/posts";
-import pwreset from "./routes/auth/passwordReset"
+import pwreset from "./routes/auth/index"
 import admin from "./routes/admin";
 import resource from "./routes/resource/";
 

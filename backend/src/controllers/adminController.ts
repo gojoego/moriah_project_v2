@@ -1,13 +1,13 @@
 import { AuthRequest } from "../types/auth";
-import { Response } from "express";
+import { Response, NextFunction } from "express";
 
 import {
-    getAllUsersAdmin,
-    getAllPostsAdmin,
-    deletePostAdmin,
-    updateUserRole,
-    getAdminStats
-} from "../db/queries/admin";
+    getAllUsersAdminService, 
+    getAllPostsAdminService, 
+    deletePostAdminService,
+    updateUserRoleService,
+    getAdminStatsService
+} from "../services/adminService";
 
 import {
     updateUserRoleSchema,
@@ -15,7 +15,11 @@ import {
     idSchema,
 } from "../schemas/admin";
 
-export async function getAllUsersAdminController(req: AuthRequest, res: Response) {
+export async function getAllUsersAdminController(
+    req: AuthRequest, 
+    res: Response, 
+    next: NextFunction
+) {
     try {
         const parsed = adminPaginationSchema.safeParse(req.query);
 
@@ -26,23 +30,24 @@ export async function getAllUsersAdminController(req: AuthRequest, res: Response
         }
         const { limit, offset } = parsed.data;
 
-        const users = await getAllUsersAdmin({
+        const users = await getAllUsersAdminService({
             limit,
             offset,
         });
         
         return res.json(users);
     } catch (error) {
-        console.error("Admin get users error: ", error);
-        return res.status(500).json({
-            error: "Failed to fetch users",
-        });
+        next(error);
     }    
 }
 
-export async function getAllPostsAdminController(_req: AuthRequest, res: Response) {
+export async function getAllPostsAdminController(
+    req: AuthRequest, 
+    res: Response, 
+    next: NextFunction
+) {
     try {
-        const parsed = adminPaginationSchema.safeParse(_req.query);
+        const parsed = adminPaginationSchema.safeParse(req.query);
 
         if (!parsed.success) {
             return res.status(400).json({
@@ -52,7 +57,7 @@ export async function getAllPostsAdminController(_req: AuthRequest, res: Respons
 
         const { limit, offset } = parsed.data;
 
-        const posts = await getAllPostsAdmin({
+        const posts = await getAllPostsAdminService({
             limit, 
             offset,
         });
@@ -60,15 +65,15 @@ export async function getAllPostsAdminController(_req: AuthRequest, res: Respons
         return res.json(posts);
 
     } catch (error) {
-        console.error("Admin get posts error: ", error);
-
-        return res.status(500).json({
-            error: "Failed to fetch posts",
-        });
+        next(error);
     }
 }
 
-export async function deletePostAdminController(req: AuthRequest, res: Response) {
+export async function deletePostAdminController(
+    req: AuthRequest, 
+    res: Response,
+    next: NextFunction
+) {
     try {
         const parsedId = idSchema.safeParse(req.params.id);
 
@@ -78,7 +83,7 @@ export async function deletePostAdminController(req: AuthRequest, res: Response)
             });
         }
 
-        const deletedPost = await deletePostAdmin(parsedId.data);
+        const deletedPost = await deletePostAdminService(parsedId.data);
 
         if (!deletedPost) {
             return res.status(404).json({
@@ -91,21 +96,21 @@ export async function deletePostAdminController(req: AuthRequest, res: Response)
             post: deletedPost,
         });
     } catch (error) {
-        console.error("Admin delete post error:", error);
-
-        return res.status(500).json({
-            error: "Failed to delete post",
-        });
+        next(error);
     }   
 }
 
-export async function updateUserRoleController(req: AuthRequest, res: Response) {
+export async function updateUserRoleController(
+    req: AuthRequest, 
+    res: Response,
+    next: NextFunction 
+) {
     try {
         const parsedId = idSchema.safeParse(req.params.id);
 
         if (!parsedId.success) {
             return res.status(400).json({
-                error: "Invalid post id",
+                error: "Invalid user id",
             });
         }
 
@@ -117,7 +122,7 @@ export async function updateUserRoleController(req: AuthRequest, res: Response) 
             });
         }
         
-        const updatedUser = await updateUserRole(
+        const updatedUser = await updateUserRoleService(
             parsedId.data, 
             parsedBody.data.role
         );
@@ -130,24 +135,20 @@ export async function updateUserRoleController(req: AuthRequest, res: Response) 
 
         return res.json(updatedUser);
     } catch (error) {
-        console.error("Admin update role error:", error);
-
-        return res.status(500).json({
-            error: "Failed to update role",
-        });           
+        next(error);        
     }
 }
 
-export async function getAdminStatsController(_req: AuthRequest, res: Response) {
+export async function getAdminStatsController(
+    _req: AuthRequest, 
+    res: Response,
+    next: NextFunction
+) {
     try {
-
-        const stats = await getAdminStats();
+        const stats = await getAdminStatsService();
         
         return res.json(stats);
     } catch (error) {
-        console.error("Admin get stats error: ", error);
-        return res.status(500).json({
-            error: "Failed to fetch stats",
-        });
+        next(error);
     }    
 }

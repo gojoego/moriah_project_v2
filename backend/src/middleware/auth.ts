@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt";
-import { AuthRequest } from "../types/auth"
+import { AuthRequest } from "../types/auth";
 
 export function authMiddleware(
     req: AuthRequest,

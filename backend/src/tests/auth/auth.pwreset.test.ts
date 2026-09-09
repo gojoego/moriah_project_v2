@@ -5,7 +5,6 @@ import app from "../../app";
 
 import {
     getUserByEmail,
-    getUserByPasswordResetToken,
     resetUserPassword,
     setPasswordResetToken,
 } from "../../db/queries/users";
@@ -14,7 +13,6 @@ import { sendPasswordResetEmail } from "../../services/email";
 
 jest.mock("../../db/queries/users", () => ({
     getUserByEmail: jest.fn(),
-    getUserByPasswordResetToken: jest.fn(),
     resetUserPassword: jest.fn(),
     setPasswordResetToken: jest.fn(),
 }));
@@ -24,9 +22,6 @@ jest.mock("../../services/email", () => ({
 }));
 
 const mockGetUserByEmail = jest.mocked(getUserByEmail);
-const mockGetUserByPasswordResetToken = jest.mocked(
-    getUserByPasswordResetToken
-);
 const mockResetUserPassword = jest.mocked(resetUserPassword);
 const mockSetPasswordResetToken = jest.mocked(setPasswordResetToken);
 const mockSendPasswordResetEmail = jest.mocked(sendPasswordResetEmail);
@@ -60,7 +55,6 @@ describe("Password reset routes", () => {
 
     describe("POST /api/auth/forgot-password", () => {
         it("returns the generic response for an existing email", async () => {
-  
             mockGetUserByEmail.mockResolvedValue({
                 id: "user-123",
                 display_name: "Joe",
@@ -80,6 +74,7 @@ describe("Password reset routes", () => {
             );
 
             expect(response.status).toBe(200);
+
             expect(response.body).toEqual({
                 message: GENERIC_RESET_MESSAGE,
             });
@@ -103,7 +98,6 @@ describe("Password reset routes", () => {
         });
 
         it("returns the same generic response for a nonexistent email", async () => {
-
             mockGetUserByEmail.mockResolvedValue(null);
 
             const response = await request(app)
@@ -113,6 +107,7 @@ describe("Password reset routes", () => {
                 });
 
             expect(response.status).toBe(200);
+
             expect(response.body).toEqual({
                 message: GENERIC_RESET_MESSAGE,
             });
@@ -130,6 +125,7 @@ describe("Password reset routes", () => {
 
             expect(response.status).toBe(400);
             expect(response.body.error).toBeDefined();
+
             expect(mockGetUserByEmail).not.toHaveBeenCalled();
             expect(mockSetPasswordResetToken).not.toHaveBeenCalled();
             expect(mockSendPasswordResetEmail).not.toHaveBeenCalled();
@@ -138,9 +134,8 @@ describe("Password reset routes", () => {
 
     describe("POST /api/auth/reset-password", () => {
         it("resets the password when the token is valid", async () => {
-            mockGetUserByPasswordResetToken.mockResolvedValue({
+            mockResetUserPassword.mockResolvedValue({
                 id: "user-123",
-                email: "joe@example.com",
             });
 
             const response = await request(app)
@@ -151,24 +146,21 @@ describe("Password reset routes", () => {
                 });
 
             expect(response.status).toBe(200);
+
             expect(response.body).toEqual({
                 message: "Password reset successful",
             });
 
-            expect(
-                mockGetUserByPasswordResetToken
-            ).toHaveBeenCalledWith("valid-reset-token");
-
             expect(mockResetUserPassword).toHaveBeenCalledTimes(1);
+
             expect(mockResetUserPassword).toHaveBeenCalledWith(
-                "user-123",
+                "valid-reset-token",
                 expect.any(String)
             );
         });
 
         it("rejects an expired token", async () => {
-
-            mockGetUserByPasswordResetToken.mockResolvedValue(null);
+            mockResetUserPassword.mockResolvedValue(null);
 
             const response = await request(app)
                 .post("/api/auth/reset-password")
@@ -178,16 +170,21 @@ describe("Password reset routes", () => {
                 });
 
             expect(response.status).toBe(400);
+
             expect(response.body.error).toBe(
                 "Invalid or expired reset token"
             );
 
-            expect(mockResetUserPassword).not.toHaveBeenCalled();
+            expect(mockResetUserPassword).toHaveBeenCalledTimes(1);
+
+            expect(mockResetUserPassword).toHaveBeenCalledWith(
+                "expired-reset-token",
+                expect.any(String)
+            );
         });
 
         it("rejects an invalid token", async () => {
-
-            mockGetUserByPasswordResetToken.mockResolvedValue(null);
+            mockResetUserPassword.mockResolvedValue(null);
 
             const response = await request(app)
                 .post("/api/auth/reset-password")
@@ -197,18 +194,23 @@ describe("Password reset routes", () => {
                 });
 
             expect(response.status).toBe(400);
+
             expect(response.body.error).toBe(
                 "Invalid or expired reset token"
             );
 
-            expect(mockResetUserPassword).not.toHaveBeenCalled();
+            expect(mockResetUserPassword).toHaveBeenCalledTimes(1);
+
+            expect(mockResetUserPassword).toHaveBeenCalledWith(
+                "made-up-token",
+                expect.any(String)
+            );
         });
 
         it("does not allow a reset token to be reused", async () => {
-            mockGetUserByPasswordResetToken
+            mockResetUserPassword
                 .mockResolvedValueOnce({
                     id: "user-123",
-                    email: "joe@example.com",
                 })
                 .mockResolvedValueOnce(null);
 
@@ -227,19 +229,18 @@ describe("Password reset routes", () => {
                 });
 
             expect(firstResponse.status).toBe(200);
-
             expect(secondResponse.status).toBe(400);
+
             expect(secondResponse.body.error).toBe(
                 "Invalid or expired reset token"
             );
 
-            expect(mockResetUserPassword).toHaveBeenCalledTimes(1);
+            expect(mockResetUserPassword).toHaveBeenCalledTimes(2);
         });
 
         it("hashes the new password before passing it to the database", async () => {
-            mockGetUserByPasswordResetToken.mockResolvedValue({
+            mockResetUserPassword.mockResolvedValue({
                 id: "user-123",
-                email: "joe@example.com",
             });
 
             const newPassword = "newPassword123";
@@ -254,9 +255,10 @@ describe("Password reset routes", () => {
             expect(response.status).toBe(200);
             expect(mockResetUserPassword).toHaveBeenCalledTimes(1);
 
-            const hashedPassword =
-                mockResetUserPassword.mock.calls[0][1];
+            const [token, hashedPassword] =
+                mockResetUserPassword.mock.calls[0];
 
+            expect(token).toBe("valid-reset-token");
             expect(hashedPassword).not.toBe(newPassword);
 
             await expect(
@@ -274,10 +276,6 @@ describe("Password reset routes", () => {
 
             expect(response.status).toBe(400);
             expect(response.body.error).toBeDefined();
-
-            expect(
-                mockGetUserByPasswordResetToken
-            ).not.toHaveBeenCalled();
 
             expect(mockResetUserPassword).not.toHaveBeenCalled();
         });
