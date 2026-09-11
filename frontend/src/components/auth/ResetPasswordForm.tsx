@@ -103,6 +103,7 @@ export default function ResetPasswordForm(){
                     >
                         Confirm password
                     </label>
+
                     <input 
                         id="confirmPassword"
                         type="password"
