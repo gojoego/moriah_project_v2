@@ -47,7 +47,7 @@ describe("GET /api/resource", () => {
         expect(mockGetAllResourcesService).toHaveBeenCalledWith({
             resourceType: "peer_support",
         });
-    })
+    });
 
     it("passes audience filter to the service", async () => {
         mockGetAllResourcesService.mockResolvedValue([]);
