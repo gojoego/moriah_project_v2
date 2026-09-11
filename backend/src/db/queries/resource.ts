@@ -60,7 +60,7 @@ export async function getAllResources(
         `;
     }
 
-    query += ` ORDER BY name ASC`;
+    query += ` ORDER BY name ASC, id ASC`;
 
     if (options?.limit !== undefined) {
         values.push(options.limit);
