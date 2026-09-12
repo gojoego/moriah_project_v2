@@ -78,6 +78,7 @@ export default function NewPost(){
                             name of the loved one you are writing to
                         </label>
                         <Input
+                            id="name"
                             type="deceased name"
                             placeholder="e.g. my friend, Moriah"
                             value={deceasedName}
@@ -94,6 +95,7 @@ export default function NewPost(){
                             background or context (optional)
                         </label>
                         <Textarea
+                            id="background"
                             className="min-h-32"
                             value={background}
                             onChange={(e) => setBackground(e.target.value)}
@@ -106,6 +108,7 @@ export default function NewPost(){
                         what I wish I could say
                         </label>
                         <Textarea
+                            id="content"
                             className="min-h-64"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}

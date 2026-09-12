@@ -27,14 +27,12 @@ import { Button } from "@/components/ui/button";
 
 import { ROUTES } from "@/constants/routes";
 
-
 export default function ProfilePage() {
     const router = useRouter();
 
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [postsError, setPostsError] = useState<string | null>(null);
-
 
     useEffect(() => {
         async function loadProfile() {
@@ -46,13 +44,21 @@ export default function ProfilePage() {
             }
 
             try {
-                const [userData, postsData] = await Promise.all([
+                const [userResult, postsResult] = await Promise.allSettled([
                     getCurrentUser(),
                     fetchMyPosts(),
                 ]);
+                if (userResult.status === "fulfilled") {
+                    setUser(userResult.value);
+                } else {
+                    setPostsError("Failed to load profile.");
+                }
 
-                setUser(userData);
-                setPosts(postsData);
+                if (postsResult.status === "fulfilled") {
+                    setPosts(postsResult.value);
+                } else {
+                    setPostsError("Failed to load remembrances.");
+                }                
             } catch (error) {
                 if (error instanceof Error) {
                     setPostsError(error.message);
@@ -90,7 +96,6 @@ export default function ProfilePage() {
         }
     };
 
-
     if (!user) {
         return (
             <main className="flex min-h-screen items-center justify-center px-6">
@@ -100,7 +105,6 @@ export default function ProfilePage() {
             </main>
         );
     }
-
 
     return (
         <main className="mx-auto w-full max-w-4xl px-6 py-16 md:px-8">

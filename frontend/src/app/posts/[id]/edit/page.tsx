@@ -169,8 +169,8 @@ export default function EditPostPage() {
                             name of the loved one you are writing to
                         </label>                        
                         <Input
-                            type="deceased name"
-                            id="deceased name"
+                            type="name"
+                            id="name"
                             value={deceased_name}
                             onChange={(e) => setDeceasedName(e.target.value)}
                             required

@@ -71,7 +71,7 @@ export default function SignupForm() {
 				</h1>
 
 				<Input
-					type="username"
+					type="text"
 					placeholder="Username"
 					value={username}
 					onChange={(e) => {
@@ -104,7 +104,7 @@ export default function SignupForm() {
 				/>
 
 				<Input
-					type="confirm password"
+					type="password"
 					placeholder="Confirm Password"
 					value={confirmPassword}
 					onChange={(e) => {

@@ -63,6 +63,7 @@ export default function ForgotPasswordPage() {
                 <div className="space-y-1">
 
                     <Input
+                        disabled={isSubmitting}
                         type="email"
                         placeholder="Email"
                         value={email}
