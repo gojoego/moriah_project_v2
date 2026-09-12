@@ -4,6 +4,8 @@ import { useState } from "react";
 import { createPost } from "@/lib/api/posts";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function NewPost(){
     const [deceasedName, setDeceasedName] = useState("");
@@ -75,47 +77,43 @@ export default function NewPost(){
                         <label className="form-label" htmlFor="name">
                             name of the loved one you are writing to
                         </label>
-                        <input
-                            type="text"
-                            className="form-input"
+                        <Input
                             id="name"
-                            value={deceasedName}
-                            onChange={(e) => setDeceasedName(e.target.value)}
-                            required
-                            disabled={isSubmitting}
+                            type="deceased name"
                             placeholder="e.g. my friend, Moriah"
-                        />                        
+                            value={deceasedName}
+                            onChange={(e) => {
+                                setDeceasedName(e.target.value);
+                                setError(null);
+                            }}
+                            required
+                        />                       
                     </div>
 
                     <div className="space-y-1">
                         <label className="form-label" htmlFor="background">
-                            Background or context (optional)
+                            background or context (optional)
                         </label>
-                        <textarea 
+                        <Textarea
+                            id="background"
+                            className="min-h-32"
                             value={background}
                             onChange={(e) => setBackground(e.target.value)}
-                            rows={5}
-                            className="form-textarea"
-                            id="background"
-                            disabled={isSubmitting} 
                             placeholder="who they were, your relationship with them"
                         />
                     </div>
                               
                     <div className="space-y-1">
                         <label className="form-label" htmlFor="content">
-                        What I wish I could say
+                        what I wish I could say
                         </label>
-                        <textarea
+                        <Textarea
+                            id="content"
+                            className="min-h-64"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
-                            rows={10}
-                            className="form-textarea"
-                            required
-                            id="content"
-                            disabled={isSubmitting}
-                            placeholder="What do you wish you could've said to them before their passing?"
-                        />
+                            placeholder="What do you wish you could've said to them before their passing?"                        
+                        />                   
                     </div>
                 </section>
 

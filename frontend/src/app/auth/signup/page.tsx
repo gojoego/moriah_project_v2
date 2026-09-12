@@ -8,6 +8,7 @@ import { setToken } from "@/lib/auth";
 
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { ROUTES } from "@/constants/routes";
+import { Input } from "@/components/ui/input";
 
 export default function SignupForm() { 
 	const router = useRouter();
@@ -31,7 +32,6 @@ export default function SignupForm() {
 			return;
 		}
 		
-
 		if (password !== confirmPassword){
 			setError("Passwords do not match.")
 			return;
@@ -60,79 +60,75 @@ export default function SignupForm() {
 		} 	
 	};
 
-  return (
-    <div>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 max-w-sm mx-auto mt-12"
-      >
-        <h1 className="text-2xl font-semibold text-center">
-          Create an Account
-        </h1>
+	return (
+		<div>
+			<form
+				onSubmit={handleSubmit}
+				className="space-y-4 max-w-sm mx-auto mt-12"
+			>
+				<h1 className="text-2xl font-semibold text-center">
+					Create an Account
+				</h1>
 
-        <input
-          type="text"
-          placeholder="Username"
-          className="w-full border p-2 rounded"
-          value={username}
-          onChange={(e) => {
-			setUsername(e.target.value);
-			setError(null);
-		  }}
-          required
-        />
+				<Input
+					type="text"
+					placeholder="Username"
+					value={username}
+					onChange={(e) => {
+						setUsername(e.target.value);
+						setError(null);
+					}}
+					required
+				/>
 
-        <input
-			type="email"
-			placeholder="Email"
-			className="w-full border p-2 rounded"
-			value={email}
-			onChange={(e) => {
-				setEmail(e.target.value);
-				setError(null);
-			}}
-			required
-        />
+				<Input
+					type="email"
+					placeholder="Email"
+					value={email}
+					onChange={(e) => {
+						setEmail(e.target.value);
+						setError(null);
+					}}
+					required
+				/>
 
-        <input
-			type="password"
-			placeholder="Password"
-			className="w-full border p-2 rounded"
-			value={password}
-			onChange={(e) => {
-				setPassword(e.target.value);
-				setError(null);
-			}}
-			required
-        />
+				<Input
+					type="password"
+					placeholder="Password"
+					value={password}
+					onChange={(e) => {
+						setPassword(e.target.value);
+						setError(null);
+					}}
+					required
+				/>
 
-        <input
-			type="password"
-			placeholder="Confirm Password"
-			className="w-full border p-2 rounded"
-			value={confirmPassword}
-			onChange={(e) => {
-				setConfirmPassword(e.target.value);
-				setError(null);
-			}}
-			required
-        />
+				<Input
+					type="password"
+					placeholder="Confirm Password"
+					value={confirmPassword}
+					onChange={(e) => {
+						setConfirmPassword(e.target.value);
+						setError(null);
+					}}
+					required
+				/>
 
-		<ErrorMessage message={error} />
+				<ErrorMessage message={error} />
 
-        <button
-          type="submit"
-		  disabled={isSubmitting}
-          className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
-        >
-          {
-            isSubmitting
-            ? "Creating account…"
-            : "Create Account"
-          }
-        </button>
-      </form>      
-    </div>
+				<button
+					type="submit"
+					disabled={isSubmitting}
+					className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
+				>
+					{
+						isSubmitting
+						? "Creating account…"
+						: "Create Account"
+					}
+				</button>
+			</form>      
+		</div>
 
-  );
+	);
 }

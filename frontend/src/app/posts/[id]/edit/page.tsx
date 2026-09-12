@@ -6,6 +6,8 @@ import { fetchPostById, updatePostById } from "@/lib/api/posts";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function EditPostPage() {
     const router = useRouter();
@@ -155,26 +157,24 @@ export default function EditPostPage() {
                         Edit post 
                     </h1>
                     <p className="text-muted-foreground">
-                        Update the message you shared with us.
+                        update the message you shared with us
                     </p>
                 </header>
                 <section className="form-section">
                     <div className="space-y-1">
-                        <label
-
+                        <label 
+                            className="form-label"
                             htmlFor="name"
                         >
                             name of the loved one you are writing to
-                        </label>
-                        <input 
-                            type="text" 
-                            className="form-input"
+                        </label>                        
+                        <Input
+                            type="name"
                             id="name"
                             value={deceased_name}
                             onChange={(e) => setDeceasedName(e.target.value)}
                             required
-                            disabled= {isSubmitting}
-                            
+                            disabled={isSubmitting}
                         />
                     </div>
                     <div className="space-y-1">
@@ -182,34 +182,31 @@ export default function EditPostPage() {
                             className="form-label" 
                             htmlFor="background"
                         >
-                            Background or context
+                            background or context
                         </label>
-                        <textarea
+                        <Textarea
+                            id="background"
                             value={background}
                             onChange={(e) => setBackground(e.target.value)}
-                            rows={5}
-                            className="form-textarea"
-                            id="background"
+                            className="min-h-32"
                             disabled={isSubmitting}
-                        />                            
+                        />     
                     </div>
-                    <div>
+                    <div className="space-y-1">
                         <label 
                             htmlFor="content"
                             className="form-label"
                         >
-                            What I wish I could say 
+                            what I wish I could say 
                         </label>
-
-                        <textarea
+                        <Textarea
+                            id="content"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
-                            rows={5}
-                            className="form-textarea"
+                            className="min-h-64"
                             required
-                            id="content"
                             disabled={isSubmitting}
-                        />                      
+                        />                   
                     </div>
                 </section>
 

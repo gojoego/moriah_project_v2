@@ -7,6 +7,7 @@ import { forgotPassword } from "@/lib/api/auth";
 import { ROUTES } from "@/constants/routes";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState("");
@@ -60,20 +61,17 @@ export default function ForgotPasswordPage() {
                     </p>
                 </header>
                 <div className="space-y-1">
-                    <label 
-                        htmlFor="email"
-                        className="form-label"
-                    >
-                        Email
-                    </label>
-                    <input 
-                        id="email"
-                        type="email"
-                        className="form-input"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+
+                    <Input
                         disabled={isSubmitting}
-                        required 
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            setError(null);
+                        }}
+                        required
                     />
                 </div>
                 <ErrorMessage message={error}/>

@@ -9,6 +9,7 @@ import { loginUser } from "@/lib/api/auth";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { ROUTES } from "@/constants/routes";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
 
 export function LoginForm(){
     const router = useRouter();
@@ -60,27 +61,26 @@ export function LoginForm(){
                 Log In
             </h2>
 
-            <input
+            <Input
                 type="email"
                 placeholder="Email"
-                className="w-full border p-2 rounded"
                 value={email}
                 onChange={(e) => {
                     setEmail(e.target.value);
-                    setError(null); 
+                    setError(null);
                 }}
                 required
             />
 
-            <input
+            <Input
                 type="password"
                 placeholder="Password"
-                className="w-full border p-2 rounded"
                 value={password}
                 onChange={(e) => {
                     setPassword(e.target.value);
-                    setError(null);  
+                    setError(null);
                 }}
+                required
             />
 
             <Link
