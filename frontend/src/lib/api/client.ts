@@ -6,12 +6,21 @@ if (!API_BASE_URL) {
 
 export { API_BASE_URL };
 
+export class ApiError extends Error {
+    status: number;
+
+    constructor(message: string, status: number) {
+        super(message);
+        this.name = "ApiError";
+        this.status = status;
+    }
+}
+
 export async function handleResponse<T>(
     res: Response
 ): Promise<T> {
 
     if (!res.ok) {
-
         let message = "Request Failed";
 
         try {
@@ -19,7 +28,7 @@ export async function handleResponse<T>(
             message = err.error || message;
         } catch {}
 
-        throw new Error(message);
+        throw new ApiError(message, res.status);
     }
 
     return res.json();

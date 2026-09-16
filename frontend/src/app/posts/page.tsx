@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { PostList } from "@/components/posts/PostList";
 import { Post } from "@/types/post";
 import { fetchPosts } from "@/lib/api/posts";
@@ -17,42 +17,40 @@ export default function PostsPage() {
     const [error, setError] = useState<string | null>(null);
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
-    useEffect(() => {
-        async function loadPosts() {
+    const loadPosts = useCallback(async () => {
+        setLoading(true);
+        setError(null); 
+
+        try {
+            const posts = await fetchPosts();
+            setPosts(posts);
+
             try {
-
-                const posts = await fetchPosts();
-
-                setPosts(posts);
-
-                try {
-                    const user = await getCurrentUser();
-                    setCurrentUser(user);
-                } catch {
-                    setCurrentUser(null);
-                }
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    setError(err.message);
-                } else {
-                    setError("Something went wrong");
-                }
-            } finally {
-                setLoading(false);
+                const user = await getCurrentUser();
+                setCurrentUser(user);
+            } catch {
+                setCurrentUser(null);
             }
-        }
-        loadPosts();
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Something went wrong");
+            }
+        } finally {
+            setLoading(false);
+        }                      
     }, []);
+
+    useEffect(() => {
+        loadPosts();
+    }, [loadPosts]);
 
     if (loading) {
         return <div className="text-center py-12">Loading posts...</div>;
     }
 
     if (error) {
-        function loadPosts(): void {
-            throw new Error("Function not implemented.");
-        }
-
         return (
             <ErrorState
                 message="cannot load stories right now"
@@ -84,7 +82,7 @@ export default function PostsPage() {
             <PostList 
                 posts={posts}
                 currentUserId={currentUser?.id} 
-            />;    
+            />    
         </main>
     )
 }

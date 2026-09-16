@@ -5,7 +5,12 @@ import {
 
 test.describe('Logout', () => {
 
-    test('user can log out successfully', async ({page}) => {
+    test('user can log out successfully', async ({ page }) => {
+
+        test.skip(
+            true,
+            'Disabled until Playwright uses an isolated test database'
+        );
 
         await page.goto('/auth/login');
 
