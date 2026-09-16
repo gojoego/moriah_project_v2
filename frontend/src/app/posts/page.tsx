@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { PostList } from "@/components/posts/PostList";
 import { Post } from "@/types/post";
 import { fetchPosts } from "@/lib/api/posts";
@@ -17,13 +17,12 @@ export default function PostsPage() {
     const [error, setError] = useState<string | null>(null);
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
-    async function loadPosts() {
+    const loadPosts = useCallback(async () => {
         setLoading(true);
-        setError(null);
+        setError(null); 
 
         try {
             const posts = await fetchPosts();
-
             setPosts(posts);
 
             try {
@@ -40,12 +39,12 @@ export default function PostsPage() {
             }
         } finally {
             setLoading(false);
-        }        
-    }
+        }                      
+    }, []);
 
     useEffect(() => {
         loadPosts();
-    }, []);
+    }, [loadPosts]);
 
     if (loading) {
         return <div className="text-center py-12">Loading posts...</div>;

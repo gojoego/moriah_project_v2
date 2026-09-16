@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ApiError } from "@/lib/api/client";
 
 import {
     Card,
@@ -26,8 +27,12 @@ export default async function PostDetailPage({
 
     try {
         post = await fetchPostById(id);
-    } catch {
-        notFound();
+    } catch (error) {
+        if (error instanceof ApiError && error.status === 404) {
+            notFound();
+        }
+
+        throw error;
     }
 
     const dateLabel = new Date(post.created_at).toLocaleDateString(
