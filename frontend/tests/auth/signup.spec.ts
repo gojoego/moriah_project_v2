@@ -7,29 +7,33 @@ test.describe('Signup', () => {
 
     test('user can sign up successfully', async ({ page }) => {
 
+        test.skip(
+            true,
+            'Disabled until Playwright uses an isolated test database'
+        );
+
         const testId = crypto.randomUUID();
-        const testUsername = `playwright-${testId}`;
+        const testDisplayName = `playwright-${testId}`;
         const testEmail = `playwright-${testId}@moriahproject.org`;
         const testPassword = `Password123!`;
 
         await page.goto('/auth/signup');
 
-        await page.getByPlaceholder('Username').fill(
-            testUsername
+        await page.getByLabel('Display name').fill(
+            testDisplayName
         );
 
-        await page.getByPlaceholder('Email').fill(
+        await page.getByLabel('Email').fill(
             testEmail
         );
 
-        
-        await page.getByPlaceholder('Password', {
+        await page.getByLabel('Password', {
             exact: true
         }).fill(
             testPassword
         );
 
-        await page.getByPlaceholder('Confirm Password').fill(
+        await page.getByLabel('Confirm password').fill(
             testPassword
         );
 
