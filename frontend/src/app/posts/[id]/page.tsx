@@ -1,15 +1,5 @@
-"use client";
-
-import {
-    useEffect,
-    useState,
-} from "react";
-
 import Link from "next/link";
-import {
-    useParams,
-    useRouter,
-} from "next/navigation";
+import { notFound } from "next/navigation";
 
 import {
     Card,
@@ -18,107 +8,27 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { Button } from "@/components/ui/button";
+import { EditPostButton } from "@/components/posts/EditPostButton";
 
 import { fetchPostById } from "@/lib/api/posts";
-import { getCurrentUser } from "@/lib/api/users";
-
-import { Post } from "@/types/post";
-import { User } from "@/types/user";
 
 import { ROUTES } from "@/constants/routes";
 
 
-export default function PostDetailPage() {
-    const params = useParams();
-    const router = useRouter();
+export default async function PostDetailPage({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}) {
+    const { id } = await params;
 
-    const postId = params.id as string;
+    let post;
 
-    const [post, setPost] = useState<Post | null>(null);
-    const [user, setUser] = useState<User | null>(null);
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [loadError, setLoadError] = useState<string | null>(null);
-
-
-    useEffect(() => {
-        let isCurrent = true;
-
-        async function loadPost() {
-            try {
-
-                const postData = await fetchPostById(postId);
-
-                if (!isCurrent) {
-                    return;
-                }
-
-                setPost(postData);
-
-                try {
-                    const currentUser = await getCurrentUser();
-
-                    if (isCurrent) {
-                        setUser(currentUser);
-                    }
-                } catch {
-
-                }
-
-            } catch {
-                if (isCurrent) {
-                    setLoadError("Failed to load remembrance.");
-                }
-            } finally {
-                if (isCurrent) {
-                    setIsLoading(false);
-                }
-            }
-        }
-
-        if (postId) {
-            loadPost();
-        } else {
-            setLoadError("Invalid remembrance id.");
-            setIsLoading(false);
-        }
-
-        return () => {
-            isCurrent = false;
-        };
-    }, [postId]);
-
-    if (isLoading) {
-        return (
-            <main className="mx-auto max-w-3xl px-4 py-8">
-                <p className="text-sm text-muted-foreground">
-                    Loading remembrance...
-                </p>
-            </main>
-        );
+    try {
+        post = await fetchPostById(id);
+    } catch {
+        notFound();
     }
-
-    if (loadError || !post) {
-        return (
-            <main className="mx-auto max-w-3xl space-y-4 px-4 py-8">
-                <p className="text-center text-sm text-destructive">
-                    {loadError ?? "Remembrance not found."}
-                </p>
-
-                <div className="flex justify-center">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => router.push(ROUTES.POSTS)}
-                    >
-                        Back to stories
-                    </Button>
-                </div>
-            </main>
-        );
-    }
-
 
     const dateLabel = new Date(post.created_at).toLocaleDateString(
         undefined,
@@ -128,8 +38,6 @@ export default function PostDetailPage() {
             day: "numeric",
         }
     );
-
-    const isOwner = user?.id === post.author_id;
 
     return (
         <main className="mx-auto max-w-3xl space-y-8 px-4 py-8">
@@ -154,18 +62,10 @@ export default function PostDetailPage() {
                         </p>
                     </div>
 
-                    {isOwner && (
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() =>
-                                router.push(`/posts/${post.id}/edit`)
-                            }
-                        >
-                            Edit post
-                        </Button>
-                    )}
+                    <EditPostButton
+                        postId={post.id}
+                        authorId={post.author_id}
+                    />
 
                 </div>
             </header>
@@ -183,7 +83,6 @@ export default function PostDetailPage() {
                     </p>
                 </CardContent>
             </Card>
-
 
             <Card>
                 <CardHeader>

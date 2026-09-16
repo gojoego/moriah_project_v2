@@ -7,128 +7,163 @@ import { signupUser } from "@/lib/api/auth";
 import { setToken } from "@/lib/auth";
 
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
-import { ROUTES } from "@/constants/routes";
 import { Input } from "@/components/ui/input";
 
-export default function SignupForm() { 
-	const router = useRouter();
+import { ROUTES } from "@/constants/routes";
 
-	const [username, setUsername] = useState("");
-  	const [email, setEmail] = useState("");
-  	const [password, setPassword] = useState("");
-  	const [confirmPassword, setConfirmPassword] = useState("");
+export default function SignupForm() {
+    const router = useRouter();
 
-  	const [error, setError] = useState<string | null>(null);
-  	const [isSubmitting, setIsSubmitting] = useState(false);
-  
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+    const [displayName, setDisplayName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
-		setError(null);
-		
-		const trimmedUsername = username.trim();
-		if (trimmedUsername.trim().length < 8) {
-			setError("Username must be at least 8 characters.")
-			return;
-		}
-		
-		if (password !== confirmPassword){
-			setError("Passwords do not match.")
-			return;
-		}
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-		setIsSubmitting(true);
 
-		try {
-			const data = await signupUser({
-				displayName: trimmedUsername,
-				email, 
-				password,
-			});
-			
-			setToken(data.token);
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-			router.push(ROUTES.PROFILE);
-		} catch(err) {
-			if (err instanceof Error) {
-				setError(err.message);
-			} else {
-				setError("Signup failed");
-			}
-		} finally {
-			setIsSubmitting(false);
-		} 	
-	};
+        setError(null);
 
-	return (
-		<div>
-			<form
-				onSubmit={handleSubmit}
-				className="space-y-4 max-w-sm mx-auto mt-12"
-			>
-				<h1 className="text-2xl font-semibold text-center">
-					Create an Account
-				</h1>
+        const trimmedDisplayName = displayName.trim();
 
-				<Input
-					type="text"
-					placeholder="Username"
-					value={username}
-					onChange={(e) => {
-						setUsername(e.target.value);
-						setError(null);
-					}}
-					required
-				/>
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
 
-				<Input
-					type="email"
-					placeholder="Email"
-					value={email}
-					onChange={(e) => {
-						setEmail(e.target.value);
-						setError(null);
-					}}
-					required
-				/>
+        setIsSubmitting(true);
 
-				<Input
-					type="password"
-					placeholder="Password"
-					value={password}
-					onChange={(e) => {
-						setPassword(e.target.value);
-						setError(null);
-					}}
-					required
-				/>
+        try {
+            const data = await signupUser({
+                displayName: trimmedDisplayName,
+                email,
+                password,
+            });
 
-				<Input
-					type="password"
-					placeholder="Confirm Password"
-					value={confirmPassword}
-					onChange={(e) => {
-						setConfirmPassword(e.target.value);
-						setError(null);
-					}}
-					required
-				/>
+            setToken(data.token);
 
-				<ErrorMessage message={error} />
+            router.push(ROUTES.PROFILE);
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Signup failed");
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					className="w-full bg-primary text-white py-2 rounded hover:opacity-90 disabled:opacity-50"
-				>
-					{
-						isSubmitting
-						? "Creating account…"
-						: "Create Account"
-					}
-				</button>
-			</form>      
-		</div>
+    return (
+        <div>
+            <form
+                onSubmit={handleSubmit}
+                className="mx-auto mt-12 max-w-sm space-y-5"
+            >
+                <h1 className="text-center text-2xl font-semibold">
+                    Create an Account
+                </h1>
 
-	);
+                <div className="space-y-1.5">
+                    <label
+                        htmlFor="displayName"
+                        className="form-label"
+                    >
+                        Display name
+                    </label>
+
+                    <Input
+                        id="displayName"
+                        type="text"
+                        value={displayName}
+                        onChange={(e) => {
+                            setDisplayName(e.target.value);
+                            setError(null);
+                        }}
+                        required
+                    />
+
+                    <p className="text-xs text-muted-foreground">
+                        This is the name others will see.
+                    </p>
+                </div>
+
+                <div className="space-y-1.5">
+                    <label
+                        htmlFor="email"
+                        className="form-label"
+                    >
+                        Email
+                    </label>
+
+                    <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            setError(null);
+                        }}
+                        required
+                    />
+                </div>
+
+                <div className="space-y-1.5">
+                    <label
+                        htmlFor="password"
+                        className="form-label"
+                    >
+                        Password
+                    </label>
+
+                    <Input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            setError(null);
+                        }}
+                        required
+                    />
+                </div>
+
+                <div className="space-y-1.5">
+                    <label
+                        htmlFor="confirmPassword"
+                        className="form-label"
+                    >
+                        Confirm password
+                    </label>
+
+                    <Input
+                        id="confirmPassword"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                            setError(null);
+                        }}
+                        required
+                    />
+                </div>
+
+                <ErrorMessage message={error} />
+
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full rounded bg-primary py-2 text-white hover:opacity-90 disabled:opacity-50"
+                >
+                    {isSubmitting
+                        ? "Creating account…"
+                        : "Create Account"}
+                </button>
+            </form>
+        </div>
+    );
 }

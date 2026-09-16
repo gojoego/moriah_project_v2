@@ -17,30 +17,33 @@ export default function PostsPage() {
     const [error, setError] = useState<string | null>(null);
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
-    useEffect(() => {
-        async function loadPosts() {
+    async function loadPosts() {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const posts = await fetchPosts();
+
+            setPosts(posts);
+
             try {
-
-                const posts = await fetchPosts();
-
-                setPosts(posts);
-
-                try {
-                    const user = await getCurrentUser();
-                    setCurrentUser(user);
-                } catch {
-                    setCurrentUser(null);
-                }
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    setError(err.message);
-                } else {
-                    setError("Something went wrong");
-                }
-            } finally {
-                setLoading(false);
+                const user = await getCurrentUser();
+                setCurrentUser(user);
+            } catch {
+                setCurrentUser(null);
             }
-        }
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Something went wrong");
+            }
+        } finally {
+            setLoading(false);
+        }        
+    }
+
+    useEffect(() => {
         loadPosts();
     }, []);
 
@@ -49,10 +52,6 @@ export default function PostsPage() {
     }
 
     if (error) {
-        function loadPosts(): void {
-            throw new Error("Function not implemented.");
-        }
-
         return (
             <ErrorState
                 message="cannot load stories right now"
@@ -84,7 +83,7 @@ export default function PostsPage() {
             <PostList 
                 posts={posts}
                 currentUserId={currentUser?.id} 
-            />;    
+            />    
         </main>
     )
 }
