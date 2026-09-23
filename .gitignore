@@ -51,3 +51,10 @@ next-env.d.ts
 # Vercel
 # ----------------------------
 .vercel
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+*.tfvars
