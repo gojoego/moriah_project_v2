@@ -30,11 +30,14 @@ Required environment variables
 - TF_VAR_supabase_database_password
 
 Workflow
+
 terraform init
 terraform fmt
 terraform validate
-terraform plan
 
+terraform import supabase_project.production <SUPABASE_PROJECT_REF>
+
+terraform plan
 Safety
 - Review plans before applying.
 - Never commit secrets or Terraform state.

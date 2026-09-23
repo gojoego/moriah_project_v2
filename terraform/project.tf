@@ -5,6 +5,7 @@ resource "supabase_project" "production" {
   region            = "us-west-2"
 
   lifecycle {
-    ignore_changes = [database_password]
+    prevent_destroy = true
+    ignore_changes  = [database_password]
   }
 }

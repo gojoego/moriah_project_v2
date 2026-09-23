@@ -58,3 +58,4 @@ next-env.d.ts
 *.tfstate.*
 .terraform.tfstate.lock.info
 *.tfvars
+*.tfvars.json
