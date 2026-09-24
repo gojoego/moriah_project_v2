@@ -4,18 +4,27 @@ const isTest = process.env.NODE_ENV === "test";
 const isE2E = process.env.E2E === "true";
 const isProd = process.env.NODE_ENV === "production";
 
-const databaseUrl = process.env.DATABASE_URL; 
+const databaseUrl = process.env.DATABASE_URL;
 
-if (!databaseUrl) {
-    throw new Error("DATABASE_URL is not defined");    
+if (!databaseUrl && !isTest) {
+    throw new Error("DATABASE_URL is not defined");
 }
 
-if (
-    (isTest || isE2E) && 
-    !databaseUrl.includes("localhost") && 
-    !databaseUrl.includes("127.0.0.1")
-) {
-    throw new Error("test environment must use a local database");
+if (isE2E && !databaseUrl) {
+    throw new Error("E2E environment requires DATABASE_URL");
+}
+
+if ((isTest || isE2E) && databaseUrl) {
+    const hostname = new URL(databaseUrl).hostname;
+
+    if (
+        hostname !== "localhost" &&
+        hostname !== "127.0.0.1"
+    ) {
+        throw new Error(
+            "Test environment must use a local database"
+        );
+    }
 }
 
 export const pool = new Pool({
@@ -23,7 +32,7 @@ export const pool = new Pool({
 
     ssl: isProd
         ? {
-              rejectUnauthorized: false, 
+              rejectUnauthorized: false,
           }
         : false,
 });
