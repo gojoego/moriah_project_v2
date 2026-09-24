@@ -7,11 +7,6 @@ test.describe('Login', () => {
     
     test('user can login successfully', async ({ page }) => {
 
-        test.skip(
-            true,
-            'Disabled until Playwright uses an isolated test database'
-        );
-
         await page.goto('/auth/login');
 
         await page.getByPlaceholder('Email').fill(

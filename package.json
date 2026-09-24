@@ -18,6 +18,10 @@
 
     "test": "cd backend && npm run test",
 
+    "e2e:db:reset": "supabase db reset --local && psql \"postgresql://postgres:postgres@127.0.0.1:54322/postgres\" -f supabase/seed.e2e.sql",
+
+    "test:e2e": "cd frontend && npm run test:e2e",
+
     "ci:local": "npm run install:all && npm run typecheck && npm run lint && npm run build && npm run test",
     "check": "npm run typecheck && npm run lint"
   },

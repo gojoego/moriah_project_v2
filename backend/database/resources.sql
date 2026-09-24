@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS resources (
     id UUID DEFAULT gen_random_uuid(),
 
     name TEXT NOT NULL, 
-    description TEST NOT NULL,
+    description TEXT NOT NULL,
     url TEXT NOT NULL, 
 
     category TEXT NOT NULL, 
