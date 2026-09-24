@@ -7,11 +7,6 @@ test.describe('Signup', () => {
 
     test('user can sign up successfully', async ({ page }) => {
 
-        test.skip(
-            true,
-            'Disabled until Playwright uses an isolated test database'
-        );
-
         const testId = crypto.randomUUID();
         const testDisplayName = `playwright-${testId}`;
         const testEmail = `playwright-${testId}@moriahproject.org`;

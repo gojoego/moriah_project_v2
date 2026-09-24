@@ -20,56 +20,50 @@ jobs:
           node-version: lts/*
           cache: npm
           cache-dependency-path: |
+            package-lock.json
             frontend/package-lock.json
             backend/package-lock.json
 
-      # Frontend dependencies
+      - name: Install root dependencies
+        run: npm ci
+
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
 
-      # Backend dependencies (needed if building/testing backend locally)
       - name: Install backend dependencies
         working-directory: backend
         run: npm ci
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: 2.115.0
+      - name: Start local Supabase
+        run: supabase start
+      - name: Create E2E environment files
+        run: |
+          cat > backend/.env.e2e <<'EOF'
+          NODE_ENV=development
+          E2E=true
+          DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+          PORT=4000
+          JWT_SECRET=e2e-only-secret
+          EOF
 
-      # Build backend so dist/server.js exists
-      - name: Build backend
-        working-directory: backend
-        run: npm run build
+          cat > frontend/.env.e2e <<'EOF'
+          NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
+          PLAYWRIGHT_TEST_EMAIL=e2e-login@moriahproject.org
+          PLAYWRIGHT_TEST_EMAIL_PASSWORD=Password123!
+          EOF        
+      - name: Reset and seed E2E database
+        run: npm run e2e:db:reset
 
-      # Start backend locally
-      - name: Start backend
-        working-directory: backend
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PORT: 4000
-        run: npm run start > backend.log 2>&1 &
-      - name: Wait for backend
-        run: npx wait-on http://localhost:4000/health --timeout 60000
-      - name: Build frontend
-        working-directory: frontend
-        env:
-          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
-        run: npm run build
-
-      # Install browsers
       - name: Install Playwright Browsers
         working-directory: frontend
         run: npx playwright install --with-deps
-
-      # Run E2E tests
       - name: Run Playwright tests
-        working-directory: frontend
-        env:
-          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
-          PLAYWRIGHT_TEST_EMAIL: ${{ secrets.PLAYWRIGHT_TEST_EMAIL }}
-          PLAYWRIGHT_TEST_EMAIL_PASSWORD: ${{ secrets.PLAYWRIGHT_TEST_EMAIL_PASSWORD }}
-        run: npx playwright test
-      - name: Show backend logs
-        if: failure()
-        run: cat backend/backend.log
+        run: npm run test:e2e
+
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
