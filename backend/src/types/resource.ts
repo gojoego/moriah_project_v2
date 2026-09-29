@@ -17,6 +17,13 @@ export type ResourceAudience =
 export type ResourceFormat =
     typeof RESOURCE_FORMATS[number];
 
+export type ResourceNeed = {
+    category?: ResourceCategory;
+    resourceType?: ResourceKind;
+    audience?: ResourceAudience;
+    format?: ResourceFormat;
+    search?: string;
+};
 export interface Resource {
     id: string;
 
