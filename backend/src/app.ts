@@ -12,6 +12,7 @@ import posts from "./routes/posts";
 import pwreset from "./routes/auth/index"
 import admin from "./routes/admin";
 import resource from "./routes/resource/";
+import chat from "./routes/chat";
 
 const allowedOrigins =  new Set([
   "http://localhost:3000",
@@ -68,6 +69,8 @@ app.use("/api/auth", pwreset);
 app.use("/api/admin", admin);
 
 app.use("/api/resource", resource);
+
+app.use("/api/chat", chat);
 
 app.use((_req, res) => {
     res.status(404).json({
