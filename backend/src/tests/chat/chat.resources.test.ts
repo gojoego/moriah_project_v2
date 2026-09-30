@@ -35,9 +35,10 @@ describe("POST /api/chat/resources", () => {
             },
         ];
 
-        mockedGetChatResources.mockResolvedValue(
-            mockResources
-        );
+        mockedGetChatResources.mockResolvedValue({
+            crisisDetected: false,
+            resources: mockResources,
+        });
 
         const response = await request(app)
             .post("/api/chat/resources")
@@ -54,6 +55,7 @@ describe("POST /api/chat/resources", () => {
             );
 
         expect(response.body).toEqual({
+            crisisDetected: false,
             resources: mockResources,
         });
     });

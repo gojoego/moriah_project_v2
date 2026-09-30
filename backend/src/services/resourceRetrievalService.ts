@@ -9,67 +9,72 @@ export function extractResourceNeed(
     const need: ResourceNeed = {};
 
     if (
-        normalized.includes("brother") ||
-        normalized.includes("sister") ||
-        normalized.includes("sibling")
+        /\bbrother\b/i.test(normalized) ||
+        /\bsister\b/i.test(normalized) ||
+        /\bsibling\b/i.test(normalized)
     ) {
         need.audience = "siblings";
     }
 
-    if (normalized.includes("support group")) {
+    if (/\bsupport group\b/i.test(normalized)) {
         need.resourceType = "support_group";
     }
 
     if (
-        normalized.includes("suicide loss") ||
-        normalized.includes("lost someone to suicide")
+        /\bsuicide loss\b/i.test(normalized) ||
+        /\blost someone to suicide\b/i.test(normalized)
     ) {
         need.category = "suicide_loss";
     }
 
-    if (normalized.includes("grief")) {
+    if (/\bgrief\b/i.test(normalized)) {
         need.category = "grief_support";
     }
 
-    if (normalized.includes("online")) {
+    if (/\bonline\b/i.test(normalized)) {
         need.format = "online";
     }
 
-    if (normalized.includes("phone")) {
+    if (/\bphone\b/i.test(normalized)) {
         need.format = "phone";
     }
 
-    if (normalized.includes("text")) {
+    if (/\btext\b/i.test(normalized)) {
         need.format = "text";
     }
 
     if (
-        normalized.includes("teen") ||
-        normalized.includes("teenager")
+        !need.audience &&
+        /\b(teen|teenager)\b/i.test(normalized)
     ) {
         need.audience = "teens";
     }
 
+
     if (
-        normalized.includes("young adult") ||
-        normalized.includes("college")
+        !need.audience &&
+        /\b(young adult|college)\b/i.test(normalized)
     ) {
         need.audience = "young_adults";
     }
 
+
     if (
-        normalized.includes("parent") ||
-        normalized.includes("mom") ||
-        normalized.includes("dad")
+        !need.audience &&
+        /\b(parent|mom|dad)\b/i.test(normalized)
     ) {
         need.audience = "parents";
     }
 
+
     return need;
 }
+
+
 export async function findResourcesForMessage(
     message: string
 ) {
     const filters = extractResourceNeed(message);
+
     return getAllResourcesService(filters);
 }
