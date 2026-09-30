@@ -34,12 +34,15 @@ jobs:
       - name: Install backend dependencies
         working-directory: backend
         run: npm ci
+
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
           version: 2.115.0
+
       - name: Start local Supabase
         run: supabase start
+
       - name: Create E2E environment files
         run: |
           cat > backend/.env.e2e <<'EOF'
@@ -54,13 +57,51 @@ jobs:
           NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
           PLAYWRIGHT_TEST_EMAIL=e2e-login@moriahproject.org
           PLAYWRIGHT_TEST_EMAIL_PASSWORD=Password123!
-          EOF        
+          EOF
+
       - name: Reset and seed E2E database
         run: npm run e2e:db:reset
+
+      - name: Verify seeded E2E login
+        shell: bash
+        run: |
+          cd backend
+
+          setsid npm run dev:e2e > /tmp/moriah-e2e-backend.log 2>&1 &
+          BACKEND_PID=$!
+
+          trap 'kill -- -"$BACKEND_PID" 2>/dev/null || true' EXIT
+
+          READY=false
+
+          for i in {1..30}; do
+            if curl -fsS http://localhost:4000/health > /dev/null; then
+              READY=true
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$READY" != "true" ]; then
+            cat /tmp/moriah-e2e-backend.log
+            exit 1
+          fi
+
+          if ! curl --fail-with-body -sS \
+            -o /tmp/moriah-login-response.json \
+            -w 'Login HTTP status: %{http_code}\n' \
+            -X POST http://localhost:4000/api/auth/login \
+            -H "Content-Type: application/json" \
+            -d '{"email":"e2e-login@moriahproject.org","password":"Password123!"}'; then
+            cat /tmp/moriah-login-response.json
+            cat /tmp/moriah-e2e-backend.log
+            exit 1
+          fi
 
       - name: Install Playwright Browsers
         working-directory: frontend
         run: npx playwright install --with-deps
+
       - name: Run Playwright tests
         run: npm run test:e2e
 
