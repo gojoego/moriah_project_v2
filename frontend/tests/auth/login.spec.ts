@@ -17,12 +17,25 @@ test.describe('Login', () => {
             process.env.PLAYWRIGHT_TEST_EMAIL_PASSWORD!
         );
 
-        await page.getByRole('button', {
-            name: 'Log in',
+        const responsePromise = page.waitForResponse(
+            response =>
+                response.url().includes("/api/auth/login") &&
+                response.request().method() === "POST"
+        );
+
+        await page.getByRole("button", {
+            name: "Log In",
         }).click();
 
+        const response = await responsePromise;
+
+        console.log(
+            "LOGIN STATUS:",
+            response.status()
+        );
+
         await expect(page)
-            .toHaveURL('/user_profile');
+            .toHaveURL("/user_profile");
 
         await expect(
             page.getByRole('heading', {
