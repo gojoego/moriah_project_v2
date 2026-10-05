@@ -11,6 +11,14 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        browser:
+          - chromium
+          - firefox
+          - webkit
+
     steps:
       - uses: actions/checkout@v4
 
@@ -62,18 +70,19 @@ jobs:
       - name: Reset and seed E2E database
         run: npm run e2e:db:reset
 
-      - name: Install Playwright Browsers
+      - name: Install Playwright browser
         working-directory: frontend
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run Playwright tests
-        run: npm run test:e2e
+        working-directory: frontend
+        run: npx playwright test --project=${{ matrix.browser }}
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: |
             frontend/playwright-report/
             frontend/test-results/
