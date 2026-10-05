@@ -17,22 +17,17 @@ test.describe('Login', () => {
             process.env.PLAYWRIGHT_TEST_EMAIL_PASSWORD!
         );
 
-        const responsePromise = page.waitForResponse(
-            response =>
-                response.url().includes("/api/auth/login") &&
-                response.request().method() === "POST"
-        );
+        const [response] = await Promise.all([
+            page.waitForResponse(
+                response =>
+                    response.url().includes("/api/auth/login") &&
+                    response.request().method() === "POST"
+            ),
 
-        await page
-            .getByLabel("Password")
-            .press("Enter");
-
-        const response = await responsePromise;
-
-        console.log(
-            "LOGIN STATUS:",
-            response.status()
-        );
+            page.getByRole("button", {
+                name: "Log In",
+            }).click(),
+        ]);
 
         console.log(
             "LOGIN STATUS:",
