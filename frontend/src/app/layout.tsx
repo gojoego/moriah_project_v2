@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Inter, Cormorant_Garamond } from "next/font/google";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 import "./globals.css";
 
@@ -42,6 +43,8 @@ export default function RootLayout({
 					{children}
 				</main>
 			</div>
+
+			<ChatWidget/>
 		</body>
 		</html>
 	);
