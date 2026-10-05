@@ -23,11 +23,16 @@ test.describe('Login', () => {
                 response.request().method() === "POST"
         );
 
-        await page.getByRole("button", {
-            name: "Log In",
-        }).click();
+        await page
+            .getByLabel("Password")
+            .press("Enter");
 
         const response = await responsePromise;
+
+        console.log(
+            "LOGIN STATUS:",
+            response.status()
+        );
 
         console.log(
             "LOGIN STATUS:",
