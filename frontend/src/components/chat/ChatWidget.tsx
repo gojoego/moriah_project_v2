@@ -23,6 +23,9 @@ export default function ChatWidget() {
     const [submittedMessage, setSubmittedMessage] = useState("");
     const [crisisDetected, setCrisisDetected] = useState(false);
     const bottomRef = useRef<HTMLDivElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const launcherRef = useRef<HTMLButtonElement | null>(null);
+    const hasOpenedRef = useRef(false);
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({
@@ -35,9 +38,26 @@ export default function ChatWidget() {
         crisisDetected,
     ]);
 
+    useEffect(() => {
+        if (isOpen) {
+            hasOpenedRef.current = true;
+            inputRef.current?.focus();
+        } else if (hasOpenedRef.current) {
+            launcherRef.current?.focus();
+        }
+    }, [isOpen]);
+
     async function handleSend(messageToSend = message) {
         if (loading) return;
         if (!messageToSend.trim()) return;
+
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+        if (!apiBaseUrl) {
+            throw new Error(
+                "NEXT_PUBLIC_API_BASE_URL is not configured"
+            );
+        }
 
         try {
             setLoading(true);
@@ -47,7 +67,7 @@ export default function ChatWidget() {
             setSubmittedMessage(messageToSend);
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/chat/resources`,
+                `${apiBaseUrl}/api/chat/resources`,
                 {
                     method: "POST",
 
@@ -341,16 +361,15 @@ export default function ChatWidget() {
                                             Immediate support resources
                                         </h3>
 
-                                        <p
-                                            className="
-                                                mt-1
-                                                text-sm
-                                                text-muted-foreground
-                                            "
-                                        >
-                                            Here are resources that can
-                                            provide immediate support.
-                                        </p>
+                                        {resources.length > 0 ? (
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                Here are resources that can provide immediate support.
+                                            </p>
+                                        ) : (
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                If you&apos;re in the U.S., call or text 988 for immediate support.
+                                            </p>
+                                        )}
                                     </div>
                                 )}
 
@@ -395,6 +414,7 @@ export default function ChatWidget() {
                         "
                     >
                         <input 
+                            ref={inputRef}
                             type="text" 
                             placeholder="Ask about resources..."    
                             value={message}
@@ -462,6 +482,7 @@ export default function ChatWidget() {
             )}
 
             <button
+                ref={launcherRef}
                 type="button"
                 onClick={() => setIsOpen((open) => !open)}
                 aria-label={

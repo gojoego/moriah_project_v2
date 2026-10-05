@@ -6,9 +6,10 @@ type ChatButtonProps = {
 };
 
 export default function ChatButton({
+    onClick
 }: ChatButtonProps) {
     return (
-        <button>
+        <button type="button" onClick={onClick}>
             Chat
         </button>
     )

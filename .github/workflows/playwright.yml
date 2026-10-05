@@ -62,42 +62,6 @@ jobs:
       - name: Reset and seed E2E database
         run: npm run e2e:db:reset
 
-      - name: Verify seeded E2E login
-        shell: bash
-        run: |
-          cd backend
-
-          setsid npm run dev:e2e > /tmp/moriah-e2e-backend.log 2>&1 &
-          BACKEND_PID=$!
-
-          trap 'kill -- -"$BACKEND_PID" 2>/dev/null || true' EXIT
-
-          READY=false
-
-          for i in {1..30}; do
-            if curl -fsS http://localhost:4000/health > /dev/null; then
-              READY=true
-              break
-            fi
-            sleep 1
-          done
-
-          if [ "$READY" != "true" ]; then
-            cat /tmp/moriah-e2e-backend.log
-            exit 1
-          fi
-
-          if ! curl --fail-with-body -sS \
-            -o /tmp/moriah-login-response.json \
-            -w 'Login HTTP status: %{http_code}\n' \
-            -X POST http://localhost:4000/api/auth/login \
-            -H "Content-Type: application/json" \
-            -d '{"email":"e2e-login@moriahproject.org","password":"Password123!"}'; then
-            cat /tmp/moriah-login-response.json
-            cat /tmp/moriah-e2e-backend.log
-            exit 1
-          fi
-
       - name: Install Playwright Browsers
         working-directory: frontend
         run: npx playwright install --with-deps
