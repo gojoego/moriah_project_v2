@@ -4,7 +4,8 @@ Sentry.init({
     dsn: process.env.SENTRY_DSN,
     tracesSampleRate: 0.1,
     enableLogs: true,
-    enabled: process.env.NODE_ENV !== "test",
+    enabled: process.env.NODE_ENV === "production",
+    environment: process.env.NODE_ENV,
 
     beforeSend(event) {
         if (event.request?.headers) {
@@ -24,6 +25,6 @@ Sentry.init({
             delete data.resetToken;
         }
 
-        return event 
+        return event;
     }
 });

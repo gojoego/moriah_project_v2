@@ -3,13 +3,9 @@ import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-
-import login from "./routes/auth/index";
-import authRoutes from "./routes/auth/"
-import signup from "./routes/auth/index";
+import authRoutes from "./routes/auth/";
 import me from "./routes/users";
 import posts from "./routes/posts";
-import pwreset from "./routes/auth/index"
 import admin from "./routes/admin";
 import resource from "./routes/resource/";
 import chat from "./routes/chat";
@@ -57,14 +53,10 @@ app.use(
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/auth", login);
-app.use("/api/auth", signup);
 
 app.use("/api/users", me);
 
 app.use("/api/posts", postsLimiter, posts);
-
-app.use("/api/auth", pwreset);
 
 app.use("/api/admin", admin);
 
