@@ -45,7 +45,9 @@ const ChatInput = forwardRef<
                     onMessageChange(event.target.value)
                 }
                 onKeyDown={(event) => {
-                    if (event.key === "Enter" && !loading) {
+                    if (event.key === "Enter" && 
+                        !event.nativeEvent.isComposing &&
+                        !loading) {
                         onSend();
                     }
                 }}
