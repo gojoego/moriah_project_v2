@@ -1,9 +1,4 @@
-import type { Resource } from "@/types/resource";
-
-export type ChatResourceResponse = {
-    crisisDetected: boolean;
-    resources: Resource[];
-};
+import type { ChatResourceResponse } from "@/types/chat";
 
 export async function fetchChatResources(
     message: string
