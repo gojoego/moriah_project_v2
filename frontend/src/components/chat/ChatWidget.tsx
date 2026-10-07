@@ -10,10 +10,9 @@ import ChatWindow from "./ChatWindow";
 import ChatButton from "./ChatButton";
 import ChatInput from "./ChatInput";
 
-type ChatResourceResponse = {
-    crisisDetected: boolean;
-    resources: Resource[];
-};
+import {
+    fetchChatResources,
+} from "@/lib/api/chat";
 
 export default function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
@@ -52,14 +51,6 @@ export default function ChatWidget() {
         if (loading) return;
         if (!messageToSend.trim()) return;
 
-        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-        if (!apiBaseUrl) {
-            throw new Error(
-                "NEXT_PUBLIC_API_BASE_URL is not configured"
-            );
-        }
-
         try {
             setLoading(true);
             setError(null);
@@ -67,27 +58,7 @@ export default function ChatWidget() {
             setCrisisDetected(false);
             setSubmittedMessage(messageToSend);
 
-            const response = await fetch(
-                `${apiBaseUrl}/api/chat/resources`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-
-                    body: JSON.stringify({
-                        message: messageToSend,
-                    }),
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error("Failed to find resources");
-            }
-
-            const data: ChatResourceResponse =
-                await response.json();
+            const data = await fetchChatResources(messageToSend);
 
             setCrisisDetected(data.crisisDetected);
 
