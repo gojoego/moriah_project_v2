@@ -7,7 +7,8 @@ import {
 } from "react";
 import type { Resource } from "@/types/resource";
 import ResourceCard from "./ResourceCard";
-import { MessageCircle } from "lucide-react";
+import ChatButton from "./ChatButton";
+import ChatInput from "./ChatInput";
 
 type ChatResourceResponse = {
     crisisDetected: boolean;
@@ -401,128 +402,22 @@ export default function ChatWidget() {
                             </div>
                     </div>
 
-                    <div
-                        className="
-                            flex 
-                            items-center
-                            gap-2
-
-                            border-t
-                            border-border
-
-                            p-3
-                        "
-                    >
-                        <input 
-                            ref={inputRef}
-                            type="text" 
-                            placeholder="Ask about resources..."    
-                            value={message}
-                            onChange={(event) => setMessage(event.target.value)}
-                            onKeyDown={(event) => {
-                                if (event.key === "Enter" && !loading) {
-                                    handleSend();
-                                }
-                            }}
-                            disabled={loading}
-                            className="
-                                flex-1
-
-                                rounded-md
-                                border
-                                border-border
-
-                                bg-background
-
-                                px-3
-                                py-2
-
-                                text-sm
-
-                                outline-none
-                                
-                                focus-visible:ring-2
-                                focus-visible:ring-ring
-                            "   
-                        />
-
-                        <button 
-                            type="button"
-                            onClick={() => handleSend()}
-                            disabled={loading}
-                            className="
-                                rounded-md
-
-                                bg-primary
-                                text-primary-foreground
-
-                                px-3
-                                py-2
-
-                                text-sm
-                                font-medium
-
-                                transition
-
-                                hover:opacity-90
-
-                                disabled:cursor-not-allowed
-                                disabled:opacity-50
-
-                                focus-visible:outline-none
-                                focus-visible:ring-2
-                                focus-visible:ring-ring
-                                focus-visible:ring-offset-2
-                            "    
-                        >
-                            {loading ? "Sending..." : "Send"}
-                        </button>
-                    </div>
+                    <ChatInput
+                        ref={inputRef}
+                        message={message}
+                        loading={loading}
+                        onMessageChange={setMessage}
+                        onSend={() => handleSend()}
+                    />     
                 </div>
             )}
 
-            <button
+            <ChatButton
                 ref={launcherRef}
-                type="button"
+                isOpen={isOpen}
                 onClick={() => setIsOpen((open) => !open)}
-                aria-label={
-                    isOpen
-                        ? "Close support chat"
-                        : "Open support chat"
-                }
-                className="
-                    fixed 
-                    bottom-6 
-                    right-6 
-                    z-50
+            />
 
-                    flex
-                    h-14
-                    w-14
-                    items-center
-                    justify-center
-
-                    rounded-full
-
-                    bg-primary
-                    text-primary-foreground
-
-                    shadow-lg
-
-                    transition
-                    hover:scale-105
-
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-ring
-                    focus:ring-offset-2
-                "
-            >
-                <MessageCircle
-                    size={24}
-                    aria-hidden="true"
-                />
-            </button>
         </div>
     );
 }
