@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt";
 import { AuthRequest } from "../types/auth";
+import { logError } from "../utils/logger"
 
 export function authMiddleware(
     req: AuthRequest,
@@ -29,8 +30,11 @@ export function authMiddleware(
 
         next();
     } catch (error) {
-        console.error("Auth middleware error:", {
-            message: error instanceof Error ? error.message : "Unknown error",
+        logError("Auth middleware error", {
+            requestId: res.locals.requestId,
+            method: req.method,
+            path: req.originalUrl,
+            error: error instanceof Error ? error.message : "Unknown error",
         });
         
         return res.status(401).json({ error: "Unauthorized" });
