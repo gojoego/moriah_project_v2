@@ -21,6 +21,4 @@ export function requestIdMiddleware(
         scope.setTag("requestId", requestId);
         next();
     });
-
-    next();
 }
