@@ -9,6 +9,8 @@ import posts from "./routes/posts";
 import admin from "./routes/admin";
 import resource from "./routes/resource/";
 import chat from "./routes/chat";
+import { requestIdMiddleware } from "./middleware/requestId";
+import { requestLogger } from "./middleware/requestLogger";
 
 const allowedOrigins =  new Set([
   "http://localhost:3000",
@@ -28,6 +30,9 @@ const postsLimiter = rateLimit({
 const app = express();
 
 app.set("trust proxy", 1);
+
+app.use(requestIdMiddleware);
+app.use(requestLogger);
 
 app.get("/health", (_req, res) => {
     res.status(200).json({
