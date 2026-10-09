@@ -1,7 +1,7 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import { authMiddleware } from "../../middleware/auth";
-import { getUserByIdController } from "../../controllers/usersController"
+import { getUserByIdController, updateDisplayNameController } from "../../controllers/usersController"
 const router = Router(); 
 
 const meRateLimiter = rateLimit({
@@ -16,6 +16,12 @@ router.get(
     meRateLimiter, 
     authMiddleware,
     getUserByIdController 
+);
+
+router.patch(
+    "/me",
+    authMiddleware,
+    updateDisplayNameController
 );
 
 export default router;
