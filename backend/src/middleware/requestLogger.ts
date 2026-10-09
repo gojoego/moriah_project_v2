@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AuthRequest } from "../types/auth";
+import { sanitizeRequestPath } from "../utils/sanitizeRequestPath";
 
 export function requestLogger(
     req: Request,
@@ -18,7 +19,7 @@ export function requestLogger(
                 message: "HTTP request completed",
                 requestId: res.locals.requestId,
                 method: req.method,
-                path: req.originalUrl,
+                path: sanitizeRequestPath(req.originalUrl),
                 statusCode: res.statusCode,
                 durationMs,
                 ...(userId && { userId }),

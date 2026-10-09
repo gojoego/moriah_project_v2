@@ -1,7 +1,8 @@
 import { Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt";
 import { AuthRequest } from "../types/auth";
-import { logError } from "../utils/logger"
+import { logError } from "../utils/logger";
+import { sanitizeRequestPath } from "../utils/sanitizeRequestPath";
 
 export function authMiddleware(
     req: AuthRequest,
@@ -33,7 +34,7 @@ export function authMiddleware(
         logError("Auth middleware error", {
             requestId: res.locals.requestId,
             method: req.method,
-            path: req.originalUrl,
+            path: sanitizeRequestPath(req.originalUrl),
             error: error instanceof Error ? error.message : "Unknown error",
         });
         
