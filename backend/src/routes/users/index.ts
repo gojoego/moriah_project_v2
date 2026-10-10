@@ -20,6 +20,7 @@ router.get(
 
 router.patch(
     "/me",
+    meRateLimiter,
     authMiddleware,
     updateDisplayNameController
 );
