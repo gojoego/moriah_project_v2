@@ -109,3 +109,22 @@ export async function resetUserPassword(
 
     return result.rows[0] ?? null;
 }
+
+export async function updateUserDisplayName(
+    userId: string, 
+    displayName: string 
+) {
+    const result = await pool.query(
+        `
+        UPDATE users 
+        SET 
+            display_name = $1, 
+            updated_at = NOW()
+        WHERE id = $2
+        RETURNING id, display_name, email, role 
+        `,
+        [displayName, userId]
+    );
+    
+    return result.rows[0];
+}

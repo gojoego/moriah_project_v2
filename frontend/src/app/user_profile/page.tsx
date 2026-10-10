@@ -7,6 +7,8 @@ import {
 
 import { useRouter } from "next/navigation";
 
+import { CurrentUser } from "@/types/auth";
+
 import {
     fetchMyPosts,
     deletePostById,
@@ -19,7 +21,6 @@ import {
 import { checkAuth } from "@/lib/auth";
 
 import { Post } from "@/types/post";
-import { User } from "@/types/user";
 
 import { PostList } from "@/components/posts/PostList";
 import { LogoutButton } from "@/components/auth/LogoutForm";
@@ -27,12 +28,15 @@ import { Button } from "@/components/ui/button";
 
 import { ROUTES } from "@/constants/routes";
 
+import { DisplayNameEditor } from "@/components/profile/DisplayNameEditor";
+
 export default function ProfilePage() {
     const router = useRouter();
 
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<CurrentUser | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [postsError, setPostsError] = useState<string | null>(null);
+
 
     useEffect(() => {
         async function loadProfile() {
@@ -70,7 +74,6 @@ export default function ProfilePage() {
 
         loadProfile();
     }, [router]);
-
 
     const handleDeletePost = async (postId: string) => {
         const confirmed = window.confirm(
@@ -129,13 +132,10 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="flex-1">
-                            <h2 className="text-xl font-semibold">
-                                {user.displayName}
-                            </h2>
-
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                {user.email}
-                            </p>
+                            <DisplayNameEditor
+                                user={user}
+                                onUserUpdated={setUser}
+                            />
                         </div>
 
                         <div className="sm:ml-auto">

@@ -2,7 +2,11 @@ import { Response, NextFunction } from "express";
 
 import { AuthRequest } from "../types/auth";
 
-import { getUserByIdService } from "../services/usersService";
+import { getUserByIdService, updateDisplayNameService } from "../services/usersService";
+
+import { getZodErrorMessage } from "../utils/zod"
+
+import { updateDisplayNameSchema } from "../schemas/users"
 
 export async function getUserByIdController(
     req: AuthRequest,
@@ -33,4 +37,35 @@ export async function getUserByIdController(
     } catch (error) {
         next(error);
     }
+}
+
+export async function updateDisplayNameController(
+    req: AuthRequest,
+    res: Response
+) {
+    const parsed = updateDisplayNameSchema.safeParse(req.body);
+
+    if (!parsed.success) {
+        return res.status(400).json({
+            error: getZodErrorMessage(parsed.error),
+        });
+    }
+
+    if (!req.user) {
+        return res.status(401).json({
+            error: "Unauthorized",
+        });
+    }
+
+    const updatedUser = await updateDisplayNameService(
+        req.user.id,
+        parsed.data.displayName
+    );
+    
+    return res.status(200).json({
+        id: updatedUser.id,
+        displayName: updatedUser.display_name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+    });
 }
