@@ -102,9 +102,10 @@ export function DisplayNameEditor({
                     id="displayName"
                     type="text"
                     value={displayNameDraft}
-                    onChange={(event) =>
-                        setDisplayNameDraft(event.target.value)
-                    }
+                    onChange={(event) => {
+                        setDisplayNameDraft(event.target.value);
+                        setError(null);
+                    }}
                     maxLength={50}
                     disabled={isSaving}
                 />
