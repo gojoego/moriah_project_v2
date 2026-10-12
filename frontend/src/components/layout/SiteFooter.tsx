@@ -1,4 +1,5 @@
 import { FooterLink } from "@/components/layout/FooterLink";
+import { CrisisNotice } from "@/components/layout/CrisisNotice"
 
 export function SiteFooter() {
 	return (
@@ -22,10 +23,6 @@ export function SiteFooter() {
 					Owned and operated by gojoego LLC.
 				</p>
 
-				<p className="mt-2">
-					Contact your local emergency services if you are in crisis.
-				</p>
-
 				<div 
 					className="
 						mt-4
@@ -35,6 +32,7 @@ export function SiteFooter() {
 						gap-4
 					"
 				>
+					<CrisisNotice/>
 					<FooterLink href="/">Home</FooterLink>
 					<FooterLink href="/terms">Terms</FooterLink>
 					<FooterLink href="privacy">Privacy</FooterLink>
