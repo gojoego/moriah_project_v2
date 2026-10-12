@@ -1,23 +1,44 @@
-type SiteFooterProps = {
-  onOpenDisclaimer: () => void;
-};
+import { FooterLink } from "@/components/layout/FooterLink";
+import { CrisisNotice } from "@/components/layout/CrisisNotice"
 
-export function SiteFooter({ onOpenDisclaimer }: SiteFooterProps) {
-  return (
-    <footer className="border-t">
-      <div className="mx-auto max-w-5xl px-4 py-10 text-sm text-muted-foreground text-center">
-        <p>© {new Date().getFullYear()} The Moriah Project</p>
-        <p className="mt-2">
-          Contact your local emergency services if you are in crisis
-        </p>
-        <button
-          onClick={onOpenDisclaimer}
-          className="mt-4 underline-offset-4 hover:underline"
-        >
-        read disclaimer
-      </button>
-      </div>
+export function SiteFooter() {
+	return (
+		<footer className="border-t">
+			<div 
+				className="
+					mx-auto
+					max-w-5xl
+					px-4
+					py-10
+					text-center
+					text-sm
+					text-muted-foreground
+				"
+			>
+				<p>
+					© {new Date().getFullYear()} The Moriah Project
+				</p>
 
-    </footer>
-  );
+				<p className="mt-1">
+					Owned and operated by gojoego LLC.
+				</p>
+
+				<div 
+					className="
+						mt-4
+						flex
+						flex-wrap
+						justify-center
+						gap-4
+					"
+				>
+					<CrisisNotice/>
+					<FooterLink href="/">Home</FooterLink>
+					<FooterLink href="/terms">Terms</FooterLink>
+					<FooterLink href="/privacy">Privacy</FooterLink>
+					<FooterLink href="/community-guidelines">Community Guidelines</FooterLink>
+				</div>
+			</div>
+		</footer>
+	);
 }
