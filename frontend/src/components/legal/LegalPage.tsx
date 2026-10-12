@@ -17,7 +17,7 @@ export function LegalPage({
     sections,
 }: LegalPageProps) {
     return (
-        <main className="mx-auto w-full max-w-4xl px-6 py-16 md:px-8 md:py-20">
+        <div className="mx-auto w-full max-w-4xl px-6 py-16 md:px-8 md:py-20">
             <div className="space-y-14">
                 <header className="max-w-2xl space-y-4">
                     <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
@@ -41,6 +41,6 @@ export function LegalPage({
                     ))}
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

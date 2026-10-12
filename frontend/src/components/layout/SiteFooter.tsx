@@ -35,7 +35,7 @@ export function SiteFooter() {
 					<CrisisNotice/>
 					<FooterLink href="/">Home</FooterLink>
 					<FooterLink href="/terms">Terms</FooterLink>
-					<FooterLink href="privacy">Privacy</FooterLink>
+					<FooterLink href="/privacy">Privacy</FooterLink>
 					<FooterLink href="/community-guidelines">Community Guidelines</FooterLink>
 				</div>
 			</div>
