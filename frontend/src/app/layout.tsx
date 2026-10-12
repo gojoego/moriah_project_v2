@@ -5,6 +5,7 @@ import ChatWidget from "@/components/chat/ChatWidget";
 import "./globals.css";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 
 export const metadata = {
 	title: "The Moriah Project",
@@ -45,6 +46,7 @@ export default function RootLayout({
 			</div>
 
 			<ChatWidget/>
+			<SiteFooter/>
 		</body>
 		</html>
 	);

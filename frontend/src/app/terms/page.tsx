@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import {
     TERMS_EFFECTIVE_DATE,
     TERMS_VERSION,
@@ -47,31 +45,6 @@ export default function TermsPage() {
                         </section>
                     ))}
                 </div>
-
-                <footer className="border-t border-border pt-8">
-                    <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                        <Link
-                            href="/privacy"
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            Privacy Policy
-                        </Link>
-
-                        <Link
-                            href="/community-guidelines"
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            Community Guidelines
-                        </Link>
-
-                        <Link
-                            href="/"
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            Return home
-                        </Link>
-                    </div>
-                </footer>
             </div>
         </main>
     );
