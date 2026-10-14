@@ -1,5 +1,6 @@
 import { pool } from "..";
 import crypto from "crypto";
+import { CreateUserInput } from "../../types/user"
 
 export async function getUserById(id:string) {
     const result = await pool.query(
@@ -40,21 +41,30 @@ export async function createUser({
     email, 
     password, 
     displayName,
-}:{
-    email: string; 
-    password: string; 
-    displayName: string;
-}){
+    termsAcceptedAt, 
+    termsVersion,
+    ageAttestedAt
+}: CreateUserInput){
     const result = await pool.query(
         `
-        INSERT INTO users (email, password, display_name)
-        VALUES ($1, $2, $3)
+        INSERT INTO users (
+            email, 
+            password, 
+            display_name, 
+            terms_accepted_at, 
+            terms_version, 
+            age_attested_at
+        )
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING id, email, display_name, role
         `,
         [
             email,
             password, 
-            displayName
+            displayName,
+            termsAcceptedAt, 
+            termsVersion,
+            ageAttestedAt
         ]
     ) 
 
