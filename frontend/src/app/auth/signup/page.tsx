@@ -176,6 +176,7 @@ export default function SignupForm() {
                                 setAcceptedTerms(e.target.checked);
                                 setError(null);
                             }}
+                            aria-required="true"
                             className="mt-1"
                         />
 
@@ -206,6 +207,7 @@ export default function SignupForm() {
                                 setAgeConfirmed(e.target.checked);
                                 setError(null);
                             }}
+                            aria-required="true"
                             className="mt-1"
                         />
 
