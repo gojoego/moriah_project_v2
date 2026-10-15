@@ -1,44 +1,51 @@
 import {
     test,
     expect
-} from '@playwright/test';
+} from "@playwright/test";
 
-test.describe('Signup', () => {
+test.describe("Signup", () => {
 
-    test('user can sign up successfully', async ({ page }) => {
+    test("user can sign up successfully", async ({ page }) => {
 
         const testId = crypto.randomUUID();
         const testDisplayName = `playwright-${testId}`;
         const testEmail = `playwright-${testId}@moriahproject.org`;
-        const testPassword = `Password123!`;
+        const testPassword = "Password123!";
 
-        await page.goto('/auth/signup');
+        await page.goto("/auth/signup");
 
-        await page.getByLabel('Display name').fill(
+        await page.getByLabel("Display name").fill(
             testDisplayName
         );
 
-        await page.getByLabel('Email').fill(
+        await page.getByLabel("Email").fill(
             testEmail
         );
 
-        await page.getByLabel('Password', {
+        await page.getByLabel("Password", {
             exact: true
         }).fill(
             testPassword
         );
 
-        await page.getByLabel('Confirm password').fill(
+        await page.getByLabel("Confirm password").fill(
             testPassword
         );
 
-        await page.getByRole('button', {
-            name: 'Create Account',
+        await page.getByLabel(
+            /I agree to the Terms of Service/
+        ).check();
+
+        await page.getByLabel(
+            /I confirm that I am at least 18 years old/
+        ).check();
+
+        await page.getByRole("button", {
+            name: "Create Account",
         }).click();
 
         await expect(page)
-            .toHaveURL('/user_profile');
-
+            .toHaveURL("/user_profile");
     });
 
 });

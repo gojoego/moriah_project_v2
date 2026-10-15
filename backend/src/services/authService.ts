@@ -9,6 +9,7 @@ import {
 import { signToken } from "../utils/jwt";
 import { SignupInput } from "../schemas/auth";
 import { sendPasswordResetEmail } from "../services/email";
+import { CURRENT_TERMS_VERSION } from "../constants/legal";
 
 function isUniqueViolation(error: unknown): boolean {
     return (
@@ -27,10 +28,15 @@ export async function signupService({
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        const acceptedAt = new Date();
+        
         const newUser = await createUser({
             email: email, 
             password: hashedPassword, 
             displayName: displayName,
+            termsAcceptedAt: acceptedAt,
+            termsVersion: CURRENT_TERMS_VERSION,
+            ageAttestedAt: acceptedAt,
         });
 
         const token = signToken({

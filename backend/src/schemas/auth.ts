@@ -16,6 +16,10 @@ export const signupSchema = z.object({
         .trim()
         .min(1, "Display name is required")
         .max(50, "Display name must be 50 characters or less"),
+    
+    acceptedTerms: z.literal(true), 
+
+    ageConfirmed: z.literal(true), 
 });
 
 export const loginSchema = z.object({

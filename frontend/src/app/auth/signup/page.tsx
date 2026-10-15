@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { signupUser } from "@/lib/api/auth";
@@ -22,6 +23,8 @@ export default function SignupForm() {
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [acceptedTerms, setAcceptedTerms] = useState(false);
+    const [ageConfirmed, setAgeConfirmed] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,6 +38,16 @@ export default function SignupForm() {
             return;
         }
 
+        if (!acceptedTerms) {
+            setError("You must agree to the Terms of Service and Privacy Policy.");
+            return;
+        }
+
+        if (!ageConfirmed) {
+            setError("You must confirm that you are at least 18 years old.");
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -42,6 +55,8 @@ export default function SignupForm() {
                 displayName: trimmedDisplayName,
                 email,
                 password,
+                acceptedTerms,
+                ageConfirmed,
             });
 
             setToken(data.token);
@@ -152,6 +167,55 @@ export default function SignupForm() {
                     />
                 </div>
 
+                <div className="space-y-4">
+                    <label className="flex items-start gap-3 text-sm">
+                        <input
+                            type="checkbox"
+                            checked={acceptedTerms}
+                            onChange={(e) => {
+                                setAcceptedTerms(e.target.checked);
+                                setError(null);
+                            }}
+                            aria-required="true"
+                            className="mt-1"
+                        />
+
+                        <span>
+                            I agree to the{" "}
+                            <Link
+                                href={ROUTES.TERMS}
+                                className="underline underline-offset-4"
+                            >
+                                Terms of Service
+                            </Link>{" "}
+                            and acknowledge the{" "}
+                            <Link
+                                href={ROUTES.PRIVACY}
+                                className="underline underline-offset-4"
+                            >
+                                Privacy Policy
+                            </Link>
+                            .
+                        </span>
+                    </label>
+
+                    <label className="flex items-start gap-3 text-sm">
+                        <input
+                            type="checkbox"
+                            checked={ageConfirmed}
+                            onChange={(e) => {
+                                setAgeConfirmed(e.target.checked);
+                                setError(null);
+                            }}
+                            aria-required="true"
+                            className="mt-1"
+                        />
+
+                        <span>
+                            I confirm that I am at least 18 years old.
+                        </span>
+                    </label>
+                </div>
                 <ErrorMessage message={error} />
 
                 <button
