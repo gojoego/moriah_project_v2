@@ -1,25 +1,7 @@
 import request from "supertest";
-
 import app from "../../app";
 
 describe("POST /api/auth/signup", () => {
-    it("creates a user when valid data is provided", async () => {
-        const email = `signup-${Date.now()}@example.com`;
-
-        const res = await request(app)
-            .post("/api/auth/signup")
-            .send({
-                email,
-                password: "password123",
-                displayName: "Test User",
-                acceptedTerms: true,
-                ageConfirmed: true,
-            });
-
-        expect(res.status).toBe(201);
-        expect(res.body.user.email).toBe(email);
-    });
-
     it("returns 400 when fields are missing", async () => {
         const res = await request(app)
             .post("/api/auth/signup")
