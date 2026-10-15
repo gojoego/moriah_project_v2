@@ -10,6 +10,7 @@ import { signToken } from "../utils/jwt";
 import { SignupInput } from "../schemas/auth";
 import { sendPasswordResetEmail } from "../services/email";
 import { CURRENT_TERMS_VERSION } from "../constants/legal";
+import { isBetaEmailAllowed } from "../utils/betaAllowList";
 
 function isUniqueViolation(error: unknown): boolean {
     return (
@@ -25,6 +26,12 @@ export async function signupService({
     password,
     displayName,
 }: SignupInput) {
+    if (!isBetaEmailAllowed(email)) {
+        return {
+            status: "invite_only" as const,
+        };
+    }
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -46,6 +53,7 @@ export async function signupService({
         });
         
         return {
+            status: "success" as const,
             user: {
                 id: newUser.id,
                 email: newUser.email,
@@ -56,9 +64,10 @@ export async function signupService({
         };        
     } catch(error) {
         if (isUniqueViolation(error)) {
-            return null;
+            return {
+                status: "duplicate_email" as const,
+            };
         }
-
         throw error;        
     }
 

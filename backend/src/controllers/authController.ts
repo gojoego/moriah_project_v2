@@ -26,14 +26,23 @@ export async function signupController(
         }
 
         const result = await signupService(parsed.data);
- 
-        if (!result) {
+
+        if (result.status === "invite_only") {
+            return res.status(403).json({
+                error: "Signups are currently invite-only.",
+            });
+        }
+
+        if (result.status === "duplicate_email") {
             return res.status(400).json({
                 error: "Invalid signup credentials",
             });
         }
-
-        return res.status(201).json(result);
+        
+        return res.status(201).json({
+            user: result.user,
+            token: result.token,
+        });
     } catch (error) {
         next(error);
     }

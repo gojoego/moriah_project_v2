@@ -5,11 +5,14 @@ import {
 
 test.describe("Signup", () => {
 
-    test("user can sign up successfully", async ({ page }) => {
+    test("user can sign up successfully", async ({
+        page,
+        browserName,
+    }) => {
 
         const testId = crypto.randomUUID();
         const testDisplayName = `playwright-${testId}`;
-        const testEmail = `playwright-${testId}@moriahproject.org`;
+        const testEmail = `e2e-signup-${browserName}@moriahproject.org`;
         const testPassword = "Password123!";
 
         await page.goto("/auth/signup");
