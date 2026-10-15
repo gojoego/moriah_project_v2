@@ -7,5 +7,7 @@ export const ROUTES = {
     POSTS: "/posts",
     NEW_POST: "/posts/new", 
     FORGOT_PASSWORD: "/auth/forgot-password",
-    RESET_PASSWORD: "/auth/reset-password"
+    RESET_PASSWORD: "/auth/reset-password",
+    TERMS: "/terms",
+    PRIVACY: "/privacy"
 }

@@ -11,6 +11,8 @@ export interface SignupInput {
     email: string;
     password: string;
     displayName: string;
+    acceptedTerms: boolean;
+    ageConfirmed: boolean;
 }
 
 export interface SignupResponse {
