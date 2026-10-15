@@ -59,6 +59,7 @@ jobs:
           DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
           PORT=4000
           JWT_SECRET=e2e-only-secret
+          BETA_ALLOWED_EMAILS=e2e-signup-chromium@moriahproject.org,e2e-signup-firefox@moriahproject.org,e2e-signup-webkit@moriahproject.org
           EOF
 
           cat > frontend/.env.e2e <<'EOF'
