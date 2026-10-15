@@ -24,14 +24,12 @@ export async function signupService({
     email, 
     password,
     displayName,
-    acceptedTerms,
-    ageConfirmed
 }: SignupInput) {
     try {
-        const acceptedAt = new Date();
-
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        const acceptedAt = new Date();
+        
         const newUser = await createUser({
             email: email, 
             password: hashedPassword, 
