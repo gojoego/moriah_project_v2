@@ -8,22 +8,22 @@ import {
     type ReactNode,
 } from "react";
 
-import {
-    checkAuth,
-    removeToken,
-} from "@/lib/auth";
-
 import { getCurrentUser } from "@/lib/api/users";
+import { removeToken } from "@/lib/auth";
 
-import { 
+import type {
     AuthContextValue,
-    CurrentUser
-} from "@/types/auth"
+    CurrentUser,
+} from "@/types/auth";
 
+export const AuthContext =
+    createContext<AuthContextValue | undefined>(
+        undefined
+    );
 
-export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
-
-type AuthProviderProps = { children: ReactNode };
+type AuthProviderProps = {
+    children: ReactNode;
+};
 
 export function AuthProvider({
     children,
@@ -36,15 +36,7 @@ export function AuthProvider({
 
     const refreshUser = useCallback(async () => {
         try {
-            const authenticated = await checkAuth();
-
-            if (!authenticated) {
-                setUser(null);
-                return;
-            }
-
-            const currentUser =
-                await getCurrentUser();
+            const currentUser = await getCurrentUser();
 
             setUser(currentUser);
         } catch {

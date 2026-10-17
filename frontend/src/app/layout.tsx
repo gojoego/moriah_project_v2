@@ -7,6 +7,8 @@ import "./globals.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
+import { Providers } from "@/components/providers/Providers";
+
 export const metadata = {
 	title: "The Moriah Project",
   	description: "A quiet space to honor loved ones who have passed from suicide",
@@ -37,13 +39,15 @@ export default function RootLayout({
 				antialiased
 			`}  
 		>
-			<div className="min-h-screen">
-				<SiteHeader />
+			<Providers>
+				<div className="min-h-screen">
+					<SiteHeader />
 
-				<main>
-					{children}
-				</main>
-			</div>
+					<main>
+						{children}
+					</main>
+				</div>				
+			</Providers>
 
 			<ChatWidget/>
 			<SiteFooter/>

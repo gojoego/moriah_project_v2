@@ -2,17 +2,20 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { setToken } from "@/lib/auth";
-
 import { loginUser } from "@/lib/api/auth";
+import { useAuth } from "@/hooks/useAuth";
+
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { ROUTES } from "@/constants/routes";
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
 
-export function LoginForm(){
+export function LoginForm() {
     const router = useRouter();
+
+    const { refreshUser } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -26,26 +29,28 @@ export function LoginForm(){
         setError(null);
 
         if (!email || !password) {
-            setError('please enter your creds');
+            setError("Please enter your credentials");
             return;
         }
-        
+
         setIsSubmitting(true);
-        
+
         try {
             const data = await loginUser({
                 email,
                 password,
             });
 
-            setToken(data.token)
+            setToken(data.token);
 
-            router.push(ROUTES.PROFILE)
+            await refreshUser();
+
+            router.push(ROUTES.PROFILE);
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
             } else {
-                setError("Login failed")
+                setError("Login failed");
             }
         } finally {
             setIsSubmitting(false);
