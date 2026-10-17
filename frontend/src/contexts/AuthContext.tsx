@@ -4,11 +4,13 @@ import {
     createContext,
     useCallback,
     useEffect,
+    useRef,
     useState,
     type ReactNode,
 } from "react";
 
 import { getCurrentUser } from "@/lib/api/users";
+import { ApiError } from "@/lib/api/client";
 import { removeToken } from "@/lib/auth";
 
 import type {
@@ -34,25 +36,63 @@ export function AuthProvider({
     const [isLoading, setIsLoading] =
         useState(true);
 
+    const refreshVersionRef = useRef(0);
+
     const refreshUser = useCallback(async () => {
+        const requestVersion =
+            ++refreshVersionRef.current;
+
         try {
-            const currentUser = await getCurrentUser();
+            const currentUser =
+                await getCurrentUser();
+
+            if (
+                requestVersion !==
+                refreshVersionRef.current
+            ) {
+                return;
+            }
 
             setUser(currentUser);
-        } catch {
-            setUser(null);
+        } catch (error) {
+            if (
+                requestVersion !==
+                refreshVersionRef.current
+            ) {
+                return;
+            }
+
+            if (
+                error instanceof ApiError &&
+                error.status === 401
+            ) {
+                setUser(null);
+                return;
+            }
+
+            throw error;
         } finally {
-            setIsLoading(false);
+            if (
+                requestVersion ===
+                refreshVersionRef.current
+            ) {
+                setIsLoading(false);
+            }
         }
     }, []);
 
     const logout = useCallback(() => {
+        refreshVersionRef.current += 1;
+
         removeToken();
         setUser(null);
+        setIsLoading(false);
     }, []);
 
     useEffect(() => {
-        void refreshUser();
+        void refreshUser().catch(() => {
+            setIsLoading(false);
+        });
     }, [refreshUser]);
 
     return (
