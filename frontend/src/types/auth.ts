@@ -25,3 +25,10 @@ export interface CurrentUser {
     email: string;
     role: string;
 }
+export interface AuthContextValue {
+    user: CurrentUser | null;
+    isLoading: boolean;
+    isAuthenticated: boolean;
+    refreshUser: () => Promise<void>;
+    logout: () => void;
+}
