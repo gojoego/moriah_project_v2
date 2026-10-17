@@ -64,7 +64,8 @@ export function AuthProvider({
 
             if (
                 error instanceof ApiError &&
-                error.status === 401
+                (error.status === 401 ||
+                    error.status === 403)
             ) {
                 setUser(null);
                 return;
