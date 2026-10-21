@@ -16,7 +16,7 @@ export async function getAllPosts(options?: {
             p.created_at,
             u.display_name AS author_name
         FROM posts p 
-        JOIN users u ON p.author_id = u.id 
+        LEFT JOIN users u ON p.author_id = u.id 
         WHERE p.status = 'published'
         ORDER BY p.created_at DESC
     `; 
@@ -73,7 +73,7 @@ export async function getPostsById(id: string){
             p.created_at,
             u.display_name AS author_name
         FROM posts p 
-        JOIN users u ON p.author_id = u.id
+        LEFT JOIN users u ON p.author_id = u.id
         WHERE p.id = $1
         `,
         [id]

@@ -45,7 +45,7 @@ export async function getAllPostsAdmin(options?: PaginationOptions) {
             p.created_at,
             u.display_name AS author_name
         FROM posts p
-        JOIN users u ON p.author_id = u.id
+        LEFT JOIN users u ON p.author_id = u.id
         ORDER BY p.created_at DESC
     `;
 
