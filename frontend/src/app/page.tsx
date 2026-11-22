@@ -321,7 +321,7 @@ export default function HomePage() {
 
                         <div className="text-center">
                             <Link
-                                href="/community_guidelines"
+                                href="/community-guidelines"
                                 className="
                                     font-sans
                                     text-sm
